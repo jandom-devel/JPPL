@@ -4,10 +4,9 @@
 package it.unich.jppl.nativeppl;
 
 import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
-import com.sun.jna.ptr.PointerByReference;
+import com.sun.jna.ptr.*;
 
 public final class LibPPL {
 
@@ -16,21 +15,36 @@ public final class LibPPL {
     private static final String LIBNAME = "libppl_c";
 
     static {
-        NativeLibrary library = NativeLibrary.getInstance(LIBNAME);
-        Native.register(library);
+        Native.register(LIBNAME);
     }
 
-     // Various
+     // Library Initialization and Finalization
 
     public static native int ppl_initialize();
 
     public static native int ppl_finalize();
+
+    public static native int ppl_set_rounding_for_PPL();
+
+    public static native int ppl_restore_pre_PPL_rounding();
+
+    public static native int ppl_irrational_precision(IntByReference p);
+
+    public static native int ppl_set_irrational_precision(int p);
+
+    // Version Checking
 
     public static native int ppl_version_major();
 
     public static native int ppl_version_minor();
 
     public static native int ppl_version_revision();
+
+    public static native int ppl_version_beta();
+
+    public static native int ppl_version(PointerByReference p);
+
+    public static native int ppl_banner(PointerByReference p);
 
     // Polyhedron
 

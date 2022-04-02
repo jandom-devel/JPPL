@@ -7,7 +7,7 @@ import it.unich.jppl.nativeppl.LibPPL;
 /**
  * Created by amato on 17/03/16.
  */
-public class CPolyhedron {
+public class CPolyhedron implements Domain {
     private Pointer obj;
 
     public CPolyhedron(long dimension, int empty) {

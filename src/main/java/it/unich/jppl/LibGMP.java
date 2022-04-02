@@ -23,7 +23,7 @@ public final class LibGMP {
 
     static {
         NativeLibrary library = NativeLibrary.getInstance(LIBNAME);
-        Native.register(library);
+        Native.register(LIBNAME);
 
         //__gmp_printf = library.getFunction("__gmp_printf");
         __gmp_version = library.getGlobalVariableAddress("__gmp_version").getPointer(0).getString(0);
