@@ -14,10 +14,6 @@ public class LinearExpression {
         return obj;
     }
 
-    protected void finalize() {
-        // should free obj
-    }
-
     public LinearExpression() {
         PointerByReference ple = new PointerByReference();
         LibPPL.ppl_new_Linear_Expression(ple);

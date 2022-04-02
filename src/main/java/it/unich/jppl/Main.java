@@ -2,12 +2,11 @@
  * Created by amato on 17/03/16.
  */
 
+package it.unich.jppl;
+
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
-
-import  it.unich.jppl.*;
-import it.unich.jppl.LibGMP;
 import it.unich.jppl.nativeppl.LibPPL;
 
 public  class Main {

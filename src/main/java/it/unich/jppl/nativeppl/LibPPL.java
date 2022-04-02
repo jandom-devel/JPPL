@@ -7,7 +7,6 @@ import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
-import com.sun.jna.ptr.ByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 public final class LibPPL {

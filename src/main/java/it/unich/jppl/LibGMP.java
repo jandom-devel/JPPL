@@ -28,7 +28,7 @@ public final class LibGMP {
         //__gmp_printf = library.getFunction("__gmp_printf");
         __gmp_version = library.getGlobalVariableAddress("__gmp_version").getPointer(0).getString(0);
 
-        gmpextra = (LibGmpExtra) Native.loadLibrary(LibGmpExtra.class);
+        gmpextra = (LibGmpExtra) Native.load(LibGmpExtra.class);
     }
 
     public static native void __gmpz_init(Pointer x);

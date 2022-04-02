@@ -10,10 +10,6 @@ import it.unich.jppl.nativeppl.LibPPL;
 public class CPolyhedron {
     private Pointer obj;
 
-    protected void finalize() {
-        // should free obj
-    }
-
     public CPolyhedron(long dimension, int empty) {
         PointerByReference objref = new PointerByReference();
         LibPPL.ppl_new_C_Polyhedron_from_space_dimension(objref, dimension, empty);

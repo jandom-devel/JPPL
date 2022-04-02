@@ -14,10 +14,6 @@ public class Constraint {
         return obj;
     }
 
-    protected void finalize() {
-        // should free obj
-    }
-
     public Constraint(LinearExpression le, int rel) {
         PointerByReference pc = new PointerByReference();
         LibPPL.ppl_new_Constraint(pc, le.getObj(), rel);

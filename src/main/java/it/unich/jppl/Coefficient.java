@@ -15,10 +15,6 @@ public class Coefficient {
         return obj;
     }
 
-    protected void finalize() {
-        // should free obj
-    }
-
     public Coefficient() {
         PointerByReference pc = new PointerByReference();
         LibPPL.ppl_new_Coefficient(pc);
