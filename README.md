@@ -1,2 +1,2 @@
 # JPPL
-Scratch git repository for JPPL
+Java bindings for the Parma Polyhedra Library
