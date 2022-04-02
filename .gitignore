@@ -1,12 +1,30 @@
 *.class
+*.log
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# sbt specific
+.cache
+.history
+.lib/
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+.classpath
+.project
+.settings/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# IntelliJ specific
+.idea/
+
+# Metals specific
+.metals/
+.bloop/
+.vscode/
+.bsp/
+metals.sbt
