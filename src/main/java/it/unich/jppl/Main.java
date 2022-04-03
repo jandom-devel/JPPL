@@ -7,7 +7,6 @@ package it.unich.jppl;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
-import com.sun.jna.ptr.IntByReference;
 
 import static it.unich.jppl.nativelib.LibGMP.*;
 import static it.unich.jppl.nativelib.LibPPL.*;
@@ -57,11 +56,7 @@ public  class Main {
     }
 
     public static void main(String[] args) {
-        LibPPL.ppl_initialize();
-        IntByReference x = new IntByReference(183);
-        LibPPL.ppl_irrational_precision(x);
-        System.out.println(x.getValue());
-        System.out.println(LibPPL.ppl_version_major()+"."+LibPPL.ppl_version_minor());
+        ppl_initialize();
         one();
         two();
     }

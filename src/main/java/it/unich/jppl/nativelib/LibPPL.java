@@ -5,14 +5,20 @@ package it.unich.jppl.nativelib;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import com.sun.jna.PointerType;
+import com.sun.jna.IntegerType;
+import com.sun.jna.Structure.FieldOrder;
 import com.sun.jna.ptr.*;
+
+import it.unich.jppl.VariableOutputFunction;
+import it.unich.jppl.ErrorHandler;
 
 public final class LibPPL {
 
     static final class CPolyhedron extends PointerType { };
 
-    private static final String LIBNAME = "libppl_c";
+    private static final String LIBNAME = "ppl_c";
 
     static {
         Native.register(LIBNAME);
@@ -45,6 +51,73 @@ public final class LibPPL {
     public static native int ppl_version(PointerByReference p);
 
     public static native int ppl_banner(PointerByReference p);
+
+    // Error handling
+
+    public static native int ppl_set_error_handler (ErrorHandler h);
+
+    // Timeout handling
+
+    public static native int ppl_set_timeout(int csecs);
+
+    public static native int ppl_reset_timeout();
+
+    public static native int ppl_set_deterministic_timeout(long unscaled_weight, int scale);
+
+    public static native int ppl_reset_deterministic_timeout();
+
+    // Dimensions
+
+    public static class Dimension extends IntegerType {
+        public Dimension() { this(0); }
+        public Dimension(long value) { super(Native.SIZE_T_SIZE, value, true); }
+    }
+
+    public static class DimensionByReference extends ByReference {
+        public DimensionByReference() {
+          this(new Dimension());
+        }
+
+        public DimensionByReference(Dimension value) {
+          super(Native.SIZE_T_SIZE);
+          setValue(value);
+        }
+
+        public void setValue(Dimension value) {
+          Pointer p = getPointer();
+          if (Native.SIZE_T_SIZE == 8) {
+            p.setLong(0, value.longValue());
+          } else {
+            p.setInt(0, value.intValue());
+          }
+        }
+
+        public Dimension getValue() {
+          Pointer p = getPointer();
+          return new Dimension(Native.SIZE_T_SIZE == 8 ? p.getLong(0) : p.getInt(0));
+        }
+    }
+
+    @FieldOrder({"f"})
+    public static class VariableOutputFunctionByRef extends Structure {
+        public VariableOutputFunction f;
+    }
+
+    public static native int ppl_max_space_dimension (DimensionByReference m);
+
+    public static native int ppl_not_a_dimension (DimensionByReference m);
+
+    public static native int ppl_io_print_variable (Dimension var);
+
+    public static native int ppl_io_fprint_variable (Pointer stream, Dimension var);
+
+    public static native int ppl_io_asprint_variable (PointerByReference strp, Dimension var);
+
+    public static native int ppl_io_set_variable_output_function (VariableOutputFunction p);
+
+    public static native int ppl_io_get_variable_output_function (VariableOutputFunctionByRef pp);
+
+    public static native Pointer ppl_io_wrap_string(String src, int indent_depth, int preferred_first_line_length, int preferred_line_length);
 
     // Polyhedron
 
