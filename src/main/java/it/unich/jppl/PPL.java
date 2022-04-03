@@ -3,7 +3,7 @@ package it.unich.jppl;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.*;
 
-import static it.unich.jppl.nativeppl.LibPPL.*;
+import static it.unich.jppl.nativelib.LibPPL.*;
 
 final class PPL {
     static {
@@ -32,7 +32,7 @@ final class PPL {
         ppl_restore_pre_PPL_rounding();
     }
 
-    static void setIrrationalPrecision(int p) { 
+    static void setIrrationalPrecision(int p) {
         ppl_set_irrational_precision(p);
     }
 

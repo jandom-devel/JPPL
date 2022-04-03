@@ -1,7 +1,7 @@
 /**
  * Created by amato on 17/03/16.
  */
-package it.unich.jppl.nativeppl;
+package it.unich.jppl.nativelib;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;

@@ -1,4 +1,4 @@
-package it.unich.jppl;
+package it.unich.jppl.nativelib;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
