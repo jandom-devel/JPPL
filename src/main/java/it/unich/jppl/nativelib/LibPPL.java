@@ -149,6 +149,59 @@ public final class LibPPL {
 
     public static native int ppl_io_asprint_Coefficient (PointerByReference strp, Pointer x);
 
+    // Linear Expressions
+
+    public static native int ppl_new_Linear_Expression (PointerByReference ple);
+
+    public static native int ppl_new_Linear_Expression_with_dimension (PointerByReference ple, Dimension d);
+
+    public static native int ppl_new_Linear_Expression_from_Linear_Expression (PointerByReference ple, Pointer le);
+
+    public static native int ppl_new_Linear_Expression_from_Constraint (PointerByReference ple, Pointer c);
+
+    public static native int ppl_new_Linear_Expression_from_Generator (PointerByReference ple, Pointer g);
+
+    public static native int ppl_new_Linear_Expression_from_Congruence (PointerByReference ple, Pointer c);
+
+    //todo: not actually supported by the C interface
+    //public static native int ppl_new_Linear_Expression_from_Grid_Generator (PointerByReference ple, Pointer g);
+
+    public static native int ppl_assign_Linear_Expression_from_Linear_Expression (Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Linear_Expression(Pointer le);
+
+    public static native int ppl_Linear_Expression_space_dimension (Pointer le, DimensionByReference m);
+
+    public static native int ppl_Linear_Expression_coefficient (Pointer le, Dimension var, Pointer n);
+
+    public static native int ppl_Linear_Expression_inhomogeneous_term  (Pointer le, Pointer n);
+
+    public static native int ppl_Linear_Expression_add_to_coefficient(Pointer le, long variable, Pointer n);
+
+    public static native int ppl_Linear_Expression_OK (Pointer le);
+
+    public static native boolean ppl_Linear_Expression_is_zero (Pointer le);
+
+    public static native boolean ppl_Linear_Expression_all_homogeneous_terms_are_zero (Pointer le);
+
+    public static native int ppl_Linear_Expression_add_to_coefficient (Pointer le, Dimension var, Pointer n);
+
+    public static native int ppl_Linear_Expression_add_to_inhomogeneous (Pointer le, Pointer n);
+
+    public static native int ppl_add_Linear_Expression_to_Linear_Expression (Pointer dst, Pointer src);
+
+    public static native int ppl_multiply_Linear_Expression_by_Coefficient (Pointer le, Pointer n);
+
+    public static native int ppl_io_print_Linear_Expression (Pointer x);
+
+    public static native int ppl_io_fprint_Linear_Expression (Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Linear_Expression (PointerByReference strp, Pointer x);
+
+    public static native int ppl_Linear_Expression_ascii_dump  (Pointer x, Pointer stream);
+
+    public static native int ppl_Linear_Expression_ascii_load (Pointer x, Pointer steam);
+
     // Polyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, long d, int empty);
@@ -160,18 +213,6 @@ public final class LibPPL {
     public static native int ppl_Polyhedron_refine_with_constraint (Pointer ph, Pointer c);
 
     public static native int ppl_io_asprint_Polyhedron (PointerByReference strp, Pointer x);
-
-    // Linear Expressions
-
-    public static native int ppl_new_Linear_Expression(PointerByReference ple);
-
-    public static native int ppl_Linear_Expression_add_to_coefficient(Pointer le, long variable, Pointer n);
-
-    public static native int ppl_io_print_Linear_Expression (Pointer le);
-
-    public static native int ppl_io_asprint_Linear_Expression (PointerByReference le, Pointer x);
-
-    public static native int ppl_Linear_Expression_add_to_inhomogeneous (Pointer le, Pointer n);
 
     // Constraint
 

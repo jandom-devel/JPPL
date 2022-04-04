@@ -57,4 +57,15 @@ public class CoefficientTest {
         var c = new Coefficient(1);
         assertTrue(! Coefficient.isBounded() || (c.minValue() < c.maxValue()));
     }
+
+    @Test
+    void testEquality() {
+        var c1 = new Coefficient(1);
+        var c2 = new Coefficient(2);
+        var c3 = new Coefficient(1);
+        assertEquals(c1, c1);
+        assertEquals(c1, c3);
+        assertNotEquals(c1, c2);
+        assertNotEquals(c1, "1");
+    }
 }

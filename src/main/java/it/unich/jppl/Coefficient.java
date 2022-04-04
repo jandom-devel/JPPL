@@ -14,7 +14,7 @@ import java.math.BigInteger;
  * Created by amato on 17/03/16.
  */
 public class Coefficient {
-    private Pointer obj;
+    Pointer obj;
 
     private static class CoefficientCleaner implements Runnable {
         private Pointer obj;
@@ -119,6 +119,7 @@ public class Coefficient {
         return ppl_Coefficient_max(obj);
     }
 
+    @Override
     public String toString() {
         PointerByReference strp = new PointerByReference();
         ppl_io_asprint_Coefficient(strp, obj);
@@ -127,4 +128,22 @@ public class Coefficient {
         Native.free(Pointer.nativeValue(p));
         return s;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Coefficient){
+            Coefficient c = (Coefficient) obj;
+            var mpz1 = new Memory(MPZ_SIZE);
+            var mpz2 = new Memory(MPZ_SIZE);
+            __gmpz_init(mpz1);
+            __gmpz_init(mpz2);
+            ppl_Coefficient_to_mpz_t(this.obj, mpz1);
+            ppl_Coefficient_to_mpz_t(c.obj, mpz2);
+            return __gmpz_cmp(mpz1, mpz2) == 0;
+        }
+        return false;
+    }
+
 }

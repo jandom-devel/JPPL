@@ -17,7 +17,7 @@ public class Constraint {
 
     public Constraint(LinearExpression le, int rel) {
         PointerByReference pc = new PointerByReference();
-        ppl_new_Constraint(pc, le.getObj(), rel);
+        ppl_new_Constraint(pc, le.obj, rel);
         obj = pc.getValue();
     }
 
