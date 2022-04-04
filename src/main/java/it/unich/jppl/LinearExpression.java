@@ -26,12 +26,12 @@ public class LinearExpression {
     }
 
     public LinearExpression addToCoefficient(long var, Coefficient c) {
-        ppl_Linear_Expression_add_to_coefficient(obj, var, c.getObj());
+        ppl_Linear_Expression_add_to_coefficient(obj, var, c.getNative());
         return this;
     }
 
     public LinearExpression addToInhomogeneous(Coefficient c) {
-        ppl_Linear_Expression_add_to_inhomogeneous(obj, c.getObj());
+        ppl_Linear_Expression_add_to_inhomogeneous(obj, c.getNative());
         return this;
     }
 

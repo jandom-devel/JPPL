@@ -33,7 +33,7 @@ public class Coefficient {
         return ppl_Coefficient_is_bounded() > 0;
     }
 
-    public Pointer getObj() {
+    public Pointer getNative() {
         return obj;
     }
 
