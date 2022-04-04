@@ -7,6 +7,8 @@ import com.sun.jna.ptr.*;
 import it.unich.jppl.nativelib.LibPPL;
 import static it.unich.jppl.nativelib.LibPPL.*;
 
+import java.lang.ref.Cleaner;
+
 final class PPL {
 
     public static final int PPL_ERROR_OUT_OF_MEMORY = -2;
@@ -20,6 +22,8 @@ final class PPL {
     public static final int PPL_ERROR_UNEXPECTED_ERROR = -10;
     public static final int PPL_TIMEOUT_EXCEPTION = -11;
     public static final int PPL_ERROR_LOGIC_ERROR = -12;
+
+    public static final Cleaner cleaner = Cleaner.create();
 
     static {
         pplInitialize();

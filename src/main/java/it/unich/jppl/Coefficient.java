@@ -16,6 +16,19 @@ import java.math.BigInteger;
 public class Coefficient {
     private Pointer obj;
 
+    private static class CoefficientCleaner implements Runnable {
+        private Pointer obj;
+
+        CoefficientCleaner(Pointer obj) {
+            this.obj = obj;
+        }
+
+        @Override
+        public void run() {
+            ppl_delete_Coefficient(obj);
+        }
+    }
+
     static public boolean isBounded() {
         return ppl_Coefficient_is_bounded() > 0;
     }
@@ -28,6 +41,7 @@ public class Coefficient {
         PointerByReference pc = new PointerByReference();
         ppl_new_Coefficient(pc);
         obj = pc.getValue();
+        PPL.cleaner.register(this, new CoefficientCleaner(obj));
     }
 
     public Coefficient(long l) {
@@ -36,6 +50,7 @@ public class Coefficient {
         __gmpz_init_set_si(mpz, l);
         ppl_new_Coefficient_from_mpz_t(pc, mpz);
         obj = pc.getValue();
+        PPL.cleaner.register(this, new CoefficientCleaner(obj));
     }
 
     public Coefficient(String s) {
@@ -43,7 +58,8 @@ public class Coefficient {
         Memory mpz = new Memory(MPZ_SIZE);
         __gmpz_init_set_str(mpz, s, 10);
         ppl_new_Coefficient_from_mpz_t(pc, mpz);
-        obj = pc.getValue();  
+        obj = pc.getValue();
+        PPL.cleaner.register(this, new CoefficientCleaner(obj));
     }
 
     public Coefficient(BigInteger z) {
@@ -54,6 +70,7 @@ public class Coefficient {
         PointerByReference pc = new PointerByReference();
         ppl_new_Coefficient_from_Coefficient(pc, c.obj);
         obj = pc.getValue();
+        PPL.cleaner.register(this, new CoefficientCleaner(obj));
     }
 
     public Coefficient assign(long n) {
