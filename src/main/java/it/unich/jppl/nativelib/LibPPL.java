@@ -119,6 +119,36 @@ public final class LibPPL {
 
     public static native Pointer ppl_io_wrap_string(String src, int indent_depth, int preferred_first_line_length, int preferred_line_length);
 
+    // Coefficients
+
+    public static native int ppl_new_Coefficient(PointerByReference pc);
+
+    public static native int ppl_new_Coefficient_from_mpz_t (PointerByReference pc, Pointer z);
+
+    public static native int ppl_new_Coefficient_from_Coefficient (PointerByReference pc, Pointer c);
+
+    public static native int ppl_assign_Coefficient_from_mpz_t (Pointer dst, Pointer z);
+
+    public static native int ppl_assign_Coefficient_from_Coefficient (Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Coefficient (Pointer c);
+
+    public static native int ppl_Coefficient_to_mpz_t (Pointer c, Pointer z);
+
+    public static native int ppl_Coefficient_OK (Pointer c);
+
+    public static native int ppl_Coefficient_is_bounded ();
+
+    public static native int ppl_Coefficient_min (Pointer min);
+
+    public static native int ppl_Coefficient_max (Pointer max);
+
+    public static native int ppl_io_print_Coefficient (Pointer x);
+
+    public static native int ppl_io_fprint_Coefficient (Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Coefficient (PointerByReference strp, Pointer x);
+
     // Polyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, long d, int empty);
@@ -130,16 +160,6 @@ public final class LibPPL {
     public static native int ppl_Polyhedron_refine_with_constraint (Pointer ph, Pointer c);
 
     public static native int ppl_io_asprint_Polyhedron (PointerByReference strp, Pointer x);
-
-    // Coefficients
-
-    public static native int ppl_new_Coefficient(PointerByReference pc);
-
-    public static native int ppl_new_Coefficient_from_mpz_t (PointerByReference pc, Pointer z);
-
-    public static native int ppl_io_print_Coefficient (Pointer x);
-
-    public static native int ppl_io_asprint_Coefficient (PointerByReference strp, Pointer x);
 
     // Linear Expressions
 
