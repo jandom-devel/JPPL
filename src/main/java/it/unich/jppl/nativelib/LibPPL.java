@@ -202,6 +202,40 @@ public final class LibPPL {
 
     public static native int ppl_Linear_Expression_ascii_load (Pointer x, Pointer steam);
 
+    // Constraint
+
+    public static native int ppl_new_Constraint (PointerByReference pc, Pointer le, int rel);
+
+    public static native int ppl_new_Constraint_zero_dim_false (PointerByReference pc);
+
+    public static native int ppl_new_Constraint_zero_dim_positivity (PointerByReference pc);
+
+    public static native int ppl_new_Constraint_from_Constraint (PointerByReference pc, Pointer c);
+
+    public static native int ppl_assign_Constraint_from_Constraint (Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Constraint (Pointer c);
+
+    public static native int ppl_Constraint_space_dimension (Pointer c, DimensionByReference m);
+
+    public static native int ppl_Constraint_type (Pointer c);
+
+    public static native int ppl_Constraint_coefficient (Pointer c, Dimension var, Pointer n);
+
+    public static native int ppl_Constraint_inhomogeneous_term (Pointer c, Pointer n);
+
+    public static native int ppl_Constraint_OK (Pointer c);
+
+    public static native int ppl_io_print_Constraint (Pointer x);
+
+    public static native int ppl_io_fprint_Constraint (Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Constraint (PointerByReference strp, Pointer x);
+
+    public static native int ppl_Constraint_ascii_dump  (Pointer x, Pointer stream);
+
+    public static native int ppl_Constraint_ascii_load (Pointer x, Pointer steam);;
+
     // Polyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, long d, int empty);
@@ -214,12 +248,5 @@ public final class LibPPL {
 
     public static native int ppl_io_asprint_Polyhedron (PointerByReference strp, Pointer x);
 
-    // Constraint
-
-    public static native int ppl_new_Constraint (PointerByReference pc, Pointer le, int rel);
-
-    public static native int ppl_io_print_Constraint (Pointer c);
-
-    public static native int ppl_io_asprint_Constraint (PointerByReference le, Pointer x);
 
 }

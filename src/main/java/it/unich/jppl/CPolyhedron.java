@@ -17,7 +17,7 @@ public class CPolyhedron implements Domain {
     }
 
     public CPolyhedron refineWithConstraint(Constraint c) {
-        ppl_Polyhedron_refine_with_constraint(obj, c.getObj());
+        ppl_Polyhedron_refine_with_constraint(obj, c.obj);
         return this;
     }
 

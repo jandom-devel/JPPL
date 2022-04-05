@@ -13,7 +13,7 @@ import java.math.BigInteger;
 /**
  * Created by amato on 17/03/16.
  */
-public class Coefficient {
+public class Coefficient extends Number {
     Pointer obj;
 
     private static class CoefficientCleaner implements Runnable {
@@ -107,6 +107,28 @@ public class Coefficient {
         return new BigInteger(s);
     }
 
+    public long longValue() {
+        Pointer mpz = new Memory(MPZ_SIZE);
+        __gmpz_init(mpz);
+        ppl_Coefficient_to_mpz_t(obj, mpz);
+        return __gmpz_get_si(mpz);
+    }
+
+    public int intValue() {
+        return (int) longValue();
+    }
+
+    public double doubleValue() {
+        Pointer mpz = new Memory(MPZ_SIZE);
+        __gmpz_init(mpz);
+        ppl_Coefficient_to_mpz_t(obj, mpz);
+        return __gmpz_get_d(mpz);
+    }
+
+    public float floatValue() {
+        return (float) doubleValue();
+
+    }
     public boolean isOK() {
         return ppl_Coefficient_OK(obj) > 0;
     }

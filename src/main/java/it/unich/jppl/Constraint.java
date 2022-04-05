@@ -1,5 +1,6 @@
 package it.unich.jppl;
 
+import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -9,22 +10,118 @@ import static it.unich.jppl.nativelib.LibPPL.*;
  * Created by amato on 17/03/16.
  */
 public class Constraint {
-    public Pointer obj;
+    Pointer obj;
 
-    public Pointer getObj() {
-        return obj;
+    public static enum ConstraintType {
+        LESS_THAN(0),
+        LESS_OR_EQUAL(1),
+        EQUAL(2),
+        GREATER_OR_EQUAL(3),
+        GREATER_THAN(4);
+
+        int pplValue;
+
+        ConstraintType (int pplValue) {
+            this.pplValue = pplValue;
+        }
+
+        static ConstraintType valueOf(int t) {
+            switch (t) {
+                case 0:
+                    return LESS_THAN;
+                case 1:
+                    return LESS_OR_EQUAL;
+                case 2:
+                    return EQUAL;
+                case 3:
+                    return GREATER_OR_EQUAL;
+                case 4:
+                    return GREATER_THAN;
+            }
+            throw new IllegalStateException("Unexpected Constraint type " + t);
+        }
     }
 
-    public Constraint(LinearExpression le, int rel) {
+    public static enum ZeroDimConstraint {
+        FALSITY,
+        POSITIVITY
+    }
+
+    private static class ConstraintCleaner implements Runnable {
+        private Pointer obj;
+
+        ConstraintCleaner(Pointer obj) {
+            this.obj = obj;
+        }
+
+        @Override
+        public void run() {
+            ppl_delete_Constraint(obj);
+        }
+    }
+
+    public Constraint(ZeroDimConstraint t) {
         PointerByReference pc = new PointerByReference();
-        ppl_new_Constraint(pc, le.obj, rel);
+        if (t == ZeroDimConstraint.FALSITY)
+            ppl_new_Constraint_zero_dim_false(pc);
+        else
+            ppl_new_Constraint_zero_dim_positivity(pc);
         obj = pc.getValue();
+        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+    }
+
+    public Constraint(LinearExpression le, ConstraintType rel) {
+        PointerByReference pc = new PointerByReference();
+        ppl_new_Constraint(pc, le.obj, rel.pplValue);
+        obj = pc.getValue();
+        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+    }
+
+    public Constraint(Constraint c) {
+        PointerByReference pc = new PointerByReference();
+        ppl_new_Constraint_from_Constraint(pc, c.obj);
+        obj = pc.getValue();
+        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+    }
+
+    public Constraint assign(Constraint c) {
+        ppl_assign_Constraint_from_Constraint(obj, c.obj);
+        return this;
+    }
+
+    public long getSpaceDimension() {
+        var dref = new DimensionByReference();
+        ppl_Constraint_space_dimension(obj, dref);
+        return dref.getValue().longValue();
+    }
+
+    public ConstraintType getType() {
+        int t = ppl_Constraint_type(obj);
+        return ConstraintType.valueOf(t);
+    }
+
+    public Coefficient getCoefficient(long var) {
+        var c = new Coefficient();
+        ppl_Constraint_coefficient(obj, new Dimension(var), c.obj);
+        return c;
+    }
+
+    public Coefficient getCoefficient() {
+        var c = new Coefficient();
+        ppl_Constraint_inhomogeneous_term(obj, c.obj);
+        return c;
+    }
+
+    public boolean isOK() {
+        return ppl_Constraint_OK(obj) > 0;
     }
 
     public String toString() {
         PointerByReference pstr = new PointerByReference();
         ppl_io_asprint_Constraint(pstr,obj);
-        return pstr.getValue().getString(0);
-        // should free string
+        Pointer p = pstr.getValue();
+        String s = p.getString(0);
+        Native.free(Pointer.nativeValue(p));
+        return s;
     }
 }

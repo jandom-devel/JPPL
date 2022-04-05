@@ -81,7 +81,7 @@ public class LinearExpression {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_Linear_Expression(ple, le.obj);
         obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        //PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
     }
 
     public LinearExpression assign(LinearExpression le) {

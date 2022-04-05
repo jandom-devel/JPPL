@@ -2,21 +2,9 @@ package it.unich.jppl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class LinearExpressionTest {
-
-    @BeforeAll
-    static void init() {
-        PPL.pplInitialize();
-    }
-
-    @AfterAll
-    static void finish() {
-        PPL.pplFinalize();
-    }
 
     @Test
     void testDefaultConstructors() {
