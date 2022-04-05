@@ -33,15 +33,15 @@ public class Coefficient extends Number {
         return ppl_Coefficient_is_bounded() > 0;
     }
 
-    public Pointer getNative() {
-        return obj;
+    private void init(Pointer p) {
+        obj = p;
+        PPL.cleaner.register(this, new CoefficientCleaner(obj));
     }
 
     public Coefficient() {
         PointerByReference pc = new PointerByReference();
         ppl_new_Coefficient(pc);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new CoefficientCleaner(obj));
+        init(pc.getValue());
     }
 
     public Coefficient(long l) {
@@ -49,8 +49,7 @@ public class Coefficient extends Number {
         Memory mpz = new Memory(MPZ_SIZE);
         __gmpz_init_set_si(mpz, l);
         ppl_new_Coefficient_from_mpz_t(pc, mpz);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new CoefficientCleaner(obj));
+        init(pc.getValue());
     }
 
     public Coefficient(String s) {
@@ -58,8 +57,7 @@ public class Coefficient extends Number {
         Memory mpz = new Memory(MPZ_SIZE);
         __gmpz_init_set_str(mpz, s, 10);
         ppl_new_Coefficient_from_mpz_t(pc, mpz);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new CoefficientCleaner(obj));
+        init(pc.getValue());
     }
 
     public Coefficient(BigInteger z) {
@@ -69,8 +67,7 @@ public class Coefficient extends Number {
     public Coefficient(Coefficient c) {
         PointerByReference pc = new PointerByReference();
         ppl_new_Coefficient_from_Coefficient(pc, c.obj);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new CoefficientCleaner(obj));
+        init(pc.getValue());
     }
 
     public Coefficient assign(long n) {

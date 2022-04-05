@@ -29,33 +29,34 @@ public class LinearExpression {
         return obj;
     }
 
+    private void init(Pointer p) {
+        obj = p;
+        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+    }
+
     public LinearExpression() {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression(ple);
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
 
     public LinearExpression(long d) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
 
     public LinearExpression(Constraint c) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_Constraint(ple, c.obj);
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
 
     /*
     public LinearExpression(Generator g) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_Generator(ple, g.obj);
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
     */
 
@@ -63,8 +64,7 @@ public class LinearExpression {
     public LinearExpression(Congruence c) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_Congruence(ple, c.obj);
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
     */
 
@@ -72,16 +72,14 @@ public class LinearExpression {
     public LinearExpression(GriGenerator g) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_GridGenerator(ple, g.obj);
-        obj = ple.getValue();
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
     */
 
     public LinearExpression(LinearExpression le) {
         PointerByReference ple = new PointerByReference();
         ppl_new_Linear_Expression_from_Linear_Expression(ple, le.obj);
-        obj = ple.getValue();
-        //PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        init(ple.getValue());
     }
 
     public LinearExpression assign(LinearExpression le) {

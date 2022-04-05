@@ -234,7 +234,63 @@ public final class LibPPL {
 
     public static native int ppl_Constraint_ascii_dump  (Pointer x, Pointer stream);
 
-    public static native int ppl_Constraint_ascii_load (Pointer x, Pointer steam);;
+    public static native int ppl_Constraint_ascii_load (Pointer x, Pointer steam);
+
+    // Constraint System
+
+    public static native int ppl_new_Constraint_System (PointerByReference pcs);
+
+    public static native int ppl_new_Constraint_System_zero_dim_empty (PointerByReference pcs);
+
+    public static native int ppl_new_Constraint_System_from_Constraint (PointerByReference pcs, Pointer c);
+
+    public static native int ppl_new_Constraint_System_from_Constraint_System (PointerByReference pcs, Pointer cs);
+
+    public static native int ppl_assign_Constraint_System_from_Constraint_System (Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Constraint_System (Pointer cs);
+
+    public static native int ppl_Constraint_System_space_dimension (Pointer cs, DimensionByReference m);
+
+    public static native int ppl_Constraint_System_empty (Pointer cs);
+
+    public static native int ppl_Constraint_System_has_strict_inequalities (Pointer cs);
+
+    public static native int ppl_Constraint_System_begin (Pointer cs, Pointer cit);
+
+    public static native int ppl_Constraint_System_end (Pointer cs, Pointer cit);
+
+    public static native int ppl_Constraint_System_OK (Pointer cs);
+
+    public static native int ppl_Constraint_System_clear (Pointer cs);
+
+    public static native int ppl_Constraint_System_insert_Constraint (Pointer cs, Pointer c);
+
+    public static native int ppl_io_print_Constraint_System (Pointer x);
+
+    public static native int ppl_io_fprint_Constraint_System (Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Constraint_System (PointerByReference strp, Pointer x);
+
+    public static native int ppl_Constraint_System_ascii_dump  (Pointer x, Pointer stream);
+
+    public static native int ppl_Constraint_System_ascii_load (Pointer x, Pointer steam);
+
+    // ConstraintSystem Iterator
+
+    public static native int ppl_new_Constraint_System_const_iterator (PointerByReference pcit);
+
+    public static native int ppl_new_Constraint_System_const_iterator_from_Constraint_System_const_iterator (PointerByReference pcit, Pointer cit);
+
+    public static native int ppl_assign_Constraint_System_const_iterator_from_Constraint_System_const_iterator (Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Constraint_System_const_iterator (Pointer cit);
+
+    public static native int ppl_Constraint_System_const_iterator_dereference (Pointer cit, PointerByReference pc);
+
+    public static native int ppl_Constraint_System_const_iterator_increment (Pointer cit);
+
+    public static native int ppl_Constraint_System_const_iterator_equal_test (Pointer x, Pointer y);
 
     // Polyhedron
 

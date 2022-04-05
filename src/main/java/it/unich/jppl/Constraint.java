@@ -60,28 +60,34 @@ public class Constraint {
         }
     }
 
+    private void init(Pointer p) {
+        obj = p;
+        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+    }
+
+    Constraint(Pointer obj) {
+        init(obj);
+    }
+
     public Constraint(ZeroDimConstraint t) {
         PointerByReference pc = new PointerByReference();
         if (t == ZeroDimConstraint.FALSITY)
             ppl_new_Constraint_zero_dim_false(pc);
         else
             ppl_new_Constraint_zero_dim_positivity(pc);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+        init(pc.getValue());
     }
 
     public Constraint(LinearExpression le, ConstraintType rel) {
         PointerByReference pc = new PointerByReference();
         ppl_new_Constraint(pc, le.obj, rel.pplValue);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+        init(pc.getValue());
     }
 
     public Constraint(Constraint c) {
         PointerByReference pc = new PointerByReference();
         ppl_new_Constraint_from_Constraint(pc, c.obj);
-        obj = pc.getValue();
-        PPL.cleaner.register(this, new ConstraintCleaner(obj));
+        init(pc.getValue());
     }
 
     public Constraint assign(Constraint c) {
@@ -116,6 +122,7 @@ public class Constraint {
         return ppl_Constraint_OK(obj) > 0;
     }
 
+    @Override
     public String toString() {
         PointerByReference pstr = new PointerByReference();
         ppl_io_asprint_Constraint(pstr,obj);
@@ -123,5 +130,24 @@ public class Constraint {
         String s = p.getString(0);
         Native.free(Pointer.nativeValue(p));
         return s;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Constraint) {
+            var c = (Constraint) obj;
+            if (c.getType() != getType())
+                return false;
+            if (! c.getCoefficient().equals(getCoefficient()))
+                return false;
+            for (long d=0; d < Math.max(c.getSpaceDimension(), getSpaceDimension()); d++) {
+                if (! c.getCoefficient(d).equals(getCoefficient(d)))
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
