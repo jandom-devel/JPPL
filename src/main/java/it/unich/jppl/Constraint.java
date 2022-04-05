@@ -65,10 +65,6 @@ public class Constraint {
         PPL.cleaner.register(this, new ConstraintCleaner(obj));
     }
 
-    Constraint(Pointer obj) {
-        init(obj);
-    }
-
     public Constraint(ZeroDimConstraint t) {
         PointerByReference pc = new PointerByReference();
         if (t == ZeroDimConstraint.FALSITY)
@@ -85,8 +81,12 @@ public class Constraint {
     }
 
     public Constraint(Constraint c) {
+        this(c.obj);
+    }
+
+    Constraint(Pointer obj) {
         PointerByReference pc = new PointerByReference();
-        ppl_new_Constraint_from_Constraint(pc, c.obj);
+        ppl_new_Constraint_from_Constraint(pc, obj);
         init(pc.getValue());
     }
 

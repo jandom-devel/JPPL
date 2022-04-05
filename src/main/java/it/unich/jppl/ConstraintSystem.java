@@ -57,10 +57,6 @@ public class ConstraintSystem implements Iterable<Constraint> {
             var pc = new PointerByReference();
             ppl_Constraint_System_const_iterator_dereference(cit, pc);
             ppl_Constraint_System_const_iterator_increment(cit);
-            var pc2 = new PointerByReference();
-            // We need to copy the constraint *pc since *pc might be deallocated
-            // if the Constraint System this becomes unreachable
-            ppl_new_Constraint_System_from_Constraint(pc2, pc.getValue());
             return new Constraint(pc.getValue());
         }
     }
@@ -92,8 +88,12 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     public ConstraintSystem(ConstraintSystem cs) {
+        this(cs.obj);
+    }
+
+    ConstraintSystem(Pointer cs) {
         PointerByReference pcs = new PointerByReference();
-        ppl_new_Constraint_System_from_Constraint_System(pcs, cs.obj);
+        ppl_new_Constraint_System_from_Constraint_System(pcs, obj);
         init(pcs.getValue());
     }
 
