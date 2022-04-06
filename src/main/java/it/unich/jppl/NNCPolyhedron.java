@@ -24,22 +24,6 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
         init(pph.getValue());
     }
 
-    public NNCPolyhedron(NNCPolyhedron ph) {
-        var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(pph, ph.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pph.getValue());
-    }
-
-    public NNCPolyhedron(NNCPolyhedron ph, ComplexityClass complexity) {
-        var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
-        if (result < 0)
-            throw new PPLError(result);
-        init(pph.getValue());
-    }
-
     public NNCPolyhedron(ConstraintSystem cs) {
         var pph = new PointerByReference();
         int result = ppl_new_NNC_Polyhedron_from_Constraint_System(pph, cs.pplObj);
@@ -55,6 +39,7 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
             throw new PPLError(result);
         init(pph.getValue());
     }
+
     /*
     public NNCPolyhedron(CongruenceSystem cs) {
         var pph = new PointerByReference();
@@ -71,11 +56,36 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
     }
     */
 
-    public NNCPolyhedron assign(NNCPolyhedron ph) {
-        int result = ppl_assign_NNC_Polyhedron_from_NNC_Polyhedron(pplObj, ph.pplObj);
+    /*
+    public NNCPolyhedron(GeneratorSystem cs) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+
+    public NNCPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_recycle_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+    */
+
+    public NNCPolyhedron(NNCPolyhedron ph) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(pph, ph.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        return this;
+        init(pph.getValue());
+    }
+
+    public NNCPolyhedron(NNCPolyhedron ph, ComplexityClass complexity) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
+        init(pph.getValue());
     }
 
     public NNCPolyhedron(CPolyhedron ph) {
@@ -94,20 +104,27 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
         init(pph.getValue());
     }
 
-    /*
-    public NNCPolyhedron(GeneratorSystem cs) {
+    public NNCPolyhedron(DoubleBox box) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_NNC_Polyhedron_from_Double_Box(pph, box.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
-    public NNCPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+    public NNCPolyhedron(DoubleBox box, ComplexityClass complexity) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_recycle_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_NNC_Polyhedron_from_Double_Box_with_complexity(pph, box.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
-    */
+
+    public NNCPolyhedron assign(NNCPolyhedron ph) {
+        int result = ppl_assign_NNC_Polyhedron_from_NNC_Polyhedron(pplObj, ph.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return this;
+    }
 
 }

@@ -23,22 +23,6 @@ public class CPolyhedron extends Polyhedron<CPolyhedron> implements Property<CPo
         init(pph.getValue());
     }
 
-    public CPolyhedron(CPolyhedron ph) {
-        var pph = new PointerByReference();
-        int result = ppl_new_C_Polyhedron_from_C_Polyhedron(pph, ph.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pph.getValue());
-    }
-
-    public CPolyhedron(CPolyhedron ph, ComplexityClass complexity) {
-        var pph = new PointerByReference();
-        int result = ppl_new_C_Polyhedron_from_C_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
-        if (result < 0)
-            throw new PPLError(result);
-        init(pph.getValue());
-    }
-
     public CPolyhedron(ConstraintSystem cs) {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Constraint_System(pph, cs.pplObj);
@@ -71,11 +55,36 @@ public class CPolyhedron extends Polyhedron<CPolyhedron> implements Property<CPo
     }
     */
 
-    public CPolyhedron assign(CPolyhedron ph) {
-        int result = ppl_assign_C_Polyhedron_from_C_Polyhedron(pplObj, ph.pplObj);
+    /*
+    public CPolyhedron(GeneratorSystem cs) {
+        var pph = new PointerByReference();
+        ppl_new_C_Polyhedron_from_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+
+    public CPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+        var pph = new PointerByReference();
+        ppl_new_C_Polyhedron_recycle_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+    */
+
+    public CPolyhedron(CPolyhedron ph) {
+        var pph = new PointerByReference();
+        int result = ppl_new_C_Polyhedron_from_C_Polyhedron(pph, ph.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        return this;
+        init(pph.getValue());
+    }
+
+    public CPolyhedron(CPolyhedron ph, ComplexityClass complexity) {
+        var pph = new PointerByReference();
+        int result = ppl_new_C_Polyhedron_from_C_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
+        init(pph.getValue());
     }
 
     public CPolyhedron(NNCPolyhedron ph) {
@@ -94,20 +103,27 @@ public class CPolyhedron extends Polyhedron<CPolyhedron> implements Property<CPo
         init(pph.getValue());
     }
 
-    /*
-    public CPolyhedron(GeneratorSystem cs) {
+    public CPolyhedron(DoubleBox box) {
         var pph = new PointerByReference();
-        ppl_new_C_Polyhedron_from_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_C_Polyhedron_from_Double_Box(pph, box.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
-    public CPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+    public CPolyhedron(DoubleBox box, ComplexityClass complexity) {
         var pph = new PointerByReference();
-        ppl_new_C_Polyhedron_recycle_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_C_Polyhedron_from_Double_Box_with_complexity(pph, box.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
-    */
+
+    public CPolyhedron assign(CPolyhedron ph) {
+        int result = ppl_assign_C_Polyhedron_from_C_Polyhedron(pplObj, ph.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return this;
+    }
 
 }

@@ -37,6 +37,7 @@ public class LinearExpression {
         init(ple.getValue());
     }
 
+    // TODO: this methods causes sometime exceptions during tests
     public LinearExpression(long d) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));

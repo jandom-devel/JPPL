@@ -15,10 +15,6 @@ public interface Domain<T extends Property<T>> {
 
     public T createProperty(long d, DegenerateElement kind);
 
-    public T createProperty(T p);
-
-    public T createProperty(T p, ComplexityClass complexity);
-
     public T createProperty(ConstraintSystem cs);
 
     public T createProperty(ConstraintSystem cs, RecycleInput dummy);
@@ -27,7 +23,20 @@ public interface Domain<T extends Property<T>> {
 
     // public T createProperty(CongruenceSystem cs, RecycleInput dummy);
 
+    public T createProperty(T p);
+
+    public T createProperty(T p, ComplexityClass complexity);
+
     public T createProperty(CPolyhedron p);
 
+    public T createProperty(CPolyhedron p, ComplexityClass complexity);
+
     public T createProperty(NNCPolyhedron p);
+
+    public T createProperty(NNCPolyhedron p, ComplexityClass complexity);
+
+    public T createProperty(DoubleBox p);
+
+    public T createProperty(DoubleBox p, ComplexityClass complexity);
+
 }

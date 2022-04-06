@@ -81,9 +81,9 @@ public final class LibPPL {
             super(ds.length * Native.SIZE_T_SIZE);
             for (int i = 0; i < ds.length; i++)
                 if (Native.SIZE_T_SIZE == 8)
-                    setLong(8*i, ds[i]);
+                    setLong(8 * i, ds[i]);
                 else
-                    setInt(4*i, (int) ds[i]);
+                    setInt(4 * i, (int) ds[i]);
         }
     }
 
@@ -306,7 +306,7 @@ public final class LibPPL {
 
     public static native int ppl_Constraint_System_const_iterator_equal_test(Pointer x, Pointer y);
 
-    // Polyhedron
+    // CPolyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d, int empty);
 
@@ -323,12 +323,23 @@ public final class LibPPL {
 
     public static native int ppl_new_C_Polyhedron_recycle_Congruence_System(PointerByReference pph, Pointer cs);
 
+    public static native int ppl_new_C_Polyhedron_from_Generator_System(PointerByReference pph, Pointer gs);
+
+    public static native int ppl_new_C_Polyhedron_recycle_Generator_System(PointerByReference pph, Pointer gs);
+
     public static native int ppl_assign_C_Polyhedron_from_C_Polyhedron(Pointer dst, Pointer src);
 
     public static native int ppl_new_C_Polyhedron_from_NNC_Polyhedron(PointerByReference pph, Pointer ph);
 
     public static native int ppl_new_C_Polyhedron_from_NNC_Polyhedron_with_complexity(PointerByReference pph,
             Pointer ph, int complexity);
+
+    public static native int ppl_new_C_Polyhedron_from_Double_Box(PointerByReference pph, Pointer ph);
+
+    public static native int ppl_new_C_Polyhedron_from_Double_Box_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
+
+    // NNCPolyhedron
 
     public static native int ppl_new_NNC_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d,
             int empty);
@@ -346,12 +357,23 @@ public final class LibPPL {
 
     public static native int ppl_new_NNC_Polyhedron_recycle_Congruence_System(PointerByReference pph, Pointer cs);
 
+    public static native int ppl_new_NNC_Polyhedron_from_Generator_System(PointerByReference pph, Pointer gs);
+
+    public static native int ppl_new_NNC_Polyhedron_recycle_Generator_System(PointerByReference pph, Pointer gs);
+
     public static native int ppl_assign_NNC_Polyhedron_from_NNC_Polyhedron(Pointer dst, Pointer src);
 
     public static native int ppl_new_NNC_Polyhedron_from_C_Polyhedron(PointerByReference pph, Pointer ph);
 
     public static native int ppl_new_NNC_Polyhedron_from_C_Polyhedron_with_complexity(PointerByReference pph,
             Pointer ph, int complexity);
+
+    public static native int ppl_new_NNC_Polyhedron_from_Double_Box(PointerByReference pph, Pointer ph);
+
+    public static native int ppl_new_NNC_Polyhedron_from_Double_Box_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
+
+    // Polyhedron
 
     public static native int ppl_delete_Polyhedron(Pointer ph);
 
@@ -499,13 +521,7 @@ public final class LibPPL {
 
     public static native int ppl_Polyhedron_ascii_load(Pointer x, Pointer stream);
 
-    public static native int ppl_new_C_Polyhedron_from_Generator_System(PointerByReference pph, Pointer gs);
-
-    public static native int ppl_new_C_Polyhedron_recycle_Generator_System(PointerByReference pph, Pointer gs);
-
-    public static native int ppl_new_NNC_Polyhedron_from_Generator_System(PointerByReference pph, Pointer gs);
-
-    public static native int ppl_new_NNC_Polyhedron_recycle_Generator_System(PointerByReference pph, Pointer gs);
+    // Polyhedron specific operations
 
     public static native int ppl_Polyhedron_get_generators(Pointer ph, PointerByReference pgs);
 
@@ -550,4 +566,183 @@ public final class LibPPL {
             Pointer cs, IntByReference tp);
 
     public static native int ppl_Polyhedron_bounded_H79_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
+
+    // DoubleBox
+
+    public static native int ppl_new_Double_Box_from_space_dimension(PointerByReference pph, Dimension d, int empty);
+
+    public static native int ppl_new_Double_Box_from_Double_Box(PointerByReference pph, Pointer ph);
+
+    public static native int ppl_new_Double_Box_from_Double_Box_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
+
+    public static native int ppl_new_Double_Box_from_Constraint_System(PointerByReference pph, Pointer cs);
+
+    public static native int ppl_new_Double_Box_recycle_Constraint_System(PointerByReference pph, Pointer cs);
+
+    public static native int ppl_new_Double_Box_from_Congruence_System(PointerByReference pph, Pointer cs);
+
+    public static native int ppl_new_Double_Box_recycle_Congruence_System(PointerByReference pph, Pointer cs);
+
+    public static native int ppl_new_Double_Box_from_Generator_System(PointerByReference pph, Pointer gs);
+
+    public static native int ppl_new_Double_Box_recycle_Generator_System(PointerByReference pph, Pointer gs);
+
+    public static native int ppl_assign_Double_Box_from_Double_Box(Pointer dst, Pointer src);
+
+    public static native int ppl_new_Double_Box_from_C_Polyhedron(PointerByReference pph, Pointer ph);
+
+    public static native int ppl_new_Double_Box_from_C_Polyhedron_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
+
+    public static native int ppl_new_Double_Box_from_NNC_Polyhedron(PointerByReference pph, Pointer ph);
+
+    public static native int ppl_new_Double_Box_from_NNC_Polyhedron_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
+
+    public static native int ppl_delete_Double_Box(Pointer ph);
+
+    public static native int ppl_Double_Box_space_dimension(Pointer ph, DimensionByReference m);
+
+    public static native int ppl_Double_Box_affine_dimension(Pointer ph, DimensionByReference m);
+
+    public static native int ppl_Double_Box_relation_with_Constraint(Pointer ph, Pointer c);
+
+    public static native int ppl_Double_Box_relation_with_Generator(Pointer ph, Pointer g);
+
+    public static native int ppl_Double_Box_get_constraints(Pointer ph, PointerByReference pcs);
+
+    public static native int ppl_Double_Box_get_congruences(Pointer ph, PointerByReference pcs);
+
+    public static native int ppl_Double_Box_get_minimized_constraints(Pointer ph, PointerByReference pcs);
+
+    public static native int ppl_Double_Box_get_minimized_congruences(Pointer ph, PointerByReference pcs);
+
+    public static native int ppl_Double_Box_is_empty(Pointer ph);
+
+    public static native int ppl_Double_Box_is_universe(Pointer ph);
+
+    public static native int ppl_Double_Box_is_bounded(Pointer ph);
+
+    public static native int ppl_Double_Box_contains_integer_point(Pointer ph);
+
+    public static native int ppl_Double_Box_is_topologically_closed(Pointer ph);
+
+    public static native int ppl_Double_Box_is_discrete(Pointer ph);
+
+    public static native int ppl_Double_Box_constrains(Pointer ph, Dimension var);
+
+    public static native int ppl_Double_Box_bounds_from_above(Pointer ph, Pointer le);
+
+    public static native int ppl_Double_Box_bounds_from_below(Pointer ph, Pointer le);
+
+    public static native int ppl_Double_Box_maximize_with_point(Pointer ph, Pointer le, Pointer sup_n, Pointer sup_d,
+            IntByReference pmaximum, Pointer point);
+
+    public static native int ppl_Double_Box_maximize(Pointer ph, Pointer le, Pointer sup_n, Pointer sup_d,
+            IntByReference pmaximum);
+
+    public static native int ppl_Double_Box_minimize_with_point(Pointer ph, Pointer le, Pointer inf_n, Pointer inf_d,
+            IntByReference pminimum, Pointer point);
+
+    public static native int ppl_Double_Box_minimize(Pointer ph, Pointer le, Pointer inf_n, Pointer inf_d,
+            IntByReference pminimum);
+
+    public static native int ppl_Double_Box_contains_Double_Box(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_strictly_contains_Double_Box(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_is_disjoint_from_Double_Box(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_equals_Double_Box(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_OK(Pointer ph);
+
+    public static native int ppl_Double_Box_external_memory_in_bytes(Pointer ph, DimensionByReference sz);
+
+    public static native int ppl_Double_Box_total_memory_in_bytes(Pointer ph, DimensionByReference sz);
+
+    public static native int ppl_Double_Box_add_constraint(Pointer ph, Pointer c);
+
+    public static native int ppl_Double_Box_add_congruence(Pointer ph, Pointer c);
+
+    public static native int ppl_Double_Box_add_constraints(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_add_congruences(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_add_recycled_constraints(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_add_recycled_congruences(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_refine_with_constraint(Pointer ph, Pointer c);
+
+    public static native int ppl_Double_Box_refine_with_congruence(Pointer ph, Pointer c);
+
+    public static native int ppl_Double_Box_refine_with_constraints(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_refine_with_congruences(Pointer ph, Pointer cs);
+
+    public static native int ppl_Double_Box_intersection_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_upper_bound_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_difference_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_simplify_using_context_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_time_elapse_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_topological_closure_assign(Pointer ph);
+
+    public static native int ppl_Double_Box_unconstrain_space_dimension(Pointer ph, Dimension var);
+
+    public static native int ppl_Double_Box_unconstrain_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+
+    public static native int ppl_Double_Box_affine_image(Pointer ph, Dimension var, Pointer le, Pointer d);
+
+    public static native int ppl_Double_Box_affine_preimage(Pointer ph, Dimension var, Pointer le, Pointer d);
+
+    public static native int ppl_Double_Box_bounded_affine_image(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+            Pointer d);
+
+    public static native int ppl_Double_Box_bounded_affine_preimage(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+            Pointer d);
+
+    public static native int ppl_Double_Box_generalized_affine_image(Pointer ph, Dimension var, int relsym, Pointer le,
+            Pointer d);
+
+    public static native int ppl_Double_Box_generalized_affine_preimage(Pointer ph, Dimension var, int relsym,
+            Pointer le, Pointer d);
+
+    public static native int ppl_Double_Box_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
+            Pointer rhs);
+
+    public static native int ppl_Double_Box_generalized_affine_preimage_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
+            Pointer rhs);
+
+    public static native int ppl_Double_Box_concatenate_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_add_space_dimensions_and_embed(Pointer ph, Dimension d);
+
+    public static native int ppl_Double_Box_add_space_dimensions_and_project(Pointer ph, Dimension d);
+
+    public static native int ppl_Double_Box_remove_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+
+    public static native int ppl_Double_Box_remove_higher_space_dimensions(Pointer ph, Dimension d);
+
+    public static native int ppl_Double_Box_map_space_dimensions(Pointer ph, Pointer maps, Dimension n);
+
+    public static native int ppl_Double_Box_expand_space_dimension(Pointer ph, Dimension d, Dimension m);
+
+    public static native int ppl_Double_Box_fold_space_dimensions(Pointer ph, Pointer ds, Dimension n, Dimension d);
+
+    public static native int ppl_io_print_Double_Box(Pointer x);
+
+    public static native int ppl_io_fprint_Double_Box(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Double_Box(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Double_Box_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Double_Box_ascii_load(Pointer x, Pointer stream);
 }

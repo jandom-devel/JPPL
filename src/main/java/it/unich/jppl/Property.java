@@ -66,11 +66,11 @@ public interface Property<T extends Property<T>> {
 
     public Optional<ExtremalOutput> minimize(LinearExpression le);
 
-    public boolean contains(T ph);
+    public boolean contains(T p);
 
-    public boolean strictlyContains(T ph);
+    public boolean strictlyContains(T p);
 
-    public boolean isDisjointFrom(T ph);
+    public boolean isDisjointFrom(T p);
 
     public boolean isOK();
 
@@ -98,15 +98,15 @@ public interface Property<T extends Property<T>> {
 
     //public T refineWithCongruences(CongruenceSystem c);
 
-    public T intersectionAssign(T ph);
+    public T intersectionAssign(T p);
 
-    public T upperBoundAssign(T ph);
+    public T upperBoundAssign(T p);
 
-    public T differenceAssign(T ph);
+    public T differenceAssign(T p);
 
-    public T simplofyUsingContextAssign(T ph);
+    public T simplofyUsingContextAssign(T p);
 
-    public T timeElapseAssign(T ph);
+    public T timeElapseAssign(T p);
 
     public T topologicalClosureAssign();
 
@@ -130,7 +130,7 @@ public interface Property<T extends Property<T>> {
 
     public T generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
 
-    public T concatenateAssign(T ph);
+    public T concatenateAssign(T p);
 
     public T addSpaceDimensionsAndEmbed(long d);
 
