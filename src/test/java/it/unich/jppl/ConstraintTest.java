@@ -2,11 +2,11 @@ package it.unich.jppl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Constraint.ZeroDimConstraint;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class ConstraintTest {
 
@@ -17,9 +17,9 @@ public class ConstraintTest {
         var le = new LinearExpression();
         le.add(new Coefficient(3));
         le.add(new Coefficient(1), 0);
-        c1  = new Constraint(le, ConstraintType.GREATER_THAN);
+        c1 = new Constraint(le, ConstraintType.GREATER_THAN);
         le.add(new Coefficient(-1), 1);
-        c2  = new Constraint(le, ConstraintType.EQUAL);
+        c2 = new Constraint(le, ConstraintType.EQUAL);
     }
 
     @Test

@@ -2,13 +2,13 @@ package it.unich.jppl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import it.unich.jppl.Constraint.ConstraintType;
+import it.unich.jppl.ConstraintSystem.ZeroDimConstraintSystem;
+
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import it.unich.jppl.Constraint.ConstraintType;
-import it.unich.jppl.ConstraintSystem.ZeroDimConstraintSystem;
 
 public class ConstraintSystemTest {
 
@@ -19,9 +19,9 @@ public class ConstraintSystemTest {
         var le = new LinearExpression();
         le.add(new Coefficient(3));
         le.add(new Coefficient(1), 0);
-        c1  = new Constraint(le, ConstraintType.GREATER_THAN);
+        c1 = new Constraint(le, ConstraintType.GREATER_THAN);
         le.add(new Coefficient(-1), 1);
-        c2  = new Constraint(le, ConstraintType.EQUAL);
+        c2 = new Constraint(le, ConstraintType.EQUAL);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ConstraintSystemTest {
         var le = new LinearExpression(2);
         le.add(new Coefficient(3));
         le.add(new Coefficient(1), 0);
-        var c1bis  = new Constraint(le, ConstraintType.GREATER_THAN);
+        var c1bis = new Constraint(le, ConstraintType.GREATER_THAN);
         var csi = cs.iterator();
         assertEquals(c1bis, csi.next());
         assertEquals(c2, csi.next());

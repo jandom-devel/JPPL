@@ -1,33 +1,21 @@
 package it.unich.jppl;
 
+import static it.unich.jppl.Constraint.RelationWithConstraint.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Domain.DegenerateElement;
-import static it.unich.jppl.Constraint.RelationWithConstraint.*;
+import it.unich.jppl.Property.WideningToken;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class PolyhedronTest {
 
-    static Constraint c1, c2;
-
-    @BeforeAll
-    static void init() {
-        var le = new LinearExpression(2);
-        le.add(new Coefficient(3));
-        le.add(new Coefficient(1), 0);
-        c1  = new Constraint(le, ConstraintType.GREATER_THAN);
-        le.add(new Coefficient(-1), 1);
-        c2  = new Constraint(le, ConstraintType.EQUAL);
-    }
-
     @Test
     void testCConstructors() {
+        var le = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
+        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+
         var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
         assertTrue(ph1.isOK());
         assertTrue(ph1.isUniverse());
@@ -55,6 +43,9 @@ public class PolyhedronTest {
 
     @Test
     void testNNCConstructors() {
+        var le = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
+        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+
         var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
         assertTrue(ph1.isOK());
         assertTrue(ph1.isUniverse());
@@ -82,15 +73,62 @@ public class PolyhedronTest {
 
     @Test
     void testGetConstraints() {
+        var le = new LinearExpression(2).add(new Coefficient(3)).add(new Coefficient(1), 0);
+        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+        le.add(new Coefficient(-1), 1);
+        var c2 = new Constraint(le, ConstraintType.EQUAL);
+
         var ph = new NNCPolyhedron(2, DegenerateElement.UNIVERSE);
         ph.addConstraint(c1).addConstraint(c2);
         var constraints = ph.getConstraints();
-        for (var c: constraints)
+        for (var c : constraints)
             assertTrue(c.equals(c1) || c.equals(c2));
     }
 
     @Test
+    void testUnconstraints() {
+        var c0 = new Constraint(new LinearExpression().add(new Coefficient(-3)).add(new Coefficient(1), 0),
+                ConstraintType.GREATER_OR_EQUAL);
+        var c1 = new Constraint(new LinearExpression().add(new Coefficient(-2)).add(new Coefficient(1), 1),
+                ConstraintType.GREATER_OR_EQUAL);
+        var c2 = new Constraint(new LinearExpression().add(new Coefficient(-1)).add(new Coefficient(1), 2),
+                ConstraintType.GREATER_OR_EQUAL);
+        var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0).addConstraint(c1).addConstraint(c2);
+        ph.unconstrainSpaceDimension(0);
+        assertEquals(new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1).addConstraint(c2), ph);
+        ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0).addConstraint(c1).addConstraint(c2);
+        long[] ds = { 0, 2 };
+        ph.unconstrainSpaceDimensions(ds);
+        assertEquals(new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1), ph);
+    }
+
+    @Test
+    void testWidenings() {
+        var le = new LinearExpression().add(new Coefficient(1), 0);
+        var c0 = new Constraint(new LinearExpression(le).add(new Coefficient(-3)), ConstraintType.GREATER_OR_EQUAL);
+        var c1 = new Constraint(new LinearExpression(le).add(new Coefficient(-2)), ConstraintType.GREATER_OR_EQUAL);
+        var c2 = new Constraint(new LinearExpression(le).add(new Coefficient(-1)), ConstraintType.GREATER_OR_EQUAL);
+        var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0);
+        var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1);
+        var w = new WideningToken(1);
+        ph1.H79WideningAssign(ph, w);
+        assertEquals(0, w.tokens);
+        var optMin = ph1.minimize(le);
+        assertTrue(optMin.isPresent());
+        var min = optMin.get();
+        assertEquals(new Coefficient(2), min.supN);
+        var ph2 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c2);
+        ph2.H79WideningAssign(ph1, w);
+        assertTrue(ph2.minimize(le).isEmpty());
+    }
+
+    @Test
     void test1() {
+        var lec = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
+        var c1 = new Constraint(lec, ConstraintType.GREATER_THAN);
+        lec.add(new Coefficient(-1), 1);
+        var c2 = new Constraint(lec, ConstraintType.EQUAL);
+
         var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
         ph1.refineWithConstraint(c1);
         assertEquals(3, ph1.getSpaceDimension());
@@ -106,8 +144,7 @@ public class PolyhedronTest {
         assertEquals(STRICTLY_INTERSECTS, ph1.getRelationWithConstraint(c1));
 
         // boundsFromAbove / boundsFromBelow
-        var le = new LinearExpression();
-        le.add(new Coefficient(1), 0);
+        var le = new LinearExpression().add(new Coefficient(1), 0);
         assertFalse(ph1.boundsFromAbove(le));
         assertTrue(ph1.boundsFromBelow(le));
 
@@ -142,6 +179,11 @@ public class PolyhedronTest {
 
     @Test
     void test2() {
+        var lec = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
+        var c1 = new Constraint(lec, ConstraintType.GREATER_THAN);
+        lec.add(new Coefficient(-1), 1);
+        var c2 = new Constraint(lec, ConstraintType.EQUAL);
+
         var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
         ph1.refineWithConstraint(c1);
         assertTrue(ph1.constraints(0));
@@ -173,7 +215,4 @@ public class PolyhedronTest {
         assertEquals(STRICTLY_INTERSECTS, ph2.getRelationWithConstraint(c1));
     }
 
-
-
 }
-

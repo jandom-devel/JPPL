@@ -43,7 +43,7 @@ public class CoefficientTest {
     @Test
     void testBounds() {
         var c = new Coefficient(1);
-        assertTrue(! Coefficient.isBounded() || (c.minValue() < c.maxValue()));
+        assertTrue(!Coefficient.isBounded() || (c.minValue() < c.maxValue()));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package it.unich.jppl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +21,8 @@ class PPLTest {
         int revision = PPL.getVersionRevision();
         int beta = PPL.getVersionBeta();
         String version = PPL.getVersion();
-        String expectedVersion = major + "." + minor +
-            (revision != 0 ? "." + revision : "") + (beta != 0 ? "b" + beta  : "");
+        String expectedVersion = major + "." + minor + (revision != 0 ? "." + revision : "")
+                + (beta != 0 ? "b" + beta : "");
         assertEquals(expectedVersion, version);
     }
 
@@ -39,7 +38,7 @@ class PPLTest {
         long var = 2;
         assertEquals("C", PPL.ioASPrintVariable(var));
         VariableOutputFunction f = PPL.ioGetVariableOutputFunction();
-        PPL.ioSetVariableOutputFunction( (x) -> "v" + x );
+        PPL.ioSetVariableOutputFunction((x) -> "v" + x);
         assertEquals("v2", PPL.ioASPrintVariable(var));
         PPL.ioSetVariableOutputFunction(f);
         assertEquals("C", PPL.ioASPrintVariable(var));
@@ -49,10 +48,7 @@ class PPLTest {
     void wrapStringTest() {
         String s = "This  is a very long text";
         String newLine = System.getProperty("line.separator");
-        String expected = String.join(newLine,
-            "This  is a",
-            "  very long",
-            "  text");
+        String expected = String.join(newLine, "This  is a", "  very long", "  text");
         String actual = PPL.ioWrapString(s, 2, 10, 10);
         assertEquals(expected, actual);
     }

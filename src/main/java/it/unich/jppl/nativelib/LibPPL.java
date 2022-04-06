@@ -4,6 +4,7 @@ import it.unich.jppl.ErrorHandler;
 import it.unich.jppl.VariableOutputFunction;
 
 import com.sun.jna.IntegerType;
+import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
@@ -75,14 +76,14 @@ public final class LibPPL {
         }
     }
 
-    public static class DimensionArray extends Pointer {
+    public static class DimensionArray extends Memory {
         public DimensionArray(long[] ds) {
             super(ds.length * Native.SIZE_T_SIZE);
             for (int i = 0; i < ds.length; i++)
                 if (Native.SIZE_T_SIZE == 8)
-                    setLong(8 * i, ds[i]);
+                    setLong(8*i, ds[i]);
                 else
-                    setInt(8 * i, (int) ds[i]);
+                    setInt(4*i, (int) ds[i]);
         }
     }
 

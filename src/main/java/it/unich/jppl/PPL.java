@@ -11,7 +11,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
-final class PPL {
+public class PPL {
 
     static final Cleaner cleaner = Cleaner.create();
 

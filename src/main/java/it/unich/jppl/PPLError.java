@@ -1,6 +1,6 @@
 package it.unich.jppl;
 
-class PPLError extends Error {
+public class PPLError extends Error {
     public static final int PPL_ERROR_OUT_OF_MEMORY = -2;
     public static final int PPL_ERROR_INVALID_ARGUMENT = -3;
     public static final int PPL_ERROR_DOMAIN_ERROR = -4;

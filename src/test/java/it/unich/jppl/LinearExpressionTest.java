@@ -88,4 +88,3 @@ public class LinearExpressionTest {
         assertEquals(new Coefficient(0), le.getCoefficient(0));
     }
 }
-
