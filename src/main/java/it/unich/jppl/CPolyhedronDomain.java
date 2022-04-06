@@ -26,4 +26,3 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
         return new CPolyhedron(ph);
     }
 }
-

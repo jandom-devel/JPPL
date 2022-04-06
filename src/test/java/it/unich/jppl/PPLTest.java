@@ -37,12 +37,12 @@ class PPLTest {
     @Test
     void variablePrintTest() {
         long var = 2;
-        assertEquals("C", PPL.IOASPrintVariable(var));
-        VariableOutputFunction f = PPL.IOGetVariableOutputFunction();
-        PPL.IOSetVariableOutputFunction( (x) -> "v" + x );
-        assertEquals("v2", PPL.IOASPrintVariable(var));
-        PPL.IOSetVariableOutputFunction(f);
-        assertEquals("C", PPL.IOASPrintVariable(var));
+        assertEquals("C", PPL.ioASPrintVariable(var));
+        VariableOutputFunction f = PPL.ioGetVariableOutputFunction();
+        PPL.ioSetVariableOutputFunction( (x) -> "v" + x );
+        assertEquals("v2", PPL.ioASPrintVariable(var));
+        PPL.ioSetVariableOutputFunction(f);
+        assertEquals("C", PPL.ioASPrintVariable(var));
     }
 
     @Test
@@ -53,7 +53,7 @@ class PPLTest {
             "This  is a",
             "  very long",
             "  text");
-        String actual = PPL.IOWrapString(s, 2, 10, 10);
+        String actual = PPL.ioWrapString(s, 2, 10, 10);
         assertEquals(expected, actual);
     }
 }

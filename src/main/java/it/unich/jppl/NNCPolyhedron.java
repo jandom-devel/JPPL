@@ -1,79 +1,113 @@
 package it.unich.jppl;
 
-import com.sun.jna.ptr.PointerByReference;
+import static it.unich.jppl.nativelib.LibPPL.*;
 
 import it.unich.jppl.Domain.ComplexityClass;
 import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Domain.RecycleInput;
+import it.unich.jppl.nativelib.LibPPL.Dimension;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import com.sun.jna.ptr.PointerByReference;
 
-/**
- * Created by amato on 17/03/16.
- */
-public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property<NNCPolyhedron>  {
+public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property<NNCPolyhedron> {
 
     protected NNCPolyhedron self() {
         return this;
     }
 
     public NNCPolyhedron(long d, DegenerateElement kind) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_space_dimension(pph, new Dimension(d), kind == DegenerateElement.EMPTY ? 1 : 0);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_space_dimension(pph, new Dimension(d),
+                kind == DegenerateElement.EMPTY ? 1 : 0);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(NNCPolyhedron ph) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(pph, ph.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(pph, ph.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(NNCPolyhedron ph, ComplexityClass complexity) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(pph, ph.obj, complexity.ordinal());
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(ConstraintSystem cs) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_Constraint_System(pph, cs.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_Constraint_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(ConstraintSystem cs, RecycleInput dummy) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_recycle_Constraint_System(pph, cs.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_recycle_Constraint_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
-/*
+    /*
     public NNCPolyhedron(CongruenceSystem cs) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_Congruence_System(pph, cs.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_Congruence_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(CongruenceSystem cs, RecycleInput dummy) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_recycle_Congruence_System(pph, cs.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_recycle_Congruence_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
         init(pph.getValue());
     }
-*/
+    */
 
     public NNCPolyhedron assign(NNCPolyhedron ph) {
-        ppl_assign_NNC_Polyhedron_from_NNC_Polyhedron(obj, ph.obj);
+        int result = ppl_assign_NNC_Polyhedron_from_NNC_Polyhedron(pplObj, ph.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
 
     public NNCPolyhedron(CPolyhedron ph) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_C_Polyhedron(pph, ph.obj);
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_C_Polyhedron(pph, ph.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(CPolyhedron ph, ComplexityClass complexity) {
-        PointerByReference pph = new PointerByReference();
-        ppl_new_NNC_Polyhedron_from_C_Polyhedron_with_complexity(pph, ph.obj, complexity.ordinal());
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_C_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
+
+    /*
+    public NNCPolyhedron(GeneratorSystem cs) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_from_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+
+    public NNCPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_recycle_Generator_System(pph, cs.obj);
+        if (result < 0) throw new PPLError(result);
+        init(pph.getValue());
+    }
+    */
+
 }

@@ -1,148 +1,166 @@
 package it.unich.jppl;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.Native;
-import com.sun.jna.ptr.PointerByReference;
-
 import static it.unich.jppl.nativelib.LibPPL.*;
 
-/**
- * Created by amato on 17/03/16.
- */
+import it.unich.jppl.nativelib.LibPPL.Dimension;
+import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.PointerByReference;
+
 public class LinearExpression {
-    Pointer obj;
+    Pointer pplObj;
 
     private static class LinearExpressionCleaner implements Runnable {
-        private Pointer obj;
+        private Pointer pplObj;
 
         LinearExpressionCleaner(Pointer obj) {
-            this.obj = obj;
+            this.pplObj = obj;
         }
 
         @Override
         public void run() {
-            ppl_delete_Linear_Expression(obj);
+            ppl_delete_Linear_Expression(pplObj);
         }
     }
 
-    public Pointer getNative() {
-        return obj;
-    }
-
     private void init(Pointer p) {
-        obj = p;
-        PPL.cleaner.register(this, new LinearExpressionCleaner(obj));
+        pplObj = p;
+        PPL.cleaner.register(this, new LinearExpressionCleaner(pplObj));
     }
 
     public LinearExpression() {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression(ple);
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression(ple);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
 
     public LinearExpression(long d) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
 
     public LinearExpression(Constraint c) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_from_Constraint(ple, c.obj);
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_Constraint(ple, c.pplObj);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
 
     /*
     public LinearExpression(Generator g) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_from_Generator(ple, g.obj);
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_Generator(ple, g.obj);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
-    */
+     */
 
     /*
     public LinearExpression(Congruence c) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_from_Congruence(ple, c.obj);
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_Congruence(ple, c.obj);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
     */
 
     /*
     public LinearExpression(GriGenerator g) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_from_GridGenerator(ple, g.obj);
+        vaar ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.obj);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
     */
 
     public LinearExpression(LinearExpression le) {
-        PointerByReference ple = new PointerByReference();
-        ppl_new_Linear_Expression_from_Linear_Expression(ple, le.obj);
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_Linear_Expression(ple, le.pplObj);
+        if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
 
     public LinearExpression assign(LinearExpression le) {
-        ppl_assign_Linear_Expression_from_Linear_Expression(obj, le.obj);
+        int result = ppl_assign_Linear_Expression_from_Linear_Expression(pplObj, le.pplObj);
+        if (result < 0) throw new PPLError(result);
         return this;
     }
 
     public long getSpaceDimension() {
-        var dref = new DimensionByReference();
-        ppl_Linear_Expression_space_dimension(obj, dref);
-        return dref.getValue().longValue();
+        var m = new DimensionByReference();
+        int result = ppl_Linear_Expression_space_dimension(pplObj, m);
+        if (result < 0) throw new PPLError(result);
+        return m.getValue().longValue();
     }
 
     public Coefficient getCoefficient(long var) {
         var c = new Coefficient();
-        ppl_Linear_Expression_coefficient(obj, new Dimension(var), c.obj);
+        int result = ppl_Linear_Expression_coefficient(pplObj, new Dimension(var), c.pplObj);
+        if (result < 0) throw new PPLError(result);
         return c;
     }
 
     public Coefficient getCoefficient() {
         var c = new Coefficient();
-        ppl_Linear_Expression_inhomogeneous_term(obj, c.obj);
+        int result = ppl_Linear_Expression_inhomogeneous_term(pplObj, c.pplObj);
+        if (result < 0) throw new PPLError(result);
         return c;
     }
 
     public boolean isOK() {
-        return ppl_Linear_Expression_OK(obj) > 0;
+        int result = ppl_Linear_Expression_OK(pplObj);
+        if (result < 0) throw new PPLError(result);
+        return result > 0;
     }
 
     public boolean isZero() {
-        return ppl_Linear_Expression_is_zero(obj);
+        int result = ppl_Linear_Expression_is_zero(pplObj);
+        if (result < 0) throw new PPLError(result);
+        return result > 0;
     }
 
     public boolean allHomogeneousTermsAreZero() {
-        return ppl_Linear_Expression_all_homogeneous_terms_are_zero(obj);
+        int result = ppl_Linear_Expression_all_homogeneous_terms_are_zero(pplObj);
+        if (result < 0) throw new PPLError(result);
+        return result > 0;
     }
 
     public LinearExpression add(Coefficient c, long d) {
-        ppl_Linear_Expression_add_to_coefficient(obj, new Dimension(d), c.obj);
+        int result = ppl_Linear_Expression_add_to_coefficient(pplObj, new Dimension(d), c.pplObj);
+        if (result < 0) throw new PPLError(result);
         return this;
     }
 
     public LinearExpression add(Coefficient c) {
-        ppl_Linear_Expression_add_to_inhomogeneous(obj, c.obj);
+        int result = ppl_Linear_Expression_add_to_inhomogeneous(pplObj, c.pplObj);
+        if (result < 0) throw new PPLError(result);
         return this;
     }
 
     public LinearExpression add(LinearExpression le) {
-        ppl_add_Linear_Expression_to_Linear_Expression(obj, le.obj);
+        int result = ppl_add_Linear_Expression_to_Linear_Expression(pplObj, le.pplObj);
+        if (result < 0) throw new PPLError(result);
         return this;
     }
 
     public LinearExpression multiply(Coefficient c) {
-        ppl_multiply_Linear_Expression_by_Coefficient (obj, c.obj);
+        int result = ppl_multiply_Linear_Expression_by_Coefficient(pplObj, c.pplObj);
+        if (result < 0) throw new PPLError(result);
         return this;
     }
 
     @Override
     public String toString() {
-        PointerByReference pstr = new PointerByReference();
-        ppl_io_asprint_Linear_Expression(pstr, obj);
-        Pointer p = pstr.getValue();
-        String s = p.getString(0);
+        var pstr = new PointerByReference();
+        int result = ppl_io_asprint_Linear_Expression(pstr, pplObj);
+        if (result < 0) throw new PPLError(result);
+        var p = pstr.getValue();
+        var s = p.getString(0);
         Native.free(Pointer.nativeValue(p));
         return s;
     }
@@ -152,10 +170,10 @@ public class LinearExpression {
         if (this == obj)
             return true;
         if (obj instanceof LinearExpression) {
-            var le = (LinearExpression) obj;
+            var le1 = (LinearExpression) obj;
             var le2 = new LinearExpression(this);
             le2.multiply(new Coefficient(-1));
-            le2.add(le);
+            le2.add(le1);
             return le2.isZero();
         }
         return false;

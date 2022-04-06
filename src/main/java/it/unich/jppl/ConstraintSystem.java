@@ -1,33 +1,33 @@
 package it.unich.jppl;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.Native;
-import com.sun.jna.ptr.PointerByReference;
-
 import static it.unich.jppl.nativelib.LibPPL.*;
+
+import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ConstraintSystem implements Iterable<Constraint> {
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.ptr.PointerByReference;
 
-    Pointer obj;
+public class ConstraintSystem implements Iterable<Constraint> {
+    Pointer pplObj;
 
     public enum ZeroDimConstraintSystem {
-        EMPTY,
-        UNSATISFIABLE
+        EMPTY, UNSATISFIABLE
     }
 
     private static class ConstraintSystemCleaner implements Runnable {
-        private Pointer obj;
+        private Pointer pplObj;
 
         ConstraintSystemCleaner(Pointer obj) {
-            this.obj = obj;
+            this.pplObj = obj;
         }
 
         @Override
         public void run() {
-            ppl_delete_Constraint_System(obj);
+            ppl_delete_Constraint_System(pplObj);
         }
     }
 
@@ -36,97 +36,135 @@ public class ConstraintSystem implements Iterable<Constraint> {
         private Pointer cend;
 
         ConstraintSystemIterator() {
-            var pcit = new PointerByReference();
-            ppl_new_Constraint_System_const_iterator(pcit);
-            cit = pcit.getValue();
-            ppl_Constraint_System_begin(obj, cit);
-            ppl_new_Constraint_System_const_iterator(pcit);
-            cend = pcit.getValue();
-            ppl_Constraint_System_end(obj, cend);
+            var pcsit = new PointerByReference();
+            int result = ppl_new_Constraint_System_const_iterator(pcsit);
+            if (result < 0)
+                throw new PPLError(result);
+            cit = pcsit.getValue();
+            result = ppl_Constraint_System_begin(pplObj, cit);
+            if (result < 0)
+                throw new PPLError(result);
+            result = ppl_new_Constraint_System_const_iterator(pcsit);
+            if (result < 0)
+                throw new PPLError(result);
+            cend = pcsit.getValue();
+            result = ppl_Constraint_System_end(pplObj, cend);
+            if (result < 0)
+                throw new PPLError(result);
         }
 
         @Override
         public boolean hasNext() {
-            return ppl_Constraint_System_const_iterator_equal_test(cit, cend) == 0;
+            int result = ppl_Constraint_System_const_iterator_equal_test(cit, cend);
+            if (result < 0)
+                throw new PPLError(result);
+            return result == 0;
         }
 
         @Override
         public Constraint next() {
-            if (! hasNext())
+            if (!hasNext())
                 throw new NoSuchElementException();
             var pc = new PointerByReference();
-            ppl_Constraint_System_const_iterator_dereference(cit, pc);
-            ppl_Constraint_System_const_iterator_increment(cit);
+            int result = ppl_Constraint_System_const_iterator_dereference(cit, pc);
+            if (result < 0)
+                throw new PPLError(result);
+            result = ppl_Constraint_System_const_iterator_increment(cit);
+            if (result < 0)
+                throw new PPLError(result);
             return new Constraint(pc.getValue());
         }
     }
 
     private void init(Pointer p) {
-        obj = p;
-        PPL.cleaner.register(this, new ConstraintSystemCleaner(obj));
+        pplObj = p;
+        PPL.cleaner.register(this, new ConstraintSystemCleaner(pplObj));
     }
 
     public ConstraintSystem() {
-        PointerByReference pcs = new PointerByReference();
-        ppl_new_Constraint_System(pcs);
+        var pcs = new PointerByReference();
+        int result = ppl_new_Constraint_System(pcs);
+        if (result < 0)
+            throw new PPLError(result);
         init(pcs.getValue());
     }
 
     public ConstraintSystem(ZeroDimConstraintSystem type) {
-        PointerByReference pcs = new PointerByReference();
-        if (type == ZeroDimConstraintSystem.EMPTY)
-            ppl_new_Constraint_System(pcs);
-        else
-            ppl_new_Constraint_System_zero_dim_empty(pcs);
+        var pcs = new PointerByReference();
+        int result = (type == ZeroDimConstraintSystem.EMPTY) ? ppl_new_Constraint_System(pcs)
+                : ppl_new_Constraint_System_zero_dim_empty(pcs);
+        if (result < 0)
+            throw new PPLError(result);
         init(pcs.getValue());
     }
 
     public ConstraintSystem(Constraint c) {
-        PointerByReference pcs = new PointerByReference();
-        ppl_new_Constraint_System_from_Constraint(pcs, c.obj);
+        var pcs = new PointerByReference();
+        int result = ppl_new_Constraint_System_from_Constraint(pcs, c.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pcs.getValue());
     }
 
     public ConstraintSystem(ConstraintSystem cs) {
-        this(cs.obj);
+        this(cs.pplObj);
     }
 
     ConstraintSystem(Pointer cs) {
-        PointerByReference pcs = new PointerByReference();
-        ppl_new_Constraint_System_from_Constraint_System(pcs, obj);
+        var pcs = new PointerByReference();
+        int result = ppl_new_Constraint_System_from_Constraint_System(pcs, cs);
+        if (result < 0)
+            throw new PPLError(result);
         init(pcs.getValue());
     }
 
     public ConstraintSystem assign(ConstraintSystem cs) {
-        ppl_assign_Constraint_System_from_Constraint_System(obj, cs.obj);
+        int result = ppl_assign_Constraint_System_from_Constraint_System(pplObj, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
 
     public long getSpaceDimension() {
-        var dref = new DimensionByReference();
-        ppl_Constraint_System_space_dimension(obj, dref);
-        return dref.getValue().longValue();
+        var m = new DimensionByReference();
+        int result = ppl_Constraint_System_space_dimension(pplObj, m);
+        if (result < 0)
+            throw new PPLError(result);
+        return m.getValue().longValue();
     }
 
     public boolean isEmpty() {
-        return ppl_Constraint_System_empty(obj) > 0;
+        int result = ppl_Constraint_System_empty(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return result > 0;
     }
 
     public boolean hasStrictInequalities() {
-        return ppl_Constraint_System_has_strict_inequalities(obj) > 0;
+        int result = ppl_Constraint_System_has_strict_inequalities(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return result > 0;
     }
 
     public boolean isOK() {
-        return ppl_Constraint_System_OK(obj) > 0;
+        int result = ppl_Constraint_System_OK(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return result > 0;
     }
 
     public ConstraintSystem clear() {
-        ppl_Constraint_System_clear(obj);
+        int result = ppl_Constraint_System_clear(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
 
     public ConstraintSystem add(Constraint c) {
-        ppl_Constraint_System_insert_Constraint(obj, c.obj);
+        int result = ppl_Constraint_System_insert_Constraint(pplObj, c.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
 
@@ -135,12 +173,13 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     public String toString() {
-        PointerByReference pstr = new PointerByReference();
-        ppl_io_asprint_Constraint_System(pstr,obj);
-        Pointer p = pstr.getValue();
-        String s = p.getString(0);
+        var pstr = new PointerByReference();
+        int result = ppl_io_asprint_Constraint_System(pstr, pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        var p = pstr.getValue();
+        var s = p.getString(0);
         Native.free(Pointer.nativeValue(p));
         return s;
     }
 }
-

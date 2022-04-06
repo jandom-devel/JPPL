@@ -81,5 +81,11 @@ public class LinearExpressionTest {
         assertEquals(le, le2);
         assertNotEquals(le, new LinearExpression());
     }
+
+    @Test
+    void testGetIllegalCoefficient() {
+        var le = new LinearExpression();
+        assertEquals(new Coefficient(0), le.getCoefficient(0));
+    }
 }
 

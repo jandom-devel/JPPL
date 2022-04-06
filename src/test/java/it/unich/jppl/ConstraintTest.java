@@ -55,4 +55,11 @@ public class ConstraintTest {
         assertEquals(c1, c3);
     }
 
+    @Test
+    void testGetIllegalCoefficient() {
+        var le = new Constraint(ZeroDimConstraint.POSITIVITY);
+        var exception = assertThrows(PPLError.class, () -> le.getCoefficient(0));
+        assertEquals(PPLError.PPL_ERROR_INVALID_ARGUMENT, exception.getPPLError());
+    }
+
 }

@@ -73,8 +73,12 @@ public class ConstraintSystemTest {
         var cs = new ConstraintSystem();
         cs.add(c1);
         cs.add(c2);
+        var le = new LinearExpression(2);
+        le.add(new Coefficient(3));
+        le.add(new Coefficient(1), 0);
+        var c1bis  = new Constraint(le, ConstraintType.GREATER_THAN);
         var csi = cs.iterator();
-        assertEquals(c1, csi.next());
+        assertEquals(c1bis, csi.next());
         assertEquals(c2, csi.next());
         assertThrows(NoSuchElementException.class, () -> csi.next());
     }
