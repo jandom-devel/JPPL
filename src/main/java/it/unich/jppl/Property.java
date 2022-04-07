@@ -10,11 +10,13 @@ public interface Property<T extends Property<T>> {
         public final Coefficient supN;
         public final Coefficient supD;
         public final boolean isMaximum;
+        public final Generator point;
 
-        ExtremalOutput(Coefficient supN, Coefficient supD, boolean isMaximum) {
+        ExtremalOutput(Coefficient supN, Coefficient supD, boolean isMaximum, Generator point) {
             this.supN = supN;
             this.supD = supD;
             this.isMaximum = isMaximum;
+            this.point = point;
         }
     }
 
@@ -34,7 +36,7 @@ public interface Property<T extends Property<T>> {
 
     public int getRelationWithConstraint(Constraint c);
 
-    // public int getRelationWithGenerator(Generator g);
+    public int getRelationWithGenerator(Generator g);
 
     public ConstraintSystem getConstraints();
 
@@ -64,7 +66,11 @@ public interface Property<T extends Property<T>> {
 
     public Optional<ExtremalOutput> maximize(LinearExpression le);
 
+    public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le);
+
     public Optional<ExtremalOutput> minimize(LinearExpression le);
+
+    public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le);
 
     public boolean contains(T p);
 

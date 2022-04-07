@@ -174,13 +174,11 @@ public class DoubleBox implements Property<DoubleBox> {
         return result;
     }
 
-    /*
     public int getRelationWithGenerator(Generator g) {
-        int result = ppl_Double_Box_relation_with_Generator(obj, g.obj);
+        int result = ppl_Double_Box_relation_with_Generator(pplObj, g.pplObj);
         if (result < 0) throw new PPLError(result);
-        return resulT;
+        return result;
     }
-    */
 
     public ConstraintSystem getConstraints() {
         var pcs = new PointerByReference();
@@ -279,12 +277,6 @@ public class DoubleBox implements Property<DoubleBox> {
         return result > 0;
     }
 
-    /*
-    public boolean maximizeWithPoint(LinearExpression le) {
-
-    }
-    */
-
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
         var pcn = new PointerByReference();
         var result = ppl_new_Coefficient(pcn);
@@ -303,14 +295,34 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
     }
 
-    /*
-    public boolean minimizeWithPoint(LinearExpression le) {
-
+    public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
+        var pcn = new PointerByReference();
+        var result = ppl_new_Coefficient(pcn);
+        if (result < 0)
+            throw new PPLError(result);
+        var cn = pcn.getValue();
+        var pcd = new PointerByReference();
+        result = ppl_new_Coefficient(pcd);
+        if (result < 0)
+            throw new PPLError(result);
+        var cd = pcd.getValue();
+        var pmaximum = new IntByReference();
+        var ppoint = new PointerByReference();
+        result = ppl_new_Generator_zero_dim_point(ppoint);
+        if (result < 0)
+            throw new PPLError(result);
+        var point = ppoint.getValue();
+        result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        if (result < 0)
+            throw new PPLError(result);
+        else if (result == 0)
+            return Optional.empty();
+        else
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
     }
-    */
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
         var pcn = new PointerByReference();
@@ -330,7 +342,33 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+    }
+
+    public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
+        var pcn = new PointerByReference();
+        var result = ppl_new_Coefficient(pcn);
+        if (result < 0)
+            throw new PPLError(result);
+        var cn = pcn.getValue();
+        var pcd = new PointerByReference();
+        result = ppl_new_Coefficient(pcd);
+        if (result < 0)
+            throw new PPLError(result);
+        var cd = pcd.getValue();
+        var pmaximum = new IntByReference();
+        var ppoint = new PointerByReference();
+        result = ppl_new_Generator_zero_dim_point(ppoint);
+        if (result < 0)
+            throw new PPLError(result);
+        var point = ppoint.getValue();
+        result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        if (result < 0)
+            throw new PPLError(result);
+        else if (result == 0)
+            return Optional.empty();
+        else
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public boolean contains(DoubleBox box) {

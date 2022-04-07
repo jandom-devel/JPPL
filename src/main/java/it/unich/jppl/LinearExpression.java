@@ -52,14 +52,12 @@ public class LinearExpression {
         init(ple.getValue());
     }
 
-    /*
     public LinearExpression(Generator g) {
         var ple = new PointerByReference();
-        int result = ppl_new_Linear_Expression_from_Generator(ple, g.obj);
+        int result = ppl_new_Linear_Expression_from_Generator(ple, g.pplObj);
         if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
-     */
 
     /*
     public LinearExpression(Congruence c) {

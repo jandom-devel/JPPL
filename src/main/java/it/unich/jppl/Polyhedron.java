@@ -64,13 +64,11 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         return result;
     }
 
-    /*
     public int getRelationWithGenerator(Generator g) {
-        int result = ppl_Polyhedron_relation_with_Generator(obj, g.obj);
+        int result = ppl_Polyhedron_relation_with_Generator(pplObj, g.pplObj);
         if (result < 0) throw new PPLError(result);
-        return resulT;
+        return result;
     }
-    */
 
     public ConstraintSystem getConstraints() {
         var pcs = new PointerByReference();
@@ -193,14 +191,34 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
     }
 
-    /*
-    public boolean minimizeWithPoint(LinearExpression le) {
-
+    public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
+        var pcn = new PointerByReference();
+        var result = ppl_new_Coefficient(pcn);
+        if (result < 0)
+            throw new PPLError(result);
+        var cn = pcn.getValue();
+        var pcd = new PointerByReference();
+        result = ppl_new_Coefficient(pcd);
+        if (result < 0)
+            throw new PPLError(result);
+        var cd = pcd.getValue();
+        var pmaximum = new IntByReference();
+        var ppoint = new PointerByReference();
+        result = ppl_new_Generator_zero_dim_point(ppoint);
+        if (result < 0)
+            throw new PPLError(result);
+        var point = ppoint.getValue();
+        result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        if (result < 0)
+            throw new PPLError(result);
+        else if (result == 0)
+            return Optional.empty();
+        else
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
     }
-    */
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
         var pcn = new PointerByReference();
@@ -220,7 +238,33 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+    }
+
+    public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
+        var pcn = new PointerByReference();
+        var result = ppl_new_Coefficient(pcn);
+        if (result < 0)
+            throw new PPLError(result);
+        var cn = pcn.getValue();
+        var pcd = new PointerByReference();
+        result = ppl_new_Coefficient(pcd);
+        if (result < 0)
+            throw new PPLError(result);
+        var cd = pcd.getValue();
+        var pmaximum = new IntByReference();
+        var ppoint = new PointerByReference();
+        result = ppl_new_Generator_zero_dim_point(ppoint);
+        if (result < 0)
+            throw new PPLError(result);
+        var point = ppoint.getValue();
+        result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        if (result < 0)
+            throw new PPLError(result);
+        else if (result == 0)
+            return Optional.empty();
+        else
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public boolean contains(T ph) {
@@ -305,8 +349,8 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     /*
-    public T addReycledGenerators(GeneratorSystem cs) {
-        int result = ppl_Polyhedron_add_recycled_generators(obj, cs.obj);
+    public T addRecycledCongruences(CongruenceSystem cs) {
+        int result = ppl_Polyhedron_add_recycled_congruences(obj, cs.obj);
         if (result < 0) throw new PPLError(result);
         return self();
     }
@@ -514,47 +558,37 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         return self();
     }
 
-    /*
-    public ConstraintSystem getGenerators() {
-        var pcs = new PointerByReference();
-        int result = ppl_Polyhedron_get_generators(obj, pcs);
+    public GeneratorSystem getGenerators() {
+        var pgs = new PointerByReference();
+        int result = ppl_Polyhedron_get_generators(pplObj, pgs);
         if (result < 0) throw new PPLError(result);
-        return new GeneratorSystem(pcs.getValue());
+        return new GeneratorSystem(pgs.getValue());
     }
-    */
 
-    /*
-    public ConstraintSystem getMinimizedGenerators() {
-        var pcs = new PointerByReference();
-        int result = ppl_Polyhedron_get_minimized_generators(obj, pcs);
+    public GeneratorSystem getMinimizedGenerators() {
+        var pgs = new PointerByReference();
+        int result = ppl_Polyhedron_get_minimized_generators(pplObj, pgs);
         if (result < 0) throw new PPLError(result);
-        return new GeneratorSystem(pcs.getValue());
+        return new GeneratorSystem(pgs.getValue());
     }
-    */
 
-    /*
-    public T addGenerator(Generator c) {
-        int result = ppl_Polyhedron_add_generator(obj, c.obj);
+    public T addGenerator(Generator g) {
+        int result = ppl_Polyhedron_add_generator(pplObj, g.pplObj);
         if (result < 0) throw new PPLError(result);
         return self();
     }
-    */
 
-    /*
-    public T addGenerators(GeneratorSystem cs) {
-        int result = ppl_Polyhedron_add_generators(obj, cs.obj);
+    public T addGenerators(GeneratorSystem gs) {
+        int result = ppl_Polyhedron_add_generators(pplObj, gs.pplObj);
         if (result < 0) throw new PPLError(result);
         return self();
     }
-    */
 
-    /*
-    public T addRecycledCongruences(CongruenceSystem cs) {
-        int result = ppl_Polyhedron_add_recycled_congruences(obj, cs.obj);
+    public T addReycledGenerators(GeneratorSystem gs) {
+        int result = ppl_Polyhedron_add_recycled_generators(pplObj, gs.pplObj);
         if (result < 0) throw new PPLError(result);
         return self();
     }
-    */
 
     public T polyHullAssign(T ph) {
         int result = ppl_Polyhedron_poly_hull_assign(pplObj, ph.pplObj);

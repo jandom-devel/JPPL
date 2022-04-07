@@ -56,6 +56,10 @@ public class Generator {
         PPL.cleaner.register(this, new GeneratorCleaner(pplObj));
     }
 
+    public Generator(LinearExpression le, GeneratorType t) {
+        this(le, t, new Coefficient(1));
+    }
+
     public Generator(LinearExpression le, GeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);

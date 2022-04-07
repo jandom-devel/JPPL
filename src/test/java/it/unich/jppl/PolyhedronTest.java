@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Domain.DegenerateElement;
+import it.unich.jppl.Generator.GeneratorType;
 import it.unich.jppl.Property.WideningToken;
 
 import org.junit.jupiter.api.Test;
@@ -149,12 +150,15 @@ public class PolyhedronTest {
         assertTrue(ph1.boundsFromBelow(le));
 
         // minimize / maximize
-        var res = ph1.minimize(le);
+        var res = ph1.minimizeWithPoint(le);
         assertTrue(res.isPresent());
         var extremals = res.get();
         assertEquals(new Coefficient(-3), extremals.supN);
         assertEquals(new Coefficient(1), extremals.supD);
         assertTrue(extremals.isMaximum);
+        Generator g = new Generator(new LinearExpression(3).add(new Coefficient(-3), 0), GeneratorType.POINT, new Coefficient(1));
+        assertEquals(g, extremals.point);
+
         res = ph1.maximize(le);
         assertTrue(res.isEmpty());
 
