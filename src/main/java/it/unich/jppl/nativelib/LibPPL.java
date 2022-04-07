@@ -394,6 +394,96 @@ public final class LibPPL {
 
     public static native int ppl_Generator_System_const_iterator_equal_test(Pointer x, Pointer y);
 
+    // Congruence
+
+    public static native int ppl_new_Congruence(PointerByReference pc, Pointer le, Pointer m);
+
+    public static native int ppl_new_Congruence_zero_dim_false(PointerByReference pc);
+
+    public static native int ppl_new_Congruence_zero_dim_integrality(PointerByReference pc);
+
+    public static native int ppl_new_Congruence_from_Congruence(PointerByReference pc, Pointer c);
+
+    public static native int ppl_assign_Congruence_from_Congruence(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Congruence(Pointer c);
+
+    public static native int ppl_Congruence_space_dimension(Pointer c, DimensionByReference m);
+
+    public static native int ppl_Congruence_coefficient(Pointer c, Dimension var, Pointer n);
+
+    public static native int ppl_Congruence_inhomogeneous_term(Pointer c, Pointer n);
+
+    public static native int ppl_Congruence_modulus(Pointer c, Pointer n);
+
+    public static native int ppl_Congruence_OK(Pointer c);
+
+    public static native int ppl_io_print_Congruence(Pointer x);
+
+    public static native int ppl_io_fprint_Congruence(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Congruence(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Congruence_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Congruence_ascii_load(Pointer x, Pointer steam);
+
+    // Congruence System
+
+    public static native int ppl_new_Congruence_System(PointerByReference pcs);
+
+    public static native int ppl_new_Congruence_System_zero_dim_empty(PointerByReference pcs);
+
+    public static native int ppl_new_Congruence_System_from_Congruence(PointerByReference pcs, Pointer c);
+
+    public static native int ppl_new_Congruence_System_from_Congruence_System(PointerByReference pcs, Pointer cs);
+
+    public static native int ppl_assign_Congruence_System_from_Congruence_System(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Congruence_System(Pointer cs);
+
+    public static native int ppl_Congruence_System_space_dimension(Pointer cs, DimensionByReference m);
+
+    public static native int ppl_Congruence_System_empty(Pointer cs);
+
+    public static native int ppl_Congruence_System_begin(Pointer cs, Pointer cit);
+
+    public static native int ppl_Congruence_System_end(Pointer cs, Pointer cit);
+
+    public static native int ppl_Congruence_System_OK(Pointer cs);
+
+    public static native int ppl_Congruence_System_clear(Pointer cs);
+
+    public static native int ppl_Congruence_System_insert_Congruence(Pointer cs, Pointer c);
+
+    public static native int ppl_io_print_Congruence_System(Pointer x);
+
+    public static native int ppl_io_fprint_Congruence_System(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Congruence_System(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Congruence_System_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Congruence_System_ascii_load(Pointer x, Pointer steam);
+
+    // CongruenceSystem Iterator
+
+    public static native int ppl_new_Congruence_System_const_iterator(PointerByReference pcit);
+
+    public static native int ppl_new_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
+            PointerByReference pcit, Pointer cit);
+
+    public static native int ppl_assign_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
+            Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Congruence_System_const_iterator(Pointer cit);
+
+    public static native int ppl_Congruence_System_const_iterator_dereference(Pointer cit, PointerByReference pc);
+
+    public static native int ppl_Congruence_System_const_iterator_increment(Pointer cit);
+
+    public static native int ppl_Congruence_System_const_iterator_equal_test(Pointer x, Pointer y);
+
     // CPolyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d, int empty);
@@ -833,4 +923,5 @@ public final class LibPPL {
     public static native int ppl_Double_Box_ascii_dump(Pointer x, Pointer stream);
 
     public static native int ppl_Double_Box_ascii_load(Pointer x, Pointer stream);
+
 }

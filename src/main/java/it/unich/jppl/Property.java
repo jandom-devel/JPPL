@@ -40,11 +40,11 @@ public interface Property<T extends Property<T>> {
 
     public ConstraintSystem getConstraints();
 
-    // public CongruenceSystem getCongruences();
+    public CongruenceSystem getCongruences();
 
     public ConstraintSystem getMinimizedConstraints();
 
-    // public ConstraintSystem getMinimizedCongruences();
+    public CongruenceSystem getMinimizedCongruences();
 
     public boolean isEmpty();
 
@@ -86,23 +86,23 @@ public interface Property<T extends Property<T>> {
 
     public T addConstraint(Constraint c);
 
-    //public T addCongruence(Congruence c);
+    public T addCongruence(Congruence c);
 
     public T addConstraints(ConstraintSystem cs);
 
-    //public T addCongruences(CongruenceSystem cs);
+    public T addCongruences(CongruenceSystem cs);
 
     public T addReycledConstraints(ConstraintSystem cs);
 
-    //public T addRecycledCongruences(CongruenceSystem cs);
+    public T addRecycledCongruences(CongruenceSystem cs);
 
     public T refineWithConstraint(Constraint c);
 
-    //public T refineWithCongruence(Congruence c);
+    public T refineWithCongruence(Congruence c);
 
     public T refineWithConstraints(ConstraintSystem c);
 
-    //public T refineWithCongruences(CongruenceSystem c);
+    public T refineWithCongruences(CongruenceSystem c);
 
     public T intersectionAssign(T p);
 

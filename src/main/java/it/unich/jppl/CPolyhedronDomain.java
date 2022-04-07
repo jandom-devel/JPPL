@@ -14,6 +14,22 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
         return new CPolyhedron(cs, dummy);
     }
 
+    public CPolyhedron createProperty(CongruenceSystem cs) {
+        return new CPolyhedron(cs);
+    }
+
+    public CPolyhedron createProperty(CongruenceSystem cs, RecycleInput dummy) {
+        return new CPolyhedron(cs, dummy);
+    }
+
+    public CPolyhedron createProperty(GeneratorSystem gs) {
+        return new CPolyhedron(gs);
+    }
+
+    public CPolyhedron createProperty(GeneratorSystem gs, RecycleInput dummy) {
+        return new CPolyhedron(gs, dummy);
+    }
+
     public CPolyhedron createProperty(CPolyhedron ph) {
         return new CPolyhedron(ph);
     }

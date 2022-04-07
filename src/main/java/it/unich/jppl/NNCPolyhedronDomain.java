@@ -14,6 +14,22 @@ public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
         return new NNCPolyhedron(cs, dummy);
     }
 
+    public NNCPolyhedron createProperty(CongruenceSystem cs) {
+        return new NNCPolyhedron(cs);
+    }
+
+    public NNCPolyhedron createProperty(CongruenceSystem cs, RecycleInput dummy) {
+        return new NNCPolyhedron(cs, dummy);
+    }
+
+    public NNCPolyhedron createProperty(GeneratorSystem gs) {
+        return new NNCPolyhedron(gs);
+    }
+
+    public NNCPolyhedron createProperty(GeneratorSystem gs, RecycleInput dummy) {
+        return new NNCPolyhedron(gs, dummy);
+    }
+
     public NNCPolyhedron createProperty(NNCPolyhedron ph) {
         return new NNCPolyhedron(ph);
     }

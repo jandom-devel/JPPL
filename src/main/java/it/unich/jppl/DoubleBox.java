@@ -24,8 +24,8 @@ public class DoubleBox implements Property<DoubleBox> {
     private static class DoubleBoxCleaner implements Runnable {
         private Pointer pplObj;
 
-        DoubleBoxCleaner(Pointer obj) {
-            this.pplObj = obj;
+        DoubleBoxCleaner(Pointer pplObj) {
+            this.pplObj = pplObj;
         }
 
         @Override
@@ -64,37 +64,37 @@ public class DoubleBox implements Property<DoubleBox> {
         init(pbox.getValue());
     }
 
-    /*
     public DoubleBox(CongruenceSystem cs) {
         PointerByReference pbox = new PointerByReference();
-        int result = ppl_new_Double_Box_from_Congruence_System(pbox, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_Double_Box_from_Congruence_System(pbox, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pbox.getValue());
     }
 
     public DoubleBox(CongruenceSystem cs, RecycleInput dummy) {
         PointerByReference pbox = new PointerByReference();
-        int result = ppl_new_Double_Box_recycle_Congruence_System(pbox, cs.obj);
-        if (result < 0) throw new PPLError(result);
-        init(pbox.getValue());
-    }
-    */
-
-    /*
-    public DoubleBox(GeneratorSystem cs) {
-        var pbox = new PointerByReference();
-        ppl_new_Double_Box_from_Generator_System(pbox, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_Double_Box_recycle_Congruence_System(pbox, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pbox.getValue());
     }
 
-    public DoubleBox(GeneratorSystem cs, RecycleInput dummy) {
+    public DoubleBox(GeneratorSystem gs) {
         var pbox = new PointerByReference();
-        ppl_new_Double_Box_recycle_Generator_System(pbox, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_Double_Box_from_Generator_System(pbox, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pbox.getValue());
     }
-    */
+
+    public DoubleBox(GeneratorSystem gs, RecycleInput dummy) {
+        var pbox = new PointerByReference();
+        int result = ppl_new_Double_Box_recycle_Generator_System(pbox, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        init(pbox.getValue());
+    }
 
     public DoubleBox(DoubleBox box) {
         var pbox = new PointerByReference();
@@ -176,7 +176,8 @@ public class DoubleBox implements Property<DoubleBox> {
 
     public int getRelationWithGenerator(Generator g) {
         int result = ppl_Double_Box_relation_with_Generator(pplObj, g.pplObj);
-        if (result < 0) throw new PPLError(result);
+        if (result < 0)
+            throw new PPLError(result);
         return result;
     }
 
@@ -188,14 +189,13 @@ public class DoubleBox implements Property<DoubleBox> {
         return new ConstraintSystem(pcs.getValue());
     }
 
-    /*
-    public ConstraintSystem getCongruences() {
+    public CongruenceSystem getCongruences() {
         var pcs = new PointerByReference();
-        int result = ppl_Double_Box_get_congruences(obj, pcs);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_get_congruences(pplObj, pcs);
+        if (result < 0)
+            throw new PPLError(result);
         return new CongruenceSystem(pcs.getValue());
     }
-    */
 
     public ConstraintSystem getMinimizedConstraints() {
         var pcs = new PointerByReference();
@@ -205,14 +205,13 @@ public class DoubleBox implements Property<DoubleBox> {
         return new ConstraintSystem(pcs.getValue());
     }
 
-    /*
-    public ConstraintSystem getMinimizedCongruences() {
+    public CongruenceSystem getMinimizedCongruences() {
         var pcs = new PointerByReference();
-        int result = ppl_Double_Box_get_minimized_congruences(obj, pcs);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_get_minimized_congruences(pplObj, pcs);
+        if (result < 0)
+            throw new PPLError(result);
         return new CongruenceSystem(pcs.getValue());
     }
-    */
 
     public boolean isEmpty() {
         int result = ppl_Double_Box_is_empty(pplObj);
@@ -295,7 +294,8 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+            return Optional
+                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
@@ -321,7 +321,8 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0,
+                    new Generator(point)));
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
@@ -342,7 +343,8 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+            return Optional
+                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
@@ -368,7 +370,8 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0,
+                    new Generator(point)));
     }
 
     public boolean contains(DoubleBox box) {
@@ -422,13 +425,12 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    /*
     public DoubleBox addCongruence(Congruence c) {
-        int result = ppl_Double_Box_add_congruence(obj, c.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_add_congruence(pplObj, c.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
-    */
 
     public DoubleBox addConstraints(ConstraintSystem cs) {
         int result = ppl_Double_Box_add_constraints(pplObj, cs.pplObj);
@@ -437,13 +439,12 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    /*
     public DoubleBox addCongruences(CongruenceSystem cs) {
-        int result = ppl_Double_Box_add_congruences(obj, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_add_congruences(pplObj, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
-    */
 
     public DoubleBox addReycledConstraints(ConstraintSystem cs) {
         int result = ppl_Double_Box_add_recycled_constraints(pplObj, cs.pplObj);
@@ -452,13 +453,12 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    /*
-    public DoubleBox addReycledGenerators(GeneratorSystem cs) {
-        int result = ppl_Double_Box_add_recycled_generators(obj, cs.obj);
-        if (result < 0) throw new PPLError(result);
+    public DoubleBox addRecycledCongruences(CongruenceSystem cs) {
+        int result = ppl_Double_Box_add_recycled_congruences(pplObj, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
-    */
 
     public DoubleBox refineWithConstraint(Constraint c) {
         int result = ppl_Double_Box_refine_with_constraint(pplObj, c.pplObj);
@@ -467,13 +467,12 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    /*
     public DoubleBox refineWithCongruence(Congruence c) {
-        int result = ppl_Double_Box_refine_with_congruence(obj, c.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_refine_with_congruence(pplObj, c.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
-    */
 
     public DoubleBox refineWithConstraints(ConstraintSystem c) {
         int result = ppl_Double_Box_refine_with_constraints(pplObj, c.pplObj);
@@ -482,13 +481,12 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    /*
     public DoubleBox refineWithCongruences(CongruenceSystem c) {
-        int result = ppl_Double_Box_refine_with_congruences(obj, c.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_Double_Box_refine_with_congruences(pplObj, c.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         return this;
     }
-    */
 
     public DoubleBox intersectionAssign(DoubleBox box) {
         int result = ppl_Double_Box_intersection_assign(pplObj, box.pplObj);
@@ -598,8 +596,10 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    public DoubleBox generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs) {
-        int result = ppl_Double_Box_generalized_affine_preimage_lhs_rhs(pplObj, lhs.pplObj, relsym.ordinal(), rhs.pplObj);
+    public DoubleBox generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym,
+            LinearExpression rhs) {
+        int result = ppl_Double_Box_generalized_affine_preimage_lhs_rhs(pplObj, lhs.pplObj, relsym.ordinal(),
+                rhs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
@@ -641,7 +641,8 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public DoubleBox mapSpaceDimensions(long[] maps) {
-        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new DimensionArray(maps), new Dimension(maps.length));
+        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new DimensionArray(maps),
+                new Dimension(maps.length));
         if (result < 0)
             throw new PPLError(result);
         return this;
@@ -661,48 +662,6 @@ public class DoubleBox implements Property<DoubleBox> {
             throw new PPLError(result);
         return this;
     }
-
-    /*
-    public ConstraintSystem getGenerators() {
-        var pcs = new PointerByReference();
-        int result = ppl_Double_Box_get_generators(obj, pcs);
-        if (result < 0) throw new PPLError(result);
-        return new GeneratorSystem(pcs.getValue());
-    }
-    */
-
-    /*
-    public ConstraintSystem getMinimizedGenerators() {
-        var pcs = new PointerByReference();
-        int result = ppl_Double_Box_get_minimized_generators(obj, pcs);
-        if (result < 0) throw new PPLError(result);
-        return new GeneratorSystem(pcs.getValue());
-    }
-    */
-
-    /*
-    public DoubleBox addGenerator(Generator c) {
-        int result = ppl_Double_Box_add_generator(obj, c.obj);
-        if (result < 0) throw new PPLError(result);
-        return this;
-    }
-    */
-
-    /*
-    public DoubleBox addGenerators(GeneratorSystem cs) {
-        int result = ppl_Double_Box_add_generators(obj, cs.obj);
-        if (result < 0) throw new PPLError(result);
-        return this;
-    }
-    */
-
-    /*
-    public DoubleBox addRecycledCongruences(CongruenceSystem cs) {
-        int result = ppl_Double_Box_add_recycled_congruences(obj, cs.obj);
-        if (result < 0) throw new PPLError(result);
-        return this;
-    }
-    */
 
     @Override
     public boolean equals(Object other) {

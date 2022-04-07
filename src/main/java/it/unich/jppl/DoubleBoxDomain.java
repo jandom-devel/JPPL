@@ -14,6 +14,22 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
         return new DoubleBox(cs, dummy);
     }
 
+    public DoubleBox createProperty(CongruenceSystem cs) {
+        return new DoubleBox(cs);
+    }
+
+    public DoubleBox createProperty(CongruenceSystem cs, RecycleInput dummy) {
+        return new DoubleBox(cs, dummy);
+    }
+
+    public DoubleBox createProperty(GeneratorSystem gs) {
+        return new DoubleBox(gs);
+    }
+
+    public DoubleBox createProperty(GeneratorSystem gs, RecycleInput dummy) {
+        return new DoubleBox(gs, dummy);
+    }
+
     public DoubleBox createProperty(DoubleBox box) {
         return new DoubleBox(box);
     }

@@ -39,37 +39,37 @@ public class CPolyhedron extends Polyhedron<CPolyhedron> implements Property<CPo
         init(pph.getValue());
     }
 
-    /*
     public CPolyhedron(CongruenceSystem cs) {
         PointerByReference pph = new PointerByReference();
-        int result = ppl_new_C_Polyhedron_from_Congruence_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_C_Polyhedron_from_Congruence_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public CPolyhedron(CongruenceSystem cs, RecycleInput dummy) {
         PointerByReference pph = new PointerByReference();
-        int result = ppl_new_C_Polyhedron_recycle_Congruence_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
-        init(pph.getValue());
-    }
-    */
-
-    /*
-    public CPolyhedron(GeneratorSystem cs) {
-        var pph = new PointerByReference();
-        ppl_new_C_Polyhedron_from_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_C_Polyhedron_recycle_Congruence_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
-    public CPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+    public CPolyhedron(GeneratorSystem gs) {
         var pph = new PointerByReference();
-        ppl_new_C_Polyhedron_recycle_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_C_Polyhedron_from_Generator_System(pph, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
-    */
+
+    public CPolyhedron(GeneratorSystem gs, RecycleInput dummy) {
+        var pph = new PointerByReference();
+        int result = ppl_new_C_Polyhedron_recycle_Generator_System(pph, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        init(pph.getValue());
+    }
 
     public CPolyhedron(CPolyhedron ph) {
         var pph = new PointerByReference();

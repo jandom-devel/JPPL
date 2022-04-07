@@ -19,9 +19,13 @@ public interface Domain<T extends Property<T>> {
 
     public T createProperty(ConstraintSystem cs, RecycleInput dummy);
 
-    // public T createProperty(CongruenceSystem cs);
+    public T createProperty(CongruenceSystem cs);
 
-    // public T createProperty(CongruenceSystem cs, RecycleInput dummy);
+    public T createProperty(CongruenceSystem cs, RecycleInput dummy);
+
+    public T createProperty(GeneratorSystem gs);
+
+    public T createProperty(GeneratorSystem gs, RecycleInput dummy);
 
     public T createProperty(T p);
 

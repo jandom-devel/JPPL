@@ -40,37 +40,37 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
         init(pph.getValue());
     }
 
-    /*
     public NNCPolyhedron(CongruenceSystem cs) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_Congruence_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_NNC_Polyhedron_from_Congruence_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
     public NNCPolyhedron(CongruenceSystem cs, RecycleInput dummy) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_recycle_Congruence_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
-        init(pph.getValue());
-    }
-    */
-
-    /*
-    public NNCPolyhedron(GeneratorSystem cs) {
-        var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_NNC_Polyhedron_recycle_Congruence_System(pph, cs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
 
-    public NNCPolyhedron(GeneratorSystem cs, RecycleInput dummy) {
+    public NNCPolyhedron(GeneratorSystem gs) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_recycle_Generator_System(pph, cs.obj);
-        if (result < 0) throw new PPLError(result);
+        int result = ppl_new_NNC_Polyhedron_from_Generator_System(pph, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
         init(pph.getValue());
     }
-    */
+
+    public NNCPolyhedron(GeneratorSystem gs, RecycleInput dummy) {
+        var pph = new PointerByReference();
+        int result = ppl_new_NNC_Polyhedron_recycle_Generator_System(pph, gs.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        init(pph.getValue());
+    }
 
     public NNCPolyhedron(NNCPolyhedron ph) {
         var pph = new PointerByReference();
