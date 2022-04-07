@@ -340,6 +340,60 @@ public final class LibPPL {
 
     public static native int ppl_Generator_ascii_load(Pointer x, Pointer steam);
 
+    // Generator System
+
+    public static native int ppl_new_Generator_System(PointerByReference pgs);
+
+    public static native int ppl_new_Generator_System_from_Generator(PointerByReference pgs, Pointer g);
+
+    public static native int ppl_new_Generator_System_from_Generator_System(PointerByReference pgs, Pointer gs);
+
+    public static native int ppl_assign_Generator_System_from_Generator_System(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Generator_System(Pointer gs);
+
+    public static native int ppl_Generator_System_space_dimension(Pointer gs, DimensionByReference m);
+
+    public static native int ppl_Generator_System_empty(Pointer gs);
+
+    public static native int ppl_Generator_System_begin(Pointer gs, Pointer cit);
+
+    public static native int ppl_Generator_System_end(Pointer gs, Pointer cit);
+
+    public static native int ppl_Generator_System_OK(Pointer gs);
+
+    public static native int ppl_Generator_System_clear(Pointer gs);
+
+    public static native int ppl_Generator_System_insert_Generator(Pointer gs, Pointer g);
+
+    public static native int ppl_io_print_Generator_System(Pointer x);
+
+    public static native int ppl_io_fprint_Generator_System(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Generator_System(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Generator_System_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Generator_System_ascii_load(Pointer x, Pointer steam);
+
+    // GeneratorSystem Iterator
+
+    public static native int ppl_new_Generator_System_const_iterator(PointerByReference pcit);
+
+    public static native int ppl_new_Generator_System_const_iterator_from_Generator_System_const_iterator(
+            PointerByReference pcit, Pointer cit);
+
+    public static native int ppl_assign_Generator_System_const_iterator_from_Generator_System_const_iterator(
+            Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Generator_System_const_iterator(Pointer cit);
+
+    public static native int ppl_Generator_System_const_iterator_dereference(Pointer cit, PointerByReference pc);
+
+    public static native int ppl_Generator_System_const_iterator_increment(Pointer cit);
+
+    public static native int ppl_Generator_System_const_iterator_equal_test(Pointer x, Pointer y);
+
     // CPolyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d, int empty);
