@@ -27,6 +27,19 @@ public class GridGeneratorSystem implements Iterable<Generator> {
         }
     }
 
+    private static class GridGeneratorSystemIteratorCleaner implements Runnable {
+        private Pointer pplObj;
+
+        GridGeneratorSystemIteratorCleaner(Pointer obj) {
+            this.pplObj = obj;
+        }
+
+        @Override
+        public void run() {
+            ppl_delete_Grid_Generator_System_const_iterator(pplObj);
+        }
+    }
+
     public class GridGeneratorSystemIterator implements Iterator<Generator> {
         private Pointer cit;
         private Pointer cend;
@@ -37,6 +50,7 @@ public class GridGeneratorSystem implements Iterable<Generator> {
             if (result < 0)
                 throw new PPLError(result);
             cit = pgsit.getValue();
+            PPL.cleaner.register(this, new GridGeneratorSystemIteratorCleaner(cit));
             result = ppl_Grid_Generator_System_begin(pplObj, cit);
             if (result < 0)
                 throw new PPLError(result);
@@ -44,6 +58,7 @@ public class GridGeneratorSystem implements Iterable<Generator> {
             if (result < 0)
                 throw new PPLError(result);
             cend = pgsit.getValue();
+            PPL.cleaner.register(this, new GridGeneratorSystemIteratorCleaner(cend));
             result = ppl_Grid_Generator_System_end(pplObj, cend);
             if (result < 0)
                 throw new PPLError(result);

@@ -31,6 +31,19 @@ public class CongruenceSystem implements Iterable<Congruence> {
         }
     }
 
+    private static class CongruenceSystemIteratorCleaner implements Runnable {
+        private Pointer pplObj;
+
+        CongruenceSystemIteratorCleaner(Pointer obj) {
+            this.pplObj = obj;
+        }
+
+        @Override
+        public void run() {
+            ppl_delete_Congruence_System_const_iterator(pplObj);
+        }
+    }
+
     public class CongruenceSystemIterator implements Iterator<Congruence> {
         private Pointer cit;
         private Pointer cend;
@@ -41,6 +54,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
             if (result < 0)
                 throw new PPLError(result);
             cit = pcsit.getValue();
+            PPL.cleaner.register(this, new CongruenceSystemIteratorCleaner(cit));
             result = ppl_Congruence_System_begin(pplObj, cit);
             if (result < 0)
                 throw new PPLError(result);
@@ -48,6 +62,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
             if (result < 0)
                 throw new PPLError(result);
             cend = pcsit.getValue();
+            PPL.cleaner.register(this, new CongruenceSystemIteratorCleaner(cend));
             result = ppl_Congruence_System_end(pplObj, cend);
             if (result < 0)
                 throw new PPLError(result);

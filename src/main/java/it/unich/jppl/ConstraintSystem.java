@@ -31,6 +31,19 @@ public class ConstraintSystem implements Iterable<Constraint> {
         }
     }
 
+    private static class ConstraintSystemIteratorCleaner implements Runnable {
+        private Pointer pplObj;
+
+        ConstraintSystemIteratorCleaner(Pointer obj) {
+            this.pplObj = obj;
+        }
+
+        @Override
+        public void run() {
+            ppl_delete_Constraint_System_const_iterator(pplObj);
+        }
+    }
+
     public class ConstraintSystemIterator implements Iterator<Constraint> {
         private Pointer cit;
         private Pointer cend;
@@ -41,6 +54,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
             if (result < 0)
                 throw new PPLError(result);
             cit = pcsit.getValue();
+            PPL.cleaner.register(this, new ConstraintSystemIteratorCleaner(cit));
             result = ppl_Constraint_System_begin(pplObj, cit);
             if (result < 0)
                 throw new PPLError(result);
@@ -48,6 +62,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
             if (result < 0)
                 throw new PPLError(result);
             cend = pcsit.getValue();
+            PPL.cleaner.register(this, new ConstraintSystemIteratorCleaner(cend));
             result = ppl_Constraint_System_end(pplObj, cend);
             if (result < 0)
                 throw new PPLError(result);
