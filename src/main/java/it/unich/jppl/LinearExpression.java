@@ -37,7 +37,7 @@ public class LinearExpression {
         init(ple.getValue());
     }
 
-    // TODO: this methods causes sometime exceptions during tests
+    // TODO: this methods causes exceptions during tests under the VSCode Test Runner
     public LinearExpression(long d) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));
@@ -59,19 +59,17 @@ public class LinearExpression {
         init(ple.getValue());
     }
 
-    /*
     public LinearExpression(Congruence c) {
         var ple = new PointerByReference();
-        int result = ppl_new_Linear_Expression_from_Congruence(ple, c.obj);
+        int result = ppl_new_Linear_Expression_from_Congruence(ple, c.pplObj);
         if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
-    */
 
     /*
-    public LinearExpression(GriGenerator g) {
-        vaar ple = new PointerByReference();
-        int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.obj);
+    public LinearExpression(GridGenerator g) {
+        var ple = new PointerByReference();
+        int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.pplObj);
         if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }

@@ -78,14 +78,6 @@ public class Coefficient extends Number {
         init(pc.getValue());
     }
 
-    Coefficient(Pointer obj) {
-        var pc = new PointerByReference();
-        int result = ppl_new_Coefficient_from_Coefficient(pc, obj);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pc.getValue());
-    }
-
     public Coefficient assign(long n) {
         var mpz = new Memory(MPZ_SIZE);
         __gmpz_init_set_si(mpz, n);

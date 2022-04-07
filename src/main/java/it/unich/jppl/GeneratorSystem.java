@@ -113,15 +113,15 @@ public class GeneratorSystem implements Iterable<Generator> {
     }
 
     public GeneratorSystem(GeneratorSystem gs) {
-        this(gs.pplObj);
-    }
-
-    GeneratorSystem(Pointer gs) {
         var pgs = new PointerByReference();
-        int result = ppl_new_Generator_System_from_Generator_System(pgs, gs);
+        int result = ppl_new_Generator_System_from_Generator_System(pgs, gs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pgs.getValue());
+    }
+
+    GeneratorSystem(Pointer pplObj) {
+        init(pplObj);
     }
 
     public GeneratorSystem assign(GeneratorSystem gs) {

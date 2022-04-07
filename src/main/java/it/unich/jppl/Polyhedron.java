@@ -165,47 +165,26 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
             throw new PPLError(result);
         return result > 0;
     }
-
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
         var pmaximum = new IntByReference();
-        result = ppl_Polyhedron_maximize(pplObj, le.pplObj, cn, cd, pmaximum);
+        int result = ppl_Polyhedron_maximize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
             return Optional
-                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
+        var point = new Generator();
         var pmaximum = new IntByReference();
-        var ppoint = new PointerByReference();
-        result = ppl_new_Generator_zero_dim_point(ppoint);
-        if (result < 0)
-            throw new PPLError(result);
-        var point = ppoint.getValue();
-        result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        int result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
@@ -216,45 +195,25 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
         var pmaximum = new IntByReference();
-        result = ppl_Polyhedron_minimize(pplObj, le.pplObj, cn, cd, pmaximum);
+        int result = ppl_Polyhedron_minimize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
             return Optional
-                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
+        var point = new Generator();
         var pmaximum = new IntByReference();
-        var ppoint = new PointerByReference();
-        result = ppl_new_Generator_zero_dim_point(ppoint);
-        if (result < 0)
-            throw new PPLError(result);
-        var point = ppoint.getValue();
-        result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        int result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
@@ -399,7 +358,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         return self();
     }
 
-    public T simplofyUsingContextAssign(T ph) {
+    public T simplifyUsingContextAssign(T ph) {
         int result = ppl_Polyhedron_difference_assign(pplObj, ph.pplObj);
         if (result < 0)
             throw new PPLError(result);

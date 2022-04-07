@@ -110,7 +110,7 @@ public interface Property<T extends Property<T>> {
 
     public T differenceAssign(T p);
 
-    public T simplofyUsingContextAssign(T p);
+    public T simplifyUsingContextAssign(T p);
 
     public T timeElapseAssign(T p);
 

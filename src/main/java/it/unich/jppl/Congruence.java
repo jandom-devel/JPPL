@@ -41,6 +41,14 @@ public class Congruence {
         PPL.cleaner.register(this, new CongruenceCleaner(pplObj));
     }
 
+    public Congruence(LinearExpression le, Coefficient m) {
+        var pc = new PointerByReference();
+        int result = ppl_new_Congruence(pc, le.pplObj, m.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        init(pc.getValue());
+    }
+
     public Congruence(ZeroDimCongruence t) {
         var pc = new PointerByReference();
         int result = (t == ZeroDimCongruence.FALSITY) ? ppl_new_Congruence_zero_dim_false(pc)
@@ -50,24 +58,20 @@ public class Congruence {
         init(pc.getValue());
     }
 
-    public Congruence(LinearExpression le, Coefficient m) {
-        var pc = new PointerByReference();
-        int result = ppl_new_Congruence(pc, le.pplObj, m.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pc.getValue());
-    }
-
     public Congruence(Congruence c) {
-        this(c.pplObj);
-    }
-
-    Congruence(Pointer obj) {
         var pc = new PointerByReference();
-        int result = ppl_new_Congruence_from_Congruence(pc, obj);
+        int result = ppl_new_Congruence_from_Congruence(pc, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pc.getValue());
+    }
+
+    Congruence() {
+        this(ZeroDimCongruence.INTEGRALITY);
+    }
+
+    Congruence(Pointer pplObj) {
+        init(pplObj);
     }
 
     public Congruence assign(Congruence c) {
@@ -128,6 +132,9 @@ public class Congruence {
         return s;
     }
 
+    // The equals method is probably slow since it calls native methods several times
+    // and allocates many Java objects. However, this is used mainly for debugging
+    // purpose, hence this should not be a problem.
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

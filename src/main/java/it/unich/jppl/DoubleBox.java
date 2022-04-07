@@ -277,45 +277,25 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
         var pmaximum = new IntByReference();
-        result = ppl_Double_Box_maximize(pplObj, le.pplObj, cn, cd, pmaximum);
+        int result = ppl_Double_Box_maximize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
             return Optional
-                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
+        var point = new Generator();
         var pmaximum = new IntByReference();
-        var ppoint = new PointerByReference();
-        result = ppl_new_Generator_zero_dim_point(ppoint);
-        if (result < 0)
-            throw new PPLError(result);
-        var point = ppoint.getValue();
-        result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        int result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
@@ -326,45 +306,25 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
         var pmaximum = new IntByReference();
-        result = ppl_Double_Box_minimize(pplObj, le.pplObj, cn, cd, pmaximum);
+        int result = ppl_Double_Box_minimize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
             return Optional
-                    .of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0, null));
+                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
-        var pcn = new PointerByReference();
-        var result = ppl_new_Coefficient(pcn);
-        if (result < 0)
-            throw new PPLError(result);
-        var cn = pcn.getValue();
-        var pcd = new PointerByReference();
-        result = ppl_new_Coefficient(pcd);
-        if (result < 0)
-            throw new PPLError(result);
-        var cd = pcd.getValue();
+        var cn = new Coefficient();
+        var cd = new Coefficient();
+        var point = new Generator();
         var pmaximum = new IntByReference();
-        var ppoint = new PointerByReference();
-        result = ppl_new_Generator_zero_dim_point(ppoint);
-        if (result < 0)
-            throw new PPLError(result);
-        var point = ppoint.getValue();
-        result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn, cd, pmaximum, point);
+        int result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
@@ -509,7 +469,7 @@ public class DoubleBox implements Property<DoubleBox> {
         return this;
     }
 
-    public DoubleBox simplofyUsingContextAssign(DoubleBox box) {
+    public DoubleBox simplifyUsingContextAssign(DoubleBox box) {
         int result = ppl_Double_Box_difference_assign(pplObj, box.pplObj);
         if (result < 0)
             throw new PPLError(result);

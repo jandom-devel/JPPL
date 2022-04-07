@@ -61,6 +61,14 @@ public class Constraint {
         PPL.cleaner.register(this, new ConstraintCleaner(pplObj));
     }
 
+    public Constraint(LinearExpression le, ConstraintType rel) {
+        var pc = new PointerByReference();
+        int result = ppl_new_Constraint(pc, le.pplObj, rel.ordinal());
+        if (result < 0)
+            throw new PPLError(result);
+        init(pc.getValue());
+    }
+
     public Constraint(ZeroDimConstraint t) {
         var pc = new PointerByReference();
         int result = (t == ZeroDimConstraint.FALSITY) ? ppl_new_Constraint_zero_dim_false(pc)
@@ -70,24 +78,20 @@ public class Constraint {
         init(pc.getValue());
     }
 
-    public Constraint(LinearExpression le, ConstraintType rel) {
-        var pc = new PointerByReference();
-        int result = ppl_new_Constraint(pc, le.pplObj, rel.ordinal());
-        if (result < 0)
-            throw new PPLError(result);
-        init(pc.getValue());
-    }
-
     public Constraint(Constraint c) {
-        this(c.pplObj);
-    }
-
-    Constraint(Pointer obj) {
         var pc = new PointerByReference();
-        int result = ppl_new_Constraint_from_Constraint(pc, obj);
+        int result = ppl_new_Constraint_from_Constraint(pc, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pc.getValue());
+    }
+
+    Constraint() {
+        this(ZeroDimConstraint.POSITIVITY);
+    }
+
+    Constraint(Pointer pplObj) {
+        init(pplObj);
     }
 
     public Constraint assign(Constraint c) {
@@ -147,6 +151,9 @@ public class Constraint {
         return s;
     }
 
+    // The equals method is probably slow since it calls native methods several times
+    // and allocates many Java objects. However, this is used mainly for debugging
+    // purpose, hence this should not be a problem.
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -155,9 +162,6 @@ public class Constraint {
             var c = (Constraint) obj;
             if (c.getType() != getType())
                 return false;
-            // Since it is not possible to access dimensions greater than the getSpaceDimension() of a
-            // constraint, we think it is safe to require two constraints to have the same space dimension
-            // in order to be considered equals.
             if (c.getSpaceDimension() != getSpaceDimension())
                 return false;
             if (!c.getCoefficient().equals(getCoefficient()))

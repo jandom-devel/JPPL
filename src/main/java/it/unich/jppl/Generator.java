@@ -56,10 +56,6 @@ public class Generator {
         PPL.cleaner.register(this, new GeneratorCleaner(pplObj));
     }
 
-    public Generator(LinearExpression le, GeneratorType t) {
-        this(le, t, new Coefficient(1));
-    }
-
     public Generator(LinearExpression le, GeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
@@ -78,15 +74,23 @@ public class Generator {
     }
 
     public Generator(Generator g) {
-        this(g.pplObj);
-    }
-
-    Generator(Pointer obj) {
         var pg = new PointerByReference();
-        int result = ppl_new_Generator_from_Generator(pg, obj);
+        int result = ppl_new_Generator_from_Generator(pg, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pg.getValue());
+    }
+
+    public Generator() {
+        this(ZeroDimGenerator.POINT);
+    }
+
+    public Generator(LinearExpression le, GeneratorType t) {
+        this(le, t, new Coefficient(1));
+    }
+
+    Generator(Pointer pplObj) {
+        init(pplObj);
     }
 
     public Generator assign(Generator g) {

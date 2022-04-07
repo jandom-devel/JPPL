@@ -97,11 +97,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     public ConstraintSystem() {
-        var pcs = new PointerByReference();
-        int result = ppl_new_Constraint_System(pcs);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pcs.getValue());
+        this(ZeroDimConstraintSystem.EMPTY);
     }
 
     public ConstraintSystem(ZeroDimConstraintSystem type) {
@@ -122,15 +118,15 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     public ConstraintSystem(ConstraintSystem cs) {
-        this(cs.pplObj);
-    }
-
-    ConstraintSystem(Pointer cs) {
         var pcs = new PointerByReference();
-        int result = ppl_new_Constraint_System_from_Constraint_System(pcs, cs);
+        int result = ppl_new_Constraint_System_from_Constraint_System(pcs, cs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pcs.getValue());
+    }
+
+    ConstraintSystem(Pointer pplObj) {
+        init(pplObj);
     }
 
     public ConstraintSystem assign(ConstraintSystem cs) {

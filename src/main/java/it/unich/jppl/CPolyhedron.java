@@ -10,6 +10,7 @@ import it.unich.jppl.nativelib.LibPPL.Dimension;
 import com.sun.jna.ptr.PointerByReference;
 
 public class CPolyhedron extends Polyhedron<CPolyhedron> implements Property<CPolyhedron> {
+
     protected CPolyhedron self() {
         return this;
     }

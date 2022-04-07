@@ -54,10 +54,6 @@ public class GridGenerator {
         PPL.cleaner.register(this, new GridGeneratorCleaner(pplObj));
     }
 
-    public GridGenerator(LinearExpression le, GridGeneratorType t) {
-        this(le, t, new Coefficient(1));
-    }
-
     public GridGenerator(LinearExpression le, GridGeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
@@ -75,15 +71,19 @@ public class GridGenerator {
     }
 
     public GridGenerator(GridGenerator g) {
-        this(g.pplObj);
-    }
-
-    GridGenerator(Pointer obj) {
         var pg = new PointerByReference();
-        int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, obj);
+        int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pg.getValue());
+    }
+
+    public GridGenerator(LinearExpression le, GridGeneratorType t) {
+        this(le, t, new Coefficient(1));
+    }
+
+    GridGenerator(Pointer pplObj) {
+        init(pplObj);
     }
 
     public GridGenerator assign(GridGenerator g) {

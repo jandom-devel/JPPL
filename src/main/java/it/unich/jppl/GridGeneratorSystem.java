@@ -109,15 +109,15 @@ public class GridGeneratorSystem implements Iterable<Generator> {
     }
 
     public GridGeneratorSystem(GridGeneratorSystem gs) {
-        this(gs.pplObj);
-    }
-
-    GridGeneratorSystem(Pointer gs) {
         var pgs = new PointerByReference();
-        int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, gs);
+        int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, gs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pgs.getValue());
+    }
+
+    GridGeneratorSystem(Pointer pplObj) {
+        init(pplObj);
     }
 
     public GridGeneratorSystem assign(GridGeneratorSystem gs) {

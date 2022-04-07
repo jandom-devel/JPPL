@@ -97,11 +97,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     public CongruenceSystem() {
-        var pcs = new PointerByReference();
-        int result = ppl_new_Congruence_System(pcs);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pcs.getValue());
+        this(ZeroDimCongruenceSystem.EMPTY);
     }
 
     public CongruenceSystem(ZeroDimCongruenceSystem type) {
@@ -122,15 +118,15 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     public CongruenceSystem(CongruenceSystem cs) {
-        this(cs.pplObj);
-    }
-
-    CongruenceSystem(Pointer cs) {
         var pcs = new PointerByReference();
-        int result = ppl_new_Congruence_System_from_Congruence_System(pcs, cs);
+        int result = ppl_new_Congruence_System_from_Congruence_System(pcs, cs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         init(pcs.getValue());
+    }
+
+    CongruenceSystem(Pointer pplObj) {
+        init(pplObj);
     }
 
     public CongruenceSystem assign(CongruenceSystem cs) {
