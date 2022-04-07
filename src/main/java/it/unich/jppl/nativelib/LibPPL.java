@@ -306,6 +306,40 @@ public final class LibPPL {
 
     public static native int ppl_Constraint_System_const_iterator_equal_test(Pointer x, Pointer y);
 
+    // Generator
+
+    public static native int ppl_new_Generator(PointerByReference pg, Pointer le, int t, Pointer d);
+
+    public static native int ppl_new_Generator_zero_dim_point(PointerByReference pg);
+
+    public static native int ppl_new_Generator_zero_dim_closure_point(PointerByReference pg);
+
+    public static native int ppl_new_Generator_from_Generator(PointerByReference pg, Pointer g);
+
+    public static native int ppl_assign_Generator_from_Generator(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Generator(Pointer g);
+
+    public static native int ppl_Generator_space_dimension(Pointer g, DimensionByReference m);
+
+    public static native int ppl_Generator_type(Pointer g);
+
+    public static native int ppl_Generator_coefficient(Pointer g, Dimension var, Pointer n);
+
+    public static native int ppl_Generator_divisor(Pointer g, Pointer d);
+
+    public static native int ppl_Generator_OK(Pointer g);
+
+    public static native int ppl_io_print_Generator(Pointer x);
+
+    public static native int ppl_io_fprint_Generator(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Generator(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Generator_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Generator_ascii_load(Pointer x, Pointer steam);
+
     // CPolyhedron
 
     public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d, int empty);

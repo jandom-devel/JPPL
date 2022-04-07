@@ -5,22 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Constraint.ZeroDimConstraint;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class ConstraintTest {
-
-    static Constraint c1, c2;
-
-    @BeforeAll
-    static void init() {
-        var le = new LinearExpression();
-        le.add(new Coefficient(3));
-        le.add(new Coefficient(1), 0);
-        c1 = new Constraint(le, ConstraintType.GREATER_THAN);
-        le.add(new Coefficient(-1), 1);
-        c2 = new Constraint(le, ConstraintType.EQUAL);
-    }
 
     @Test
     void testZeroDimConstructors() {
@@ -48,6 +35,13 @@ public class ConstraintTest {
 
     @Test
     void testEquality() {
+        var le = new LinearExpression();
+        le.add(new Coefficient(3));
+        le.add(new Coefficient(1), 0);
+        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+        le.add(new Coefficient(-1), 1);
+        var c2 = new Constraint(le, ConstraintType.EQUAL);
+
         assertEquals(c1, c1);
         assertNotEquals(c1, c2);
         var c3 = new Constraint(c1);
@@ -57,8 +51,8 @@ public class ConstraintTest {
 
     @Test
     void testGetIllegalCoefficient() {
-        var le = new Constraint(ZeroDimConstraint.POSITIVITY);
-        var exception = assertThrows(PPLError.class, () -> le.getCoefficient(0));
+        var c = new Constraint(ZeroDimConstraint.POSITIVITY);
+        var exception = assertThrows(PPLError.class, () -> c.getCoefficient(0));
         assertEquals(PPLError.PPL_ERROR_INVALID_ARGUMENT, exception.getPPLError());
     }
 

@@ -28,7 +28,7 @@ public class Constraint {
             case 4:
                 return GREATER_THAN;
             }
-            throw new IllegalStateException("Unexpected Constraint type " + t);
+            throw new IllegalStateException("Unexpected constraint type " + t);
         }
     }
 
