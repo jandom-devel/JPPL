@@ -288,7 +288,7 @@ public final class LibPPL {
 
     public static native int ppl_Constraint_System_ascii_load(Pointer x, Pointer steam);
 
-    // ConstraintSystem Iterator
+    // Constraint System Iterator
 
     public static native int ppl_new_Constraint_System_const_iterator(PointerByReference pcit);
 
@@ -376,7 +376,7 @@ public final class LibPPL {
 
     public static native int ppl_Generator_System_ascii_load(Pointer x, Pointer steam);
 
-    // GeneratorSystem Iterator
+    // Generator System Iterator
 
     public static native int ppl_new_Generator_System_const_iterator(PointerByReference pcit);
 
@@ -446,9 +446,9 @@ public final class LibPPL {
 
     public static native int ppl_Congruence_System_empty(Pointer cs);
 
-    public static native int ppl_Congruence_System_begin(Pointer cs, Pointer cit);
+    public static native int ppl_Congruence_System_begin(Pointer cs, Pointer git);
 
-    public static native int ppl_Congruence_System_end(Pointer cs, Pointer cit);
+    public static native int ppl_Congruence_System_end(Pointer cs, Pointer git);
 
     public static native int ppl_Congruence_System_OK(Pointer cs);
 
@@ -466,23 +466,110 @@ public final class LibPPL {
 
     public static native int ppl_Congruence_System_ascii_load(Pointer x, Pointer steam);
 
-    // CongruenceSystem Iterator
+    // Congruence System Iterator
 
-    public static native int ppl_new_Congruence_System_const_iterator(PointerByReference pcit);
+    public static native int ppl_new_Congruence_System_const_iterator(PointerByReference pgit);
 
     public static native int ppl_new_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
-            PointerByReference pcit, Pointer cit);
+            PointerByReference pgit, Pointer git);
 
     public static native int ppl_assign_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
             Pointer dst, Pointer src);
 
-    public static native int ppl_delete_Congruence_System_const_iterator(Pointer cit);
+    public static native int ppl_delete_Congruence_System_const_iterator(Pointer git);
 
-    public static native int ppl_Congruence_System_const_iterator_dereference(Pointer cit, PointerByReference pc);
+    public static native int ppl_Congruence_System_const_iterator_dereference(Pointer git, PointerByReference pg);
 
-    public static native int ppl_Congruence_System_const_iterator_increment(Pointer cit);
+    public static native int ppl_Congruence_System_const_iterator_increment(Pointer git);
 
     public static native int ppl_Congruence_System_const_iterator_equal_test(Pointer x, Pointer y);
+
+    // Grid Generator
+
+    public static native int ppl_new_Grid_Generator(PointerByReference pg, Pointer le, int t, Pointer d);
+
+    public static native int ppl_new_Grid_Generator_zero_dim_point(PointerByReference pg);
+
+    public static native int ppl_new_Grid_Generator_from_Grid_Generator(PointerByReference pg, Pointer g);
+
+    public static native int ppl_assign_Grid_Generator_from_Grid_Generator(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Grid_Generator(Pointer g);
+
+    public static native int ppl_Grid_Generator_space_dimension(Pointer g, DimensionByReference m);
+
+    public static native int ppl_Grid_Generator_type(Pointer g);
+
+    public static native int ppl_Grid_Generator_coefficient(Pointer g, Dimension var, Pointer n);
+
+    public static native int ppl_Grid_Generator_divisor(Pointer g, Pointer d);
+
+    public static native int ppl_Grid_Generator_OK(Pointer g);
+
+    public static native int ppl_io_print_Grid_Generator(Pointer x);
+
+    public static native int ppl_io_fprint_Grid_Generator(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Grid_Generator(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Grid_Generator_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Grid_Generator_ascii_load(Pointer x, Pointer steam);
+
+    // Grid Generator System
+
+    public static native int ppl_new_Grid_Generator_System(PointerByReference pgs);
+
+    public static native int ppl_new_Grid_Generator_System_from_Grid_Generator(PointerByReference pgs, Pointer g);
+
+    public static native int ppl_new_Grid_Generator_System_from_Grid_Generator_System(PointerByReference pgs,
+            Pointer gs);
+
+    public static native int ppl_assign_Grid_Generator_System_from_Grid_Generator_System(Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Grid_Generator_System(Pointer gs);
+
+    public static native int ppl_Grid_Generator_System_space_dimension(Pointer gs, DimensionByReference m);
+
+    public static native int ppl_Grid_Generator_System_empty(Pointer gs);
+
+    public static native int ppl_Grid_Generator_System_begin(Pointer gs, Pointer git);
+
+    public static native int ppl_Grid_Generator_System_end(Pointer gs, Pointer git);
+
+    public static native int ppl_Grid_Generator_System_OK(Pointer gs);
+
+    public static native int ppl_Grid_Generator_System_clear(Pointer gs);
+
+    public static native int ppl_Grid_Generator_System_insert_Grid_Generator(Pointer gs, Pointer g);
+
+    public static native int ppl_io_print_Grid_Generator_System(Pointer x);
+
+    public static native int ppl_io_fprint_Grid_Generator_System(Pointer stream, Pointer x);
+
+    public static native int ppl_io_asprint_Grid_Generator_System(PointerByReference strp, Pointer x);
+
+    public static native int ppl_Grid_Generator_System_ascii_dump(Pointer x, Pointer stream);
+
+    public static native int ppl_Grid_Generator_System_ascii_load(Pointer x, Pointer steam);
+
+    // Grid Generator System Iterator
+
+    public static native int ppl_new_Grid_Generator_System_const_iterator(PointerByReference pgit);
+
+    public static native int ppl_new_Grid_Generator_System_const_iterator_from_Grid_Generator_System_const_iterator(
+            PointerByReference pgit, Pointer git);
+
+    public static native int ppl_assign_Grid_Generator_System_const_iterator_from_Grid_Generator_System_const_iterator(
+            Pointer dst, Pointer src);
+
+    public static native int ppl_delete_Grid_Generator_System_const_iterator(Pointer git);
+
+    public static native int ppl_Grid_Generator_System_const_iterator_dereference(Pointer git, PointerByReference pg);
+
+    public static native int ppl_Grid_Generator_System_const_iterator_increment(Pointer git);
+
+    public static native int ppl_Grid_Generator_System_const_iterator_equal_test(Pointer x, Pointer y);
 
     // CPolyhedron
 
