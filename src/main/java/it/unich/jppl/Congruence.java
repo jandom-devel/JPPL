@@ -2,8 +2,8 @@ package it.unich.jppl;
 
 import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.Dimension;
-import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -82,7 +82,7 @@ public class Congruence {
     }
 
     public long getSpaceDimension() {
-        var m = new DimensionByReference();
+        var m = new SizeTByReference();
         int result = ppl_Congruence_space_dimension(pplObj, m);
         if (result < 0)
             throw new PPLError(result);
@@ -91,7 +91,7 @@ public class Congruence {
 
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
-        int result = ppl_Congruence_coefficient(pplObj, new Dimension(var), n.pplObj);
+        int result = ppl_Congruence_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return n;

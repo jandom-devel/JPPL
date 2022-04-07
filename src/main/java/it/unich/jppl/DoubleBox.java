@@ -6,9 +6,9 @@ import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Domain.ComplexityClass;
 import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Domain.RecycleInput;
-import it.unich.jppl.nativelib.LibPPL.Dimension;
-import it.unich.jppl.nativelib.LibPPL.DimensionArray;
-import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.nativelib.LibPPL.SizeTArray;
+import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import java.util.Optional;
 
@@ -41,7 +41,7 @@ public class DoubleBox implements Property<DoubleBox> {
 
     public DoubleBox(long d, DegenerateElement kind) {
         var pbox = new PointerByReference();
-        int result = ppl_new_Double_Box_from_space_dimension(pbox, new Dimension(d),
+        int result = ppl_new_Double_Box_from_space_dimension(pbox, new SizeT(d),
                 kind == DegenerateElement.EMPTY ? 1 : 0);
         if (result < 0)
             throw new PPLError(result);
@@ -152,7 +152,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public long getSpaceDimension() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Double_Box_space_dimension(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -160,7 +160,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public long getAffineDimension() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Double_Box_affine_dimension(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -256,7 +256,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public boolean constraints(long var) {
-        int result = ppl_Double_Box_constrains(pplObj, new Dimension(var));
+        int result = ppl_Double_Box_constrains(pplObj, new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
         return result > 0;
@@ -363,7 +363,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public long getExternalMemoryInBytes() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Double_Box_external_memory_in_bytes(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -371,7 +371,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public long getTotalMemoryInBytes() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Double_Box_total_memory_in_bytes(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -491,50 +491,50 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public DoubleBox unconstrainSpaceDimension(long var) {
-        int result = ppl_Double_Box_unconstrain_space_dimension(pplObj, new Dimension(var));
+        int result = ppl_Double_Box_unconstrain_space_dimension(pplObj, new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox unconstrainSpaceDimensions(long[] ds) {
-        var buffer = new DimensionArray(ds);
-        int result = ppl_Double_Box_unconstrain_space_dimensions(pplObj, buffer, new Dimension(ds.length));
+        var buffer = new SizeTArray(ds);
+        int result = ppl_Double_Box_unconstrain_space_dimensions(pplObj, buffer, new SizeT(ds.length));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox affineImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_affine_image(pplObj, new Dimension(var), le.pplObj, d.pplObj);
+        int result = ppl_Double_Box_affine_image(pplObj, new SizeT(var), le.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox affinePreImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_affine_preimage(pplObj, new Dimension(var), le.pplObj, d.pplObj);
+        int result = ppl_Double_Box_affine_preimage(pplObj, new SizeT(var), le.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Double_Box_bounded_affine_image(pplObj, new Dimension(var), lb.pplObj, ub.pplObj, d.pplObj);
+        int result = ppl_Double_Box_bounded_affine_image(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Double_Box_bounded_affine_preimage(pplObj, new Dimension(var), lb.pplObj, ub.pplObj, d.pplObj);
+        int result = ppl_Double_Box_bounded_affine_preimage(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_generalized_affine_image(pplObj, new Dimension(var), relsym.ordinal(), le.pplObj,
+        int result = ppl_Double_Box_generalized_affine_image(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -542,7 +542,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public DoubleBox generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_generalized_affine_preimage(pplObj, new Dimension(var), relsym.ordinal(), le.pplObj,
+        int result = ppl_Double_Box_generalized_affine_preimage(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -573,51 +573,51 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public DoubleBox addSpaceDimensionsAndEmbed(long d) {
-        int result = ppl_Double_Box_add_space_dimensions_and_embed(pplObj, new Dimension(d));
+        int result = ppl_Double_Box_add_space_dimensions_and_embed(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox addSpaceDimensionsAndProject(long d) {
-        int result = ppl_Double_Box_add_space_dimensions_and_project(pplObj, new Dimension(d));
+        int result = ppl_Double_Box_add_space_dimensions_and_project(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox removeSpaceDimensions(long ds[]) {
-        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new DimensionArray(ds), new Dimension(ds.length));
+        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox removeHigherSpaceDimensions(long d) {
-        int result = ppl_Double_Box_remove_higher_space_dimensions(pplObj, new Dimension(d));
+        int result = ppl_Double_Box_remove_higher_space_dimensions(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox mapSpaceDimensions(long[] maps) {
-        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new DimensionArray(maps),
-                new Dimension(maps.length));
+        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new SizeTArray(maps),
+                new SizeT(maps.length));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox expandSpaceDimension(long d, long m) {
-        int result = ppl_Double_Box_expand_space_dimension(pplObj, new Dimension(d), new Dimension(m));
+        int result = ppl_Double_Box_expand_space_dimension(pplObj, new SizeT(d), new SizeT(m));
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
     public DoubleBox foldSpaceDimensions(long[] ds, long d) {
-        int result = ppl_Double_Box_fold_space_dimensions(pplObj, new DimensionArray(ds), new Dimension(ds.length),
-                new Dimension(d));
+        int result = ppl_Double_Box_fold_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length),
+                new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return this;

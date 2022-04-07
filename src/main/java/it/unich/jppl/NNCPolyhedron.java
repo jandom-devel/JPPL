@@ -5,7 +5,7 @@ import static it.unich.jppl.nativelib.LibPPL.*;
 import it.unich.jppl.Domain.ComplexityClass;
 import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Domain.RecycleInput;
-import it.unich.jppl.nativelib.LibPPL.Dimension;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
 
 import com.sun.jna.ptr.PointerByReference;
 
@@ -17,7 +17,7 @@ public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> implements Property
 
     public NNCPolyhedron(long d, DegenerateElement kind) {
         var pph = new PointerByReference();
-        int result = ppl_new_NNC_Polyhedron_from_space_dimension(pph, new Dimension(d),
+        int result = ppl_new_NNC_Polyhedron_from_space_dimension(pph, new SizeT(d),
                 kind == DegenerateElement.EMPTY ? 1 : 0);
         if (result < 0)
             throw new PPLError(result);

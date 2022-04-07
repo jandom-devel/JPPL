@@ -2,7 +2,7 @@ package it.unich.jppl;
 
 import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -128,7 +128,7 @@ public class GridGeneratorSystem implements Iterable<Generator> {
     }
 
     public long getSpaceDimension() {
-        var m = new DimensionByReference();
+        var m = new SizeTByReference();
         int result = ppl_Grid_Generator_System_space_dimension(pplObj, m);
         if (result < 0)
             throw new PPLError(result);

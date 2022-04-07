@@ -2,8 +2,8 @@ package it.unich.jppl;
 
 import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.Dimension;
-import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -40,7 +40,7 @@ public class LinearExpression {
     // TODO: this methods causes exceptions during tests under the VSCode Test Runner
     public LinearExpression(long d) {
         var ple = new PointerByReference();
-        int result = ppl_new_Linear_Expression_with_dimension(ple, new Dimension(d));
+        int result = ppl_new_Linear_Expression_with_dimension(ple, new SizeT(d));
         if (result < 0) throw new PPLError(result);
         init(ple.getValue());
     }
@@ -89,7 +89,7 @@ public class LinearExpression {
     }
 
     public long getSpaceDimension() {
-        var m = new DimensionByReference();
+        var m = new SizeTByReference();
         int result = ppl_Linear_Expression_space_dimension(pplObj, m);
         if (result < 0) throw new PPLError(result);
         return m.getValue().longValue();
@@ -97,7 +97,7 @@ public class LinearExpression {
 
     public Coefficient getCoefficient(long var) {
         var c = new Coefficient();
-        int result = ppl_Linear_Expression_coefficient(pplObj, new Dimension(var), c.pplObj);
+        int result = ppl_Linear_Expression_coefficient(pplObj, new SizeT(var), c.pplObj);
         if (result < 0) throw new PPLError(result);
         return c;
     }
@@ -128,7 +128,7 @@ public class LinearExpression {
     }
 
     public LinearExpression add(Coefficient c, long d) {
-        int result = ppl_Linear_Expression_add_to_coefficient(pplObj, new Dimension(d), c.pplObj);
+        int result = ppl_Linear_Expression_add_to_coefficient(pplObj, new SizeT(d), c.pplObj);
         if (result < 0) throw new PPLError(result);
         return this;
     }

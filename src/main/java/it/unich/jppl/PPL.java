@@ -2,7 +2,7 @@ package it.unich.jppl;
 
 import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.Dimension;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
 
 import java.lang.ref.Cleaner;
 
@@ -128,7 +128,7 @@ public class PPL {
     }
 
     public static long getMaxSpaceDimension() {
-        var mref = new DimensionByReference();
+        var mref = new SizeTByReference();
         int result = ppl_max_space_dimension(mref);
         if (result < 0)
             throw new PPLError(result);
@@ -136,7 +136,7 @@ public class PPL {
     }
 
     public static long getNotADimension() {
-        var mref = new DimensionByReference();
+        var mref = new SizeTByReference();
         int result = ppl_not_a_dimension(mref);
         if (result < 0)
             throw new PPLError(result);
@@ -144,14 +144,14 @@ public class PPL {
     }
 
     public static void ioPrintVariable(long var) {
-        int result = ppl_io_print_variable(new Dimension(var));
+        int result = ppl_io_print_variable(new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
     }
 
     public static String ioASPrintVariable(long var) {
         var strp = new PointerByReference();
-        int result = ppl_io_asprint_variable(strp, new Dimension(var));
+        int result = ppl_io_asprint_variable(strp, new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
         var p = strp.getValue();

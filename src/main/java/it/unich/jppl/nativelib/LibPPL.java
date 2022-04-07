@@ -66,18 +66,18 @@ public final class LibPPL {
 
     // Dimensions
 
-    public static class Dimension extends IntegerType {
-        public Dimension() {
+    public static class SizeT extends IntegerType {
+        public SizeT() {
             this(0);
         }
 
-        public Dimension(long value) {
+        public SizeT(long value) {
             super(Native.SIZE_T_SIZE, value, true);
         }
     }
 
-    public static class DimensionArray extends Memory {
-        public DimensionArray(long[] ds) {
+    public static class SizeTArray extends Memory {
+        public SizeTArray(long[] ds) {
             super(ds.length * Native.SIZE_T_SIZE);
             for (int i = 0; i < ds.length; i++)
                 if (Native.SIZE_T_SIZE == 8)
@@ -87,17 +87,17 @@ public final class LibPPL {
         }
     }
 
-    public static class DimensionByReference extends ByReference {
-        public DimensionByReference() {
-            this(new Dimension());
+    public static class SizeTByReference extends ByReference {
+        public SizeTByReference() {
+            this(new SizeT());
         }
 
-        public DimensionByReference(Dimension value) {
+        public SizeTByReference(SizeT value) {
             super(Native.SIZE_T_SIZE);
             setValue(value);
         }
 
-        public void setValue(Dimension value) {
+        public void setValue(SizeT value) {
             Pointer p = getPointer();
             if (Native.SIZE_T_SIZE == 8) {
                 p.setLong(0, value.longValue());
@@ -106,9 +106,9 @@ public final class LibPPL {
             }
         }
 
-        public Dimension getValue() {
+        public SizeT getValue() {
             Pointer p = getPointer();
-            return new Dimension(Native.SIZE_T_SIZE == 8 ? p.getLong(0) : p.getInt(0));
+            return new SizeT(Native.SIZE_T_SIZE == 8 ? p.getLong(0) : p.getInt(0));
         }
     }
 
@@ -117,15 +117,15 @@ public final class LibPPL {
         public VariableOutputFunction f;
     }
 
-    public static native int ppl_max_space_dimension(DimensionByReference m);
+    public static native int ppl_max_space_dimension(SizeTByReference m);
 
-    public static native int ppl_not_a_dimension(DimensionByReference m);
+    public static native int ppl_not_a_dimension(SizeTByReference m);
 
-    public static native int ppl_io_print_variable(Dimension var);
+    public static native int ppl_io_print_variable(SizeT var);
 
-    public static native int ppl_io_fprint_variable(Pointer stream, Dimension var);
+    public static native int ppl_io_fprint_variable(Pointer stream, SizeT var);
 
-    public static native int ppl_io_asprint_variable(PointerByReference strp, Dimension var);
+    public static native int ppl_io_asprint_variable(PointerByReference strp, SizeT var);
 
     public static native int ppl_io_set_variable_output_function(VariableOutputFunction p);
 
@@ -168,7 +168,7 @@ public final class LibPPL {
 
     public static native int ppl_new_Linear_Expression(PointerByReference ple);
 
-    public static native int ppl_new_Linear_Expression_with_dimension(PointerByReference ple, Dimension d);
+    public static native int ppl_new_Linear_Expression_with_dimension(PointerByReference ple, SizeT d);
 
     public static native int ppl_new_Linear_Expression_from_Linear_Expression(PointerByReference ple, Pointer le);
 
@@ -184,9 +184,9 @@ public final class LibPPL {
 
     public static native int ppl_delete_Linear_Expression(Pointer le);
 
-    public static native int ppl_Linear_Expression_space_dimension(Pointer le, DimensionByReference m);
+    public static native int ppl_Linear_Expression_space_dimension(Pointer le, SizeTByReference m);
 
-    public static native int ppl_Linear_Expression_coefficient(Pointer le, Dimension var, Pointer n);
+    public static native int ppl_Linear_Expression_coefficient(Pointer le, SizeT var, Pointer n);
 
     public static native int ppl_Linear_Expression_inhomogeneous_term(Pointer le, Pointer n);
 
@@ -196,7 +196,7 @@ public final class LibPPL {
 
     public static native int ppl_Linear_Expression_all_homogeneous_terms_are_zero(Pointer le);
 
-    public static native int ppl_Linear_Expression_add_to_coefficient(Pointer le, Dimension var, Pointer n);
+    public static native int ppl_Linear_Expression_add_to_coefficient(Pointer le, SizeT var, Pointer n);
 
     public static native int ppl_Linear_Expression_add_to_inhomogeneous(Pointer le, Pointer n);
 
@@ -228,11 +228,11 @@ public final class LibPPL {
 
     public static native int ppl_delete_Constraint(Pointer c);
 
-    public static native int ppl_Constraint_space_dimension(Pointer c, DimensionByReference m);
+    public static native int ppl_Constraint_space_dimension(Pointer c, SizeTByReference m);
 
     public static native int ppl_Constraint_type(Pointer c);
 
-    public static native int ppl_Constraint_coefficient(Pointer c, Dimension var, Pointer n);
+    public static native int ppl_Constraint_coefficient(Pointer c, SizeT var, Pointer n);
 
     public static native int ppl_Constraint_inhomogeneous_term(Pointer c, Pointer n);
 
@@ -262,7 +262,7 @@ public final class LibPPL {
 
     public static native int ppl_delete_Constraint_System(Pointer cs);
 
-    public static native int ppl_Constraint_System_space_dimension(Pointer cs, DimensionByReference m);
+    public static native int ppl_Constraint_System_space_dimension(Pointer cs, SizeTByReference m);
 
     public static native int ppl_Constraint_System_empty(Pointer cs);
 
@@ -320,11 +320,11 @@ public final class LibPPL {
 
     public static native int ppl_delete_Generator(Pointer g);
 
-    public static native int ppl_Generator_space_dimension(Pointer g, DimensionByReference m);
+    public static native int ppl_Generator_space_dimension(Pointer g, SizeTByReference m);
 
     public static native int ppl_Generator_type(Pointer g);
 
-    public static native int ppl_Generator_coefficient(Pointer g, Dimension var, Pointer n);
+    public static native int ppl_Generator_coefficient(Pointer g, SizeT var, Pointer n);
 
     public static native int ppl_Generator_divisor(Pointer g, Pointer d);
 
@@ -352,7 +352,7 @@ public final class LibPPL {
 
     public static native int ppl_delete_Generator_System(Pointer gs);
 
-    public static native int ppl_Generator_System_space_dimension(Pointer gs, DimensionByReference m);
+    public static native int ppl_Generator_System_space_dimension(Pointer gs, SizeTByReference m);
 
     public static native int ppl_Generator_System_empty(Pointer gs);
 
@@ -408,9 +408,9 @@ public final class LibPPL {
 
     public static native int ppl_delete_Congruence(Pointer c);
 
-    public static native int ppl_Congruence_space_dimension(Pointer c, DimensionByReference m);
+    public static native int ppl_Congruence_space_dimension(Pointer c, SizeTByReference m);
 
-    public static native int ppl_Congruence_coefficient(Pointer c, Dimension var, Pointer n);
+    public static native int ppl_Congruence_coefficient(Pointer c, SizeT var, Pointer n);
 
     public static native int ppl_Congruence_inhomogeneous_term(Pointer c, Pointer n);
 
@@ -442,7 +442,7 @@ public final class LibPPL {
 
     public static native int ppl_delete_Congruence_System(Pointer cs);
 
-    public static native int ppl_Congruence_System_space_dimension(Pointer cs, DimensionByReference m);
+    public static native int ppl_Congruence_System_space_dimension(Pointer cs, SizeTByReference m);
 
     public static native int ppl_Congruence_System_empty(Pointer cs);
 
@@ -496,11 +496,11 @@ public final class LibPPL {
 
     public static native int ppl_delete_Grid_Generator(Pointer g);
 
-    public static native int ppl_Grid_Generator_space_dimension(Pointer g, DimensionByReference m);
+    public static native int ppl_Grid_Generator_space_dimension(Pointer g, SizeTByReference m);
 
     public static native int ppl_Grid_Generator_type(Pointer g);
 
-    public static native int ppl_Grid_Generator_coefficient(Pointer g, Dimension var, Pointer n);
+    public static native int ppl_Grid_Generator_coefficient(Pointer g, SizeT var, Pointer n);
 
     public static native int ppl_Grid_Generator_divisor(Pointer g, Pointer d);
 
@@ -529,7 +529,7 @@ public final class LibPPL {
 
     public static native int ppl_delete_Grid_Generator_System(Pointer gs);
 
-    public static native int ppl_Grid_Generator_System_space_dimension(Pointer gs, DimensionByReference m);
+    public static native int ppl_Grid_Generator_System_space_dimension(Pointer gs, SizeTByReference m);
 
     public static native int ppl_Grid_Generator_System_empty(Pointer gs);
 
@@ -573,7 +573,7 @@ public final class LibPPL {
 
     // CPolyhedron
 
-    public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d, int empty);
+    public static native int ppl_new_C_Polyhedron_from_space_dimension(PointerByReference pph, SizeT d, int empty);
 
     public static native int ppl_new_C_Polyhedron_from_C_Polyhedron(PointerByReference pph, Pointer ph);
 
@@ -606,7 +606,7 @@ public final class LibPPL {
 
     // NNCPolyhedron
 
-    public static native int ppl_new_NNC_Polyhedron_from_space_dimension(PointerByReference pph, Dimension d,
+    public static native int ppl_new_NNC_Polyhedron_from_space_dimension(PointerByReference pph, SizeT d,
             int empty);
 
     public static native int ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(PointerByReference pph, Pointer ph);
@@ -642,9 +642,9 @@ public final class LibPPL {
 
     public static native int ppl_delete_Polyhedron(Pointer ph);
 
-    public static native int ppl_Polyhedron_space_dimension(Pointer ph, DimensionByReference m);
+    public static native int ppl_Polyhedron_space_dimension(Pointer ph, SizeTByReference m);
 
-    public static native int ppl_Polyhedron_affine_dimension(Pointer ph, DimensionByReference m);
+    public static native int ppl_Polyhedron_affine_dimension(Pointer ph, SizeTByReference m);
 
     public static native int ppl_Polyhedron_relation_with_Constraint(Pointer ph, Pointer c);
 
@@ -670,7 +670,7 @@ public final class LibPPL {
 
     public static native int ppl_Polyhedron_is_discrete(Pointer ph);
 
-    public static native int ppl_Polyhedron_constrains(Pointer ph, Dimension var);
+    public static native int ppl_Polyhedron_constrains(Pointer ph, SizeT var);
 
     public static native int ppl_Polyhedron_bounds_from_above(Pointer ph, Pointer le);
 
@@ -698,9 +698,9 @@ public final class LibPPL {
 
     public static native int ppl_Polyhedron_OK(Pointer ph);
 
-    public static native int ppl_Polyhedron_external_memory_in_bytes(Pointer ph, DimensionByReference sz);
+    public static native int ppl_Polyhedron_external_memory_in_bytes(Pointer ph, SizeTByReference sz);
 
-    public static native int ppl_Polyhedron_total_memory_in_bytes(Pointer ph, DimensionByReference sz);
+    public static native int ppl_Polyhedron_total_memory_in_bytes(Pointer ph, SizeTByReference sz);
 
     public static native int ppl_Polyhedron_add_constraint(Pointer ph, Pointer c);
 
@@ -734,24 +734,24 @@ public final class LibPPL {
 
     public static native int ppl_Polyhedron_topological_closure_assign(Pointer ph);
 
-    public static native int ppl_Polyhedron_unconstrain_space_dimension(Pointer ph, Dimension var);
+    public static native int ppl_Polyhedron_unconstrain_space_dimension(Pointer ph, SizeT var);
 
-    public static native int ppl_Polyhedron_unconstrain_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+    public static native int ppl_Polyhedron_unconstrain_space_dimensions(Pointer ph, Pointer ds, SizeT n);
 
-    public static native int ppl_Polyhedron_affine_image(Pointer ph, Dimension var, Pointer le, Pointer d);
+    public static native int ppl_Polyhedron_affine_image(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    public static native int ppl_Polyhedron_affine_preimage(Pointer ph, Dimension var, Pointer le, Pointer d);
+    public static native int ppl_Polyhedron_affine_preimage(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    public static native int ppl_Polyhedron_bounded_affine_image(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+    public static native int ppl_Polyhedron_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub,
             Pointer d);
 
-    public static native int ppl_Polyhedron_bounded_affine_preimage(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+    public static native int ppl_Polyhedron_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub,
             Pointer d);
 
-    public static native int ppl_Polyhedron_generalized_affine_image(Pointer ph, Dimension var, int relsym, Pointer le,
+    public static native int ppl_Polyhedron_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le,
             Pointer d);
 
-    public static native int ppl_Polyhedron_generalized_affine_preimage(Pointer ph, Dimension var, int relsym,
+    public static native int ppl_Polyhedron_generalized_affine_preimage(Pointer ph, SizeT var, int relsym,
             Pointer le, Pointer d);
 
     public static native int ppl_Polyhedron_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
@@ -762,19 +762,19 @@ public final class LibPPL {
 
     public static native int ppl_Polyhedron_concatenate_assign(Pointer x, Pointer y);
 
-    public static native int ppl_Polyhedron_add_space_dimensions_and_embed(Pointer ph, Dimension d);
+    public static native int ppl_Polyhedron_add_space_dimensions_and_embed(Pointer ph, SizeT d);
 
-    public static native int ppl_Polyhedron_add_space_dimensions_and_project(Pointer ph, Dimension d);
+    public static native int ppl_Polyhedron_add_space_dimensions_and_project(Pointer ph, SizeT d);
 
-    public static native int ppl_Polyhedron_remove_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+    public static native int ppl_Polyhedron_remove_space_dimensions(Pointer ph, Pointer ds, SizeT n);
 
-    public static native int ppl_Polyhedron_remove_higher_space_dimensions(Pointer ph, Dimension d);
+    public static native int ppl_Polyhedron_remove_higher_space_dimensions(Pointer ph, SizeT d);
 
-    public static native int ppl_Polyhedron_map_space_dimensions(Pointer ph, Pointer maps, Dimension n);
+    public static native int ppl_Polyhedron_map_space_dimensions(Pointer ph, Pointer maps, SizeT n);
 
-    public static native int ppl_Polyhedron_expand_space_dimension(Pointer ph, Dimension d, Dimension m);
+    public static native int ppl_Polyhedron_expand_space_dimension(Pointer ph, SizeT d, SizeT m);
 
-    public static native int ppl_Polyhedron_fold_space_dimensions(Pointer ph, Pointer ds, Dimension n, Dimension d);
+    public static native int ppl_Polyhedron_fold_space_dimensions(Pointer ph, Pointer ds, SizeT n, SizeT d);
 
     public static native int ppl_io_print_Polyhedron(Pointer x);
 
@@ -834,7 +834,7 @@ public final class LibPPL {
 
     // DoubleBox
 
-    public static native int ppl_new_Double_Box_from_space_dimension(PointerByReference pph, Dimension d, int empty);
+    public static native int ppl_new_Double_Box_from_space_dimension(PointerByReference pph, SizeT d, int empty);
 
     public static native int ppl_new_Double_Box_from_Double_Box(PointerByReference pph, Pointer ph);
 
@@ -867,9 +867,9 @@ public final class LibPPL {
 
     public static native int ppl_delete_Double_Box(Pointer ph);
 
-    public static native int ppl_Double_Box_space_dimension(Pointer ph, DimensionByReference m);
+    public static native int ppl_Double_Box_space_dimension(Pointer ph, SizeTByReference m);
 
-    public static native int ppl_Double_Box_affine_dimension(Pointer ph, DimensionByReference m);
+    public static native int ppl_Double_Box_affine_dimension(Pointer ph, SizeTByReference m);
 
     public static native int ppl_Double_Box_relation_with_Constraint(Pointer ph, Pointer c);
 
@@ -895,7 +895,7 @@ public final class LibPPL {
 
     public static native int ppl_Double_Box_is_discrete(Pointer ph);
 
-    public static native int ppl_Double_Box_constrains(Pointer ph, Dimension var);
+    public static native int ppl_Double_Box_constrains(Pointer ph, SizeT var);
 
     public static native int ppl_Double_Box_bounds_from_above(Pointer ph, Pointer le);
 
@@ -923,9 +923,9 @@ public final class LibPPL {
 
     public static native int ppl_Double_Box_OK(Pointer ph);
 
-    public static native int ppl_Double_Box_external_memory_in_bytes(Pointer ph, DimensionByReference sz);
+    public static native int ppl_Double_Box_external_memory_in_bytes(Pointer ph, SizeTByReference sz);
 
-    public static native int ppl_Double_Box_total_memory_in_bytes(Pointer ph, DimensionByReference sz);
+    public static native int ppl_Double_Box_total_memory_in_bytes(Pointer ph, SizeTByReference sz);
 
     public static native int ppl_Double_Box_add_constraint(Pointer ph, Pointer c);
 
@@ -959,24 +959,24 @@ public final class LibPPL {
 
     public static native int ppl_Double_Box_topological_closure_assign(Pointer ph);
 
-    public static native int ppl_Double_Box_unconstrain_space_dimension(Pointer ph, Dimension var);
+    public static native int ppl_Double_Box_unconstrain_space_dimension(Pointer ph, SizeT var);
 
-    public static native int ppl_Double_Box_unconstrain_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+    public static native int ppl_Double_Box_unconstrain_space_dimensions(Pointer ph, Pointer ds, SizeT n);
 
-    public static native int ppl_Double_Box_affine_image(Pointer ph, Dimension var, Pointer le, Pointer d);
+    public static native int ppl_Double_Box_affine_image(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    public static native int ppl_Double_Box_affine_preimage(Pointer ph, Dimension var, Pointer le, Pointer d);
+    public static native int ppl_Double_Box_affine_preimage(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    public static native int ppl_Double_Box_bounded_affine_image(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+    public static native int ppl_Double_Box_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub,
             Pointer d);
 
-    public static native int ppl_Double_Box_bounded_affine_preimage(Pointer ph, Dimension var, Pointer lb, Pointer ub,
+    public static native int ppl_Double_Box_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub,
             Pointer d);
 
-    public static native int ppl_Double_Box_generalized_affine_image(Pointer ph, Dimension var, int relsym, Pointer le,
+    public static native int ppl_Double_Box_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le,
             Pointer d);
 
-    public static native int ppl_Double_Box_generalized_affine_preimage(Pointer ph, Dimension var, int relsym,
+    public static native int ppl_Double_Box_generalized_affine_preimage(Pointer ph, SizeT var, int relsym,
             Pointer le, Pointer d);
 
     public static native int ppl_Double_Box_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
@@ -987,19 +987,19 @@ public final class LibPPL {
 
     public static native int ppl_Double_Box_concatenate_assign(Pointer x, Pointer y);
 
-    public static native int ppl_Double_Box_add_space_dimensions_and_embed(Pointer ph, Dimension d);
+    public static native int ppl_Double_Box_add_space_dimensions_and_embed(Pointer ph, SizeT d);
 
-    public static native int ppl_Double_Box_add_space_dimensions_and_project(Pointer ph, Dimension d);
+    public static native int ppl_Double_Box_add_space_dimensions_and_project(Pointer ph, SizeT d);
 
-    public static native int ppl_Double_Box_remove_space_dimensions(Pointer ph, Pointer ds, Dimension n);
+    public static native int ppl_Double_Box_remove_space_dimensions(Pointer ph, Pointer ds, SizeT n);
 
-    public static native int ppl_Double_Box_remove_higher_space_dimensions(Pointer ph, Dimension d);
+    public static native int ppl_Double_Box_remove_higher_space_dimensions(Pointer ph, SizeT d);
 
-    public static native int ppl_Double_Box_map_space_dimensions(Pointer ph, Pointer maps, Dimension n);
+    public static native int ppl_Double_Box_map_space_dimensions(Pointer ph, Pointer maps, SizeT n);
 
-    public static native int ppl_Double_Box_expand_space_dimension(Pointer ph, Dimension d, Dimension m);
+    public static native int ppl_Double_Box_expand_space_dimension(Pointer ph, SizeT d, SizeT m);
 
-    public static native int ppl_Double_Box_fold_space_dimensions(Pointer ph, Pointer ds, Dimension n, Dimension d);
+    public static native int ppl_Double_Box_fold_space_dimensions(Pointer ph, Pointer ds, SizeT n, SizeT d);
 
     public static native int ppl_io_print_Double_Box(Pointer x);
 

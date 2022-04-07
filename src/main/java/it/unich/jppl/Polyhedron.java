@@ -5,9 +5,9 @@ import static it.unich.jppl.nativelib.LibPPL.*;
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Property.ExtremalOutput;
 import it.unich.jppl.Property.WideningToken;
-import it.unich.jppl.nativelib.LibPPL.Dimension;
-import it.unich.jppl.nativelib.LibPPL.DimensionArray;
-import it.unich.jppl.nativelib.LibPPL.DimensionByReference;
+import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.nativelib.LibPPL.SizeTArray;
+import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import java.util.Optional;
 
@@ -42,7 +42,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     abstract protected T self();
 
     public long getSpaceDimension() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Polyhedron_space_dimension(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -50,7 +50,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public long getAffineDimension() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Polyhedron_affine_dimension(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -146,7 +146,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public boolean constraints(long var) {
-        int result = ppl_Polyhedron_constrains(pplObj, new Dimension(var));
+        int result = ppl_Polyhedron_constrains(pplObj, new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
         return result > 0;
@@ -252,7 +252,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public long getExternalMemoryInBytes() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Polyhedron_external_memory_in_bytes(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -260,7 +260,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public long getTotalMemoryInBytes() {
-        var pd = new DimensionByReference();
+        var pd = new SizeTByReference();
         int result = ppl_Polyhedron_total_memory_in_bytes(pplObj, pd);
         if (result < 0)
             throw new PPLError(result);
@@ -380,50 +380,50 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public T unconstrainSpaceDimension(long var) {
-        int result = ppl_Polyhedron_unconstrain_space_dimension(pplObj, new Dimension(var));
+        int result = ppl_Polyhedron_unconstrain_space_dimension(pplObj, new SizeT(var));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T unconstrainSpaceDimensions(long[] ds) {
-        var buffer = new DimensionArray(ds);
-        int result = ppl_Polyhedron_unconstrain_space_dimensions(pplObj, buffer, new Dimension(ds.length));
+        var buffer = new SizeTArray(ds);
+        int result = ppl_Polyhedron_unconstrain_space_dimensions(pplObj, buffer, new SizeT(ds.length));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T affineImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_affine_image(pplObj, new Dimension(var), le.pplObj, d.pplObj);
+        int result = ppl_Polyhedron_affine_image(pplObj, new SizeT(var), le.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T affinePreImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_affine_preimage(pplObj, new Dimension(var), le.pplObj, d.pplObj);
+        int result = ppl_Polyhedron_affine_preimage(pplObj, new SizeT(var), le.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Polyhedron_bounded_affine_image(pplObj, new Dimension(var), lb.pplObj, ub.pplObj, d.pplObj);
+        int result = ppl_Polyhedron_bounded_affine_image(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Polyhedron_bounded_affine_preimage(pplObj, new Dimension(var), lb.pplObj, ub.pplObj, d.pplObj);
+        int result = ppl_Polyhedron_bounded_affine_preimage(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_generalized_affine_image(pplObj, new Dimension(var), relsym.ordinal(), le.pplObj,
+        int result = ppl_Polyhedron_generalized_affine_image(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -431,7 +431,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_generalized_affine_preimage(pplObj, new Dimension(var), relsym.ordinal(), le.pplObj,
+        int result = ppl_Polyhedron_generalized_affine_preimage(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -461,51 +461,51 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public T addSpaceDimensionsAndEmbed(long d) {
-        int result = ppl_Polyhedron_add_space_dimensions_and_embed(pplObj, new Dimension(d));
+        int result = ppl_Polyhedron_add_space_dimensions_and_embed(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T addSpaceDimensionsAndProject(long d) {
-        int result = ppl_Polyhedron_add_space_dimensions_and_project(pplObj, new Dimension(d));
+        int result = ppl_Polyhedron_add_space_dimensions_and_project(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T removeSpaceDimensions(long ds[]) {
-        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new DimensionArray(ds), new Dimension(ds.length));
+        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T removeHigherSpaceDimensions(long d) {
-        int result = ppl_Polyhedron_remove_higher_space_dimensions(pplObj, new Dimension(d));
+        int result = ppl_Polyhedron_remove_higher_space_dimensions(pplObj, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T mapSpaceDimensions(long[] maps) {
-        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new DimensionArray(maps),
-                new Dimension(maps.length));
+        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new SizeTArray(maps),
+                new SizeT(maps.length));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T expandSpaceDimension(long d, long m) {
-        int result = ppl_Polyhedron_expand_space_dimension(pplObj, new Dimension(d), new Dimension(m));
+        int result = ppl_Polyhedron_expand_space_dimension(pplObj, new SizeT(d), new SizeT(m));
         if (result < 0)
             throw new PPLError(result);
         return self();
     }
 
     public T foldSpaceDimensions(long[] ds, long d) {
-        int result = ppl_Polyhedron_fold_space_dimensions(pplObj, new DimensionArray(ds), new Dimension(ds.length),
-                new Dimension(d));
+        int result = ppl_Polyhedron_fold_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length),
+                new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
         return self();
