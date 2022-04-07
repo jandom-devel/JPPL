@@ -25,6 +25,8 @@ project/plugins/project/
 # Metals specific
 .metals/
 .bloop/
-.vscode/
+.vscode/*
+!.vscode/settings.json.default
+!.vscode/java-formatter.xml
 .bsp/
 metals.sbt
