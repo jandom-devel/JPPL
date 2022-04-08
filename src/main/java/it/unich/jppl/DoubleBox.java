@@ -301,7 +301,7 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0,
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
                     new Generator(point)));
     }
 
@@ -330,7 +330,7 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(new Coefficient(cn), new Coefficient(cd), pmaximum.getValue() != 0,
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
                     new Generator(point)));
     }
 

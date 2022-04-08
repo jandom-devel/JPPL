@@ -11,12 +11,12 @@ public class LinearExpressionTest {
         var le = new LinearExpression();
         assertTrue(le.isZero());
         assertTrue(le.isOK());
-        assertTrue(le.allHomogeneousTermsAreZero());
+        assertTrue(le.isConstant());
         assertEquals(0, le.getSpaceDimension());
         le = new LinearExpression(5);
         assertTrue(le.isZero());
         assertTrue(le.isOK());
-        assertTrue(le.allHomogeneousTermsAreZero());
+        assertTrue(le.isConstant());
         assertEquals(5, le.getSpaceDimension());
     }
 
@@ -41,7 +41,7 @@ public class LinearExpressionTest {
         assertEquals(new Coefficient(6), le.getCoefficient());
         assertTrue(le.isOK());
         assertFalse(le.isZero());
-        assertFalse(le.allHomogeneousTermsAreZero());
+        assertFalse(le.isConstant());
     }
 
     @Test
