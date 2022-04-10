@@ -1,9 +1,9 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.SizeT;
-import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
+import it.unich.jppl.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeTByReference;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -17,10 +17,10 @@ public class Congruence {
     }
 
     public static class RelationWithCongruence {
-        public final static int IS_DISJOINT = 1;
-        public final static int STRICTLY_INTERSECTS = 2;
-        public final static int IS_INCLUDED = 4;
-        public final static int SATURATES = 8;
+        public static final int IS_DISJOINT = 1;
+        public static final int STRICTLY_INTERSECTS = 2;
+        public static final int IS_INCLUDED = 4;
+        public static final int SATURATES = 8;
     }
 
     private static class CongruenceCleaner implements Runnable {

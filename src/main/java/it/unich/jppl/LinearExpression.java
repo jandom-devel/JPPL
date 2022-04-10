@@ -1,18 +1,18 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
+
+import it.unich.jppl.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeTByReference;
 
 import java.math.BigInteger;
-
-import it.unich.jppl.nativelib.LibPPL.SizeT;
-import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * An object of the class Linear_Expression represents the linear expression
+ * An object of the class LinearExpression represents the linear expression
  * \(\sum_{i=1}^n a_i x_i \) where \(n\) is the dimension of the vector space,
  * each \(a_i\) is the integer coefficient of the \(i\)-th variable \(x_i\) and
  * \(b\) is the integer for the inhomogeneous term.
@@ -25,9 +25,14 @@ import com.sun.jna.ptr.PointerByReference;
  * include unary negation, binary addition and subtraction, as well as
  * multiplication by a Coefficient. The space dimension of a linear expression
  * is defined as the maximum space dimension of the arguments used to build it:
- * in particular, the space dimension of a variable <code>x</code> is defined as
- * <code>x.id()+1</code>, whereas all the objects of the class Coefficient have
- * space dimension zero.
+ * in particular, the space dimension of a variable \(x_i\) is defined as
+ * \(i+1\), whereas all the objects of the class Coefficient have space
+ * dimension zero.
+ * </p>
+ * <p>
+ * Almost all methods throw {@link PPLError} when the underlying PPL library
+ * generates an error.
+ * </p>
  */
 public class LinearExpression {
     Pointer pplObj;
@@ -66,7 +71,7 @@ public class LinearExpression {
      * Returns a new linear expression corresponding the constant 0 in a
      * d-dimensional space.
      */
-    LinearExpression(long d) {
+    public LinearExpression(long d) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_with_dimension(ple, new SizeT(d));
         if (result < 0)
@@ -128,45 +133,6 @@ public class LinearExpression {
     }
 
     /**
-     * Convenience constructor which builds a linear expression by a list of
-     * coefficients, starting with the inhomogeneous term and continuing with the
-     * coefficient of the variables \(x_0, \x_1, \ldots\)
-     */
-    public LinearExpression(Coefficient c, Coefficient... args) {
-        this();
-        add(c);
-        for (int i = 0; i < args.length; i++) {
-            add(args[i], i);
-        }
-    }
-
-    /**
-     * Similar to the {@link #LinearExpression(Coefficient c, Coefficient... args)
-     * LinearExpression(Coefficient c, Coefficient... args)} constructor but with
-     * BigInteger parameters.
-     */
-    public LinearExpression(BigInteger c, BigInteger... args) {
-        this();
-        add(new Coefficient(c));
-        for (int i = 0; i < args.length; i++) {
-            add(new Coefficient(args[i]), i);
-        }
-    }
-
-    /**
-     * Similar to {@link #LinearExpression(Coefficient c, Coefficient... args)
-     * LinearExpression(Coefficient c, Coefficient... args)} constructor but with
-     * long parameters.
-     */
-    public LinearExpression(long c, long... args) {
-        this();
-        add(new Coefficient(c));
-        for (int i = 0; i < args.length; i++) {
-            add(new Coefficient(args[i]), i);
-        }
-    }
-
-    /**
      * Assign to this linear expression a copy of the linear expressione le.
      */
     public LinearExpression set(LinearExpression le) {
@@ -188,7 +154,7 @@ public class LinearExpression {
     }
 
     /**
-     * Returns the Coefficient for to the variable \(x_i\).
+     * Returns the Coefficient for the variable \(x_i\).
      */
     public Coefficient getCoefficient(long i) {
         var c = new Coefficient();
@@ -201,7 +167,7 @@ public class LinearExpression {
     /**
      * Returns the inhomogeneous term.
      */
-    public Coefficient getCoefficient() {
+    public Coefficient getInhomogeneousTerm() {
         var c = new Coefficient();
         int result = ppl_Linear_Expression_inhomogeneous_term(pplObj, c.pplObj);
         if (result < 0)
@@ -242,7 +208,7 @@ public class LinearExpression {
     }
 
     /**
-     * Add the linear expression \(c \cdot x_i\) to this linear expression.
+     * Adds the term \(c \cdot x_i\) to this linear expression.
      *
      * @return this linear expression.
      */
@@ -305,7 +271,7 @@ public class LinearExpression {
     }
 
     /**
-     * Returns whether obj is the sama as this linear expressions. Two linear
+     * Returns whether obj is the same as this linear expressions. Two linear
      * expressions are the same if they have the same coefficients, even if their
      * space dimension differs.
      */
@@ -322,4 +288,45 @@ public class LinearExpression {
         }
         return false;
     }
+
+    /**
+     * Convenience method which builds a linear expression given a list of
+     * coefficients, starting with the inhomogeneous term and continuing with the
+     * coefficient of the variables \(x_0, \x_1, \ldots\)
+     */
+    public static LinearExpression of(Coefficient c, Coefficient... args) {
+        var le = new LinearExpression();
+        le.add(c);
+        for (int i = 0; i < args.length; i++) {
+            le.add(args[i], i);
+        }
+        return le;
+    }
+
+    /**
+     * Similar to the {@link #of(Coefficient c, Coefficient... args) of(Coefficient
+     * c, Coefficient... args)} constructor but with BigInteger parameters.
+     */
+    public static LinearExpression of(BigInteger c, BigInteger... args) {
+        var le = new LinearExpression();
+        le.add(new Coefficient(c));
+        for (int i = 0; i < args.length; i++) {
+            le.add(new Coefficient(args[i]), i);
+        }
+        return le;
+    }
+
+    /**
+     * Similar to {@link #of(Coefficient c, Coefficient... args) of(Coefficient c,
+     * Coefficient... args)} constructor but with long parameters.
+     */
+    public static LinearExpression of(long c, long... args) {
+        var le = new LinearExpression();
+        le.add(new Coefficient(c));
+        for (int i = 0; i < args.length; i++) {
+            le.add(new Coefficient(args[i]), i);
+        }
+        return le;
+    }
+
 }

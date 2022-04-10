@@ -1,8 +1,8 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeT;
 
 import java.lang.ref.Cleaner;
 

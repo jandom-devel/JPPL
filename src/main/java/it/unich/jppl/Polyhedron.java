@@ -1,13 +1,13 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
 
 import it.unich.jppl.Constraint.ConstraintType;
+import it.unich.jppl.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeTArray;
+import it.unich.jppl.LibPPL.SizeTByReference;
 import it.unich.jppl.Property.ExtremalOutput;
 import it.unich.jppl.Property.WideningToken;
-import it.unich.jppl.nativelib.LibPPL.SizeT;
-import it.unich.jppl.nativelib.LibPPL.SizeTArray;
-import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
 
 import java.util.Optional;
 

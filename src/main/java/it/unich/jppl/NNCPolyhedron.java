@@ -1,11 +1,11 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
 
 import it.unich.jppl.Domain.ComplexityClass;
 import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Domain.RecycleInput;
-import it.unich.jppl.nativelib.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeT;
 
 import com.sun.jna.ptr.PointerByReference;
 

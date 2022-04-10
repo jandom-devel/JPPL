@@ -1,9 +1,9 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.nativelib.LibPPL.*;
+import static it.unich.jppl.LibPPL.*;
 
-import it.unich.jppl.nativelib.LibPPL.SizeT;
-import it.unich.jppl.nativelib.LibPPL.SizeTByReference;
+import it.unich.jppl.LibPPL.SizeT;
+import it.unich.jppl.LibPPL.SizeTByReference;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -35,7 +35,7 @@ public class Generator {
     }
 
     public static class RelationWithGenerator {
-        public final static int SUBSUMES = 1;
+        public static final int SUBSUMES = 1;
     }
 
     private static class GeneratorCleaner implements Runnable {

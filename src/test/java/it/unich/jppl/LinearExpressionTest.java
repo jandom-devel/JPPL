@@ -38,7 +38,7 @@ public class LinearExpressionTest {
         assertEquals(new Coefficient(1), le.getCoefficient(1));
         assertEquals(new Coefficient(0), le.getCoefficient(2));
         assertEquals(new Coefficient(9), le.getCoefficient(3));
-        assertEquals(new Coefficient(6), le.getCoefficient());
+        assertEquals(new Coefficient(6), le.getInhomogeneousTerm());
         assertTrue(le.isOK());
         assertFalse(le.isZero());
         assertFalse(le.isConstant());
@@ -90,8 +90,8 @@ public class LinearExpressionTest {
 
     @Test
     void testAuxiliaryConstructors() {
-        var le = new LinearExpression(0, 1);
-        assertEquals(Coefficient.ZERO, le.getCoefficient());
+        var le = LinearExpression.of(0, 1);
+        assertEquals(Coefficient.ZERO, le.getInhomogeneousTerm());
         assertEquals(Coefficient.ONE, le.getCoefficient(0));
 
     }
