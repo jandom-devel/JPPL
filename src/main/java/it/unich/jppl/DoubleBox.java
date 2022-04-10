@@ -286,8 +286,7 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional
-                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
@@ -295,14 +294,14 @@ public class DoubleBox implements Property<DoubleBox> {
         var cd = new Coefficient();
         var point = new Generator();
         var pmaximum = new IntByReference();
-        int result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
+        int result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
+                point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
-                    new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
@@ -315,8 +314,7 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional
-                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
@@ -324,14 +322,14 @@ public class DoubleBox implements Property<DoubleBox> {
         var cd = new Coefficient();
         var point = new Generator();
         var pmaximum = new IntByReference();
-        int result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
+        int result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
+                point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
-                    new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public boolean contains(DoubleBox box) {
@@ -601,8 +599,7 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public DoubleBox mapSpaceDimensions(long[] maps) {
-        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new SizeTArray(maps),
-                new SizeT(maps.length));
+        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
         if (result < 0)
             throw new PPLError(result);
         return this;

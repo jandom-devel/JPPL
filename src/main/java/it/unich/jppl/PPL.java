@@ -15,29 +15,25 @@ public class PPL {
 
     static final Cleaner cleaner = Cleaner.create();
 
-    static public enum BoundedIntegerTypeOverflow {
+    public static enum BoundedIntegerTypeOverflow {
         WRAPS, UNDEFINED, IMPOSSIBLE
     }
 
-    static public enum BoundedIntegerTypeRepresentation {
+    public static enum BoundedIntegerTypeRepresentation {
         UNSIGNED, SIGNED_2_COMPLEMENT
     };
 
-    static public enum BoundedIntegerTypeWidth {
-        PPL_BITS_8(8),
-        PPL_BITS_16(16),
-        PPL_BITS_32(32),
-        PPL_BITS_64(64),
-        PPL_BITS_128(128);
+    public static enum BoundedIntegerTypeWidth {
+        PPL_BITS_8(8), PPL_BITS_16(16), PPL_BITS_32(32), PPL_BITS_64(64), PPL_BITS_128(128);
 
         int pplValue;
 
-        BoundedIntegerTypeWidth (int pplValue) {
+        BoundedIntegerTypeWidth(int pplValue) {
             this.pplValue = pplValue;
         }
     }
 
-    static public final String JPPL_VERSION = "0.2-SNAPSHOT";
+    public static final String JPPL_VERSION = "0.2-SNAPSHOT";
 
     static {
         pplInitialize();

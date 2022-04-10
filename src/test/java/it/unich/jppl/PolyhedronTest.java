@@ -156,7 +156,8 @@ public class PolyhedronTest {
         assertEquals(new Coefficient(-3), extremals.supN);
         assertEquals(new Coefficient(1), extremals.supD);
         assertTrue(extremals.isMaximum);
-        Generator g = new Generator(new LinearExpression(3).add(new Coefficient(-3), 0), GeneratorType.POINT, new Coefficient(1));
+        Generator g = new Generator(new LinearExpression(3).add(new Coefficient(-3), 0), GeneratorType.POINT,
+                new Coefficient(1));
         assertEquals(g, extremals.point);
 
         res = ph1.maximize(le);

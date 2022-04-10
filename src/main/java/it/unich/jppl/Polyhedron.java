@@ -165,6 +165,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
             throw new PPLError(result);
         return result > 0;
     }
+
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
         var cn = new Coefficient();
         var cd = new Coefficient();
@@ -175,8 +176,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional
-                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
@@ -184,14 +184,14 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         var cd = new Coefficient();
         var point = new Generator();
         var pmaximum = new IntByReference();
-        int result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
+        int result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
+                point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
-                    new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
@@ -204,8 +204,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional
-                    .of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, null));
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
@@ -213,14 +212,14 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         var cd = new Coefficient();
         var point = new Generator();
         var pmaximum = new IntByReference();
-        int result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum, point.pplObj);
+        int result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
+                point.pplObj);
         if (result < 0)
             throw new PPLError(result);
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0,
-                    new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
     }
 
     public boolean contains(T ph) {
@@ -489,8 +488,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public T mapSpaceDimensions(long[] maps) {
-        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new SizeTArray(maps),
-                new SizeT(maps.length));
+        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
         if (result < 0)
             throw new PPLError(result);
         return self();
