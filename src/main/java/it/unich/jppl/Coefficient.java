@@ -11,6 +11,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
+ * <p>
  * Objects of type Coefficient are used to implement the integral valued coefficients occurring in
  * linear expressions, constraints, generators, intervals, bounding boxes and so on. Depending on the
  * way the PPL is configured, a Coefficient may actually be:

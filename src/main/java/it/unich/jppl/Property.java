@@ -122,15 +122,39 @@ public interface Property<T extends Property<T>> {
 
     public T affineImage(long var, LinearExpression le, Coefficient d);
 
+    default public T affineImage(long var, LinearExpression le) {
+        return affineImage(var, le, Coefficient.ONE);
+    }
+
     public T affinePreImage(long var, LinearExpression le, Coefficient d);
+
+    default public T affinePreImage(long var, LinearExpression le) {
+        return affinePreImage(var, le, Coefficient.ONE);
+    }
 
     public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
 
+    default public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub) {
+        return boundedAffineImage(var, lb, ub, Coefficient.ONE);
+    }
+
     public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
+
+    default public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub) {
+        return boundedAffinePreImage(var, lb, ub, Coefficient.ONE);
+    }
 
     public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
 
+    default public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le) {
+        return generalizedAffineImage(var, relsym, le, Coefficient.ONE);
+    }
+
     public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
+
+    default public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le) {
+        return generalizedAffinePreImage(var, relsym, le, Coefficient.ONE);
+    }
 
     public T generalizedAffineImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
 

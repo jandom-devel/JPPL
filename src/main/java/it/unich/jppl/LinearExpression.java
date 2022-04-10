@@ -13,8 +13,9 @@ import com.sun.jna.ptr.PointerByReference;
 
 /**
  * An object of the class Linear_Expression represents the linear expression
- * where <math>n</math> is the dimension of the vector space, each <math>a_i</math> is the integer coefficient of the
- * <math>i</math>-th variable <math>x<sub>i</sub></math> and <math>b</math> is the integer for the inhomogeneous term.
+ * \(\sum_{i=1}^n a_i x_i \)
+ * where \(n\) is the dimension of the vector space, each \(a_i\) is the integer coefficient of the
+ * \(i\)-th variable \(x_i\) and \(b\) is the integer for the inhomogeneous term.
  * <p>
  * Linear expressions are the basic blocks for defining both constraints (i.e., linear equalities or inequalities)
  * and generators (i.e., lines, rays, points and closure points). A full set of functions is defined to provide a
@@ -117,11 +118,10 @@ public class LinearExpression {
     /**
      * Convenience constructor which builds a linear expression by a list of
      * coefficients, starting with the inhomogeneous term and continuing with
-     * the coefficient of the variables <math>x<sub>0</sub>, x<sub>1</sub>, ....
-     * </math>.
+     * the coefficient of the variables \(x_0, \x_1, \ldots\)
      */
     public LinearExpression(Coefficient c, Coefficient... args) {
-        super();
+        this();
         add(c);
         for (int i = 0; i < args.length; i++) {
             add(args[i], i);
@@ -133,7 +133,7 @@ public class LinearExpression {
      * LinearExpression(Coefficient c, Coefficient... args)} constructor but with BigInteger parameters.
      */
     public LinearExpression(BigInteger c, BigInteger... args) {
-        super();
+        this();
         add(new Coefficient(c));
         for (int i = 0; i < args.length; i++) {
             add(new Coefficient(args[i]), i);
@@ -145,7 +145,7 @@ public class LinearExpression {
      * LinearExpression(Coefficient c, Coefficient... args)} constructor but with long parameters.
      */
     public LinearExpression(long c, long... args) {
-        super();
+        this();
         add(new Coefficient(c));
         for (int i = 0; i < args.length; i++) {
             add(new Coefficient(args[i]), i);
@@ -172,7 +172,7 @@ public class LinearExpression {
     }
 
     /**
-     * Returns the Coefficient for to the variable <math>x<sub>i</sub><math>.
+     * Returns the Coefficient for to the variable \(x_i\).
      */
     public Coefficient getCoefficient(long i) {
         var c = new Coefficient();
@@ -220,7 +220,7 @@ public class LinearExpression {
     }
 
     /**
-     * Add the linear expression <math>c &middot; x<sub>i</sub></math> to this linear expression.
+     * Add the linear expression \(c \cdot x_i\) to this linear expression.
      * @return this linear expression.
      */
     public LinearExpression add(Coefficient c, long i) {
@@ -230,7 +230,7 @@ public class LinearExpression {
     }
 
     /**
-     * Add the inhomogeneous term <math>c</math> to this linear expression.
+     * Add the inhomogeneous term \(c\) to this linear expression.
      * @return this linear expression.
      */
     public LinearExpression add(Coefficient c) {

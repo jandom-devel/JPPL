@@ -37,6 +37,8 @@ public class PPL {
         }
     }
 
+    static public final String JPPL_VERSION = "0.2-SNAPSHOT";
+
     static {
         pplInitialize();
     }
