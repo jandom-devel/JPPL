@@ -1,15 +1,16 @@
 package it.unich.jppl;
 
 public interface Domain<T extends Property<T>> {
-    enum DegenerateElement {
+
+    public static enum DegenerateElement {
         UNIVERSE, EMPTY
     }
 
-    enum ComplexityClass {
+    public static enum ComplexityClass {
         POLYNOMIAL_COMPLEXITY, SIMPLEX_COMPLEXITY, ANY_COMPLEXITY
     }
 
-    enum RecycleInput {
+    public static enum RecycleInput {
         RECYCLE
     }
 
