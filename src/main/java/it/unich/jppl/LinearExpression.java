@@ -12,10 +12,17 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
+ * A linear expression.
+ *
+ * <p>
  * An object of the class LinearExpression represents the linear expression
- * \(\sum_{i=1}^n a_i x_i \) where \(n\) is the dimension of the vector space,
- * each \(a_i\) is the integer coefficient of the \(i\)-th variable \(x_i\) and
- * \(b\) is the integer for the inhomogeneous term.
+ *
+ * \[ \sum_{i=1}^n a_i x_i + b \]
+ *
+ * where \(n\) is the dimension of the vector space, each \(a_i\) is the integer
+ * coefficient of the \(i\)-th variable \(x_i\) and \(b\) is the integer for the
+ * inhomogeneous term.
+ * </p>
  * <p>
  * Linear expressions are the basic blocks for defining both constraints (i.e.,
  * linear equalities or inequalities) and generators (i.e., lines, rays, points

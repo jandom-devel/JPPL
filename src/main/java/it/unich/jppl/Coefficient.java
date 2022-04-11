@@ -144,7 +144,7 @@ public class Coefficient extends Number {
     /**
      * Set the value of this Coefficient to z.
      */
-    Coefficient set(MPZ z) {
+    Coefficient assign(MPZ z) {
         int result = ppl_assign_Coefficient_from_mpz_t(pplObj, z.getPointer());
         if (result < 0)
             throw new PPLError(result);
@@ -154,37 +154,37 @@ public class Coefficient extends Number {
     /**
      * Set the value of this Coefficient to l.
      */
-    Coefficient set(long l) {
-        return set(new MPZ(l));
+    Coefficient assign(long l) {
+        return assign(new MPZ(l));
     }
 
     /**
      * Set the value of this Coefficient to the value given by the string
      * representation s in the specified radix.
      */
-    Coefficient set(String s, int radix) {
-        return set(new MPZ(s, radix));
+    Coefficient assign(String s, int radix) {
+        return assign(new MPZ(s, radix));
     }
 
     /**
      * Set the value of this Coefficientto the value given by the decimal string
      * representation s. It is equivalent to {@code set(s,10)}.
      */
-    Coefficient set(String s) {
-        return set(s, 10);
+    Coefficient assign(String s) {
+        return assign(s, 10);
     }
 
     /**
      * Set the value of this Coefficient to bi.
      */
-    Coefficient set(BigInteger bi) {
-        return set(bi.toString(32), 32);
+    Coefficient assign(BigInteger bi) {
+        return assign(bi.toString(32), 32);
     }
 
     /**
      * Set the value of this Coefficient to a copy of the Coefficient c.
      */
-    Coefficient set(Coefficient c) {
+    Coefficient assign(Coefficient c) {
         int result = ppl_assign_Coefficient_from_Coefficient(pplObj, this.pplObj);
         if (result < 0)
             throw new PPLError(result);

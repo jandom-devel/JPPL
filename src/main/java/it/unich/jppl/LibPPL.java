@@ -11,6 +11,10 @@ import com.sun.jna.ptr.ByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
+/**
+ * This class contains all native methods which are used by the other classes of
+ * the package to interface with the C library.
+ */
 public final class LibPPL {
 
     private static final String LIBNAME = "ppl_c";
@@ -63,7 +67,7 @@ public final class LibPPL {
 
     // Dimensions
 
-    protected  static class SizeT extends IntegerType {
+    protected static class SizeT extends IntegerType {
         public SizeT() {
             this(0);
         }
@@ -110,7 +114,7 @@ public final class LibPPL {
     }
 
     @FieldOrder({ "f" })
-    protected  static class VariableOutputFunctionByRef extends Structure {
+    protected static class VariableOutputFunctionByRef extends Structure {
         public VariableOutputFunction f;
     }
 
@@ -292,8 +296,8 @@ public final class LibPPL {
     static native int ppl_new_Constraint_System_const_iterator_from_Constraint_System_const_iterator(
             PointerByReference pcit, Pointer cit);
 
-    static native int ppl_assign_Constraint_System_const_iterator_from_Constraint_System_const_iterator(
-            Pointer dst, Pointer src);
+    static native int ppl_assign_Constraint_System_const_iterator_from_Constraint_System_const_iterator(Pointer dst,
+            Pointer src);
 
     static native int ppl_delete_Constraint_System_const_iterator(Pointer cit);
 
@@ -380,8 +384,8 @@ public final class LibPPL {
     static native int ppl_new_Generator_System_const_iterator_from_Generator_System_const_iterator(
             PointerByReference pcit, Pointer cit);
 
-    static native int ppl_assign_Generator_System_const_iterator_from_Generator_System_const_iterator(
-            Pointer dst, Pointer src);
+    static native int ppl_assign_Generator_System_const_iterator_from_Generator_System_const_iterator(Pointer dst,
+            Pointer src);
 
     static native int ppl_delete_Generator_System_const_iterator(Pointer cit);
 
@@ -470,8 +474,8 @@ public final class LibPPL {
     static native int ppl_new_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
             PointerByReference pgit, Pointer git);
 
-    static native int ppl_assign_Congruence_System_const_iterator_from_Congruence_System_const_iterator(
-            Pointer dst, Pointer src);
+    static native int ppl_assign_Congruence_System_const_iterator_from_Congruence_System_const_iterator(Pointer dst,
+            Pointer src);
 
     static native int ppl_delete_Congruence_System_const_iterator(Pointer git);
 
@@ -519,8 +523,7 @@ public final class LibPPL {
 
     static native int ppl_new_Grid_Generator_System_from_Grid_Generator(PointerByReference pgs, Pointer g);
 
-    static native int ppl_new_Grid_Generator_System_from_Grid_Generator_System(PointerByReference pgs,
-            Pointer gs);
+    static native int ppl_new_Grid_Generator_System_from_Grid_Generator_System(PointerByReference pgs, Pointer gs);
 
     static native int ppl_assign_Grid_Generator_System_from_Grid_Generator_System(Pointer dst, Pointer src);
 
@@ -593,8 +596,8 @@ public final class LibPPL {
 
     static native int ppl_new_C_Polyhedron_from_NNC_Polyhedron(PointerByReference pph, Pointer ph);
 
-    static native int ppl_new_C_Polyhedron_from_NNC_Polyhedron_with_complexity(PointerByReference pph,
-            Pointer ph, int complexity);
+    static native int ppl_new_C_Polyhedron_from_NNC_Polyhedron_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
 
     static native int ppl_new_C_Polyhedron_from_Double_Box(PointerByReference pph, Pointer ph);
 
@@ -603,13 +606,12 @@ public final class LibPPL {
 
     // NNCPolyhedron
 
-    static native int ppl_new_NNC_Polyhedron_from_space_dimension(PointerByReference pph, SizeT d,
-            int empty);
+    static native int ppl_new_NNC_Polyhedron_from_space_dimension(PointerByReference pph, SizeT d, int empty);
 
     static native int ppl_new_NNC_Polyhedron_from_NNC_Polyhedron(PointerByReference pph, Pointer ph);
 
-    static native int ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(PointerByReference pph,
-            Pointer ph, int complexity);
+    static native int ppl_new_NNC_Polyhedron_from_NNC_Polyhedron_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
 
     static native int ppl_new_NNC_Polyhedron_from_Constraint_System(PointerByReference pph, Pointer cs);
 
@@ -627,8 +629,8 @@ public final class LibPPL {
 
     static native int ppl_new_NNC_Polyhedron_from_C_Polyhedron(PointerByReference pph, Pointer ph);
 
-    static native int ppl_new_NNC_Polyhedron_from_C_Polyhedron_with_complexity(PointerByReference pph,
-            Pointer ph, int complexity);
+    static native int ppl_new_NNC_Polyhedron_from_C_Polyhedron_with_complexity(PointerByReference pph, Pointer ph,
+            int complexity);
 
     static native int ppl_new_NNC_Polyhedron_from_Double_Box(PointerByReference pph, Pointer ph);
 
@@ -739,20 +741,16 @@ public final class LibPPL {
 
     static native int ppl_Polyhedron_affine_preimage(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    static native int ppl_Polyhedron_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub,
+    static native int ppl_Polyhedron_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub, Pointer d);
+
+    static native int ppl_Polyhedron_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub, Pointer d);
+
+    static native int ppl_Polyhedron_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le, Pointer d);
+
+    static native int ppl_Polyhedron_generalized_affine_preimage(Pointer ph, SizeT var, int relsym, Pointer le,
             Pointer d);
 
-    static native int ppl_Polyhedron_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub,
-            Pointer d);
-
-    static native int ppl_Polyhedron_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le,
-            Pointer d);
-
-    static native int ppl_Polyhedron_generalized_affine_preimage(Pointer ph, SizeT var, int relsym,
-            Pointer le, Pointer d);
-
-    static native int ppl_Polyhedron_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
-            Pointer rhs);
+    static native int ppl_Polyhedron_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym, Pointer rhs);
 
     static native int ppl_Polyhedron_generalized_affine_preimage_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
             Pointer rhs);
@@ -809,23 +807,23 @@ public final class LibPPL {
 
     static native int ppl_Polyhedron_H79_widening_assign(Pointer x, Pointer y);
 
-    static native int ppl_Polyhedron_limited_BHRZ03_extrapolation_assign_with_tokens(Pointer x, Pointer y,
-            Pointer cs, IntByReference tp);
+    static native int ppl_Polyhedron_limited_BHRZ03_extrapolation_assign_with_tokens(Pointer x, Pointer y, Pointer cs,
+            IntByReference tp);
 
-    static native int ppl_Polyhedron_limited_H79_extrapolation_assign_with_tokens(Pointer x, Pointer y,
-            Pointer cs, IntByReference tp);
+    static native int ppl_Polyhedron_limited_H79_extrapolation_assign_with_tokens(Pointer x, Pointer y, Pointer cs,
+            IntByReference tp);
 
     static native int ppl_Polyhedron_limited_BHRZ03_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
 
     static native int ppl_Polyhedron_limited_H79_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
 
-    static native int ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign_with_tokens(Pointer x, Pointer y,
-            Pointer cs, IntByReference tp);
+    static native int ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign_with_tokens(Pointer x, Pointer y, Pointer cs,
+            IntByReference tp);
 
     static native int ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
 
-    static native int ppl_Polyhedron_bounded_H79_extrapolation_assign_with_tokens(Pointer x, Pointer y,
-            Pointer cs, IntByReference tp);
+    static native int ppl_Polyhedron_bounded_H79_extrapolation_assign_with_tokens(Pointer x, Pointer y, Pointer cs,
+            IntByReference tp);
 
     static native int ppl_Polyhedron_bounded_H79_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
 
@@ -964,20 +962,16 @@ public final class LibPPL {
 
     static native int ppl_Double_Box_affine_preimage(Pointer ph, SizeT var, Pointer le, Pointer d);
 
-    static native int ppl_Double_Box_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub,
+    static native int ppl_Double_Box_bounded_affine_image(Pointer ph, SizeT var, Pointer lb, Pointer ub, Pointer d);
+
+    static native int ppl_Double_Box_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub, Pointer d);
+
+    static native int ppl_Double_Box_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le, Pointer d);
+
+    static native int ppl_Double_Box_generalized_affine_preimage(Pointer ph, SizeT var, int relsym, Pointer le,
             Pointer d);
 
-    static native int ppl_Double_Box_bounded_affine_preimage(Pointer ph, SizeT var, Pointer lb, Pointer ub,
-            Pointer d);
-
-    static native int ppl_Double_Box_generalized_affine_image(Pointer ph, SizeT var, int relsym, Pointer le,
-            Pointer d);
-
-    static native int ppl_Double_Box_generalized_affine_preimage(Pointer ph, SizeT var, int relsym,
-            Pointer le, Pointer d);
-
-    static native int ppl_Double_Box_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
-            Pointer rhs);
+    static native int ppl_Double_Box_generalized_affine_image_lhs_rhs(Pointer ph, Pointer lhs, int relsym, Pointer rhs);
 
     static native int ppl_Double_Box_generalized_affine_preimage_lhs_rhs(Pointer ph, Pointer lhs, int relsym,
             Pointer rhs);

@@ -14,11 +14,11 @@ public class ConstraintTest {
         var c1 = new Constraint(ZeroDimConstraint.FALSITY);
         assertEquals(0, c1.getSpaceDimension());
         assertEquals(ConstraintType.EQUAL, c1.getType());
-        assertNotEquals(new Coefficient(70), c1.getCoefficient());
+        assertNotEquals(new Coefficient(70), c1.getInhomogeneousTerm());
         var c2 = new Constraint(ZeroDimConstraint.POSITIVITY);
         assertEquals(0, c2.getSpaceDimension());
         assertEquals(ConstraintType.GREATER_OR_EQUAL, c2.getType());
-        assertEquals(new Coefficient(1), c2.getCoefficient());
+        assertEquals(new Coefficient(1), c2.getInhomogeneousTerm());
     }
 
     @Test
@@ -29,7 +29,7 @@ public class ConstraintTest {
         Constraint c = new Constraint(le, ConstraintType.GREATER_THAN);
         assertTrue(c.isOK());
         assertEquals(ConstraintType.GREATER_THAN, c.getType());
-        assertEquals(new Coefficient(3), c.getCoefficient());
+        assertEquals(new Coefficient(3), c.getInhomogeneousTerm());
         assertEquals(1, c.getSpaceDimension());
     }
 

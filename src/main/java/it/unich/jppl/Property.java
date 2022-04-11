@@ -20,6 +20,33 @@ public interface Property<T extends Property<T>> {
         }
     }
 
+    /**
+     * Class of constants representing the relation between a contraint and a
+     * geometric object.
+     */
+    public static class RelationWithConstraint {
+        /**
+         * The geometric oject and the set of points satisfying the constraint are
+         * disjoint.
+         */
+        public static final int IS_DISJOINT = 1;
+        /**
+         * The geometric object intersects the set of points satisfying the constraint,
+         * but it is not included in it.
+         */
+        public static final int STRICTLY_INTERSECTS = 2;
+        /**
+         * The geometric object is included in the set of points satisfying the
+         * constraint.
+         */
+        public static final int IS_INCLUDED = 4;
+        /**
+         * The geometric object is included in the set of points saturating the
+         * constraint.
+         */
+        public static final int SATURATES = 8;
+    }
+
     public static class WideningToken {
         public int tokens;
 
