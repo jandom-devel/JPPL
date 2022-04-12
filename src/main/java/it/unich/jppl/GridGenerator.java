@@ -9,31 +9,48 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
+/**
+ * A grid line, parameter or grid point.
+ * 
+ * <p>
+ * An object of the class GridGenerator is one of the following:
+ * </p>
+ * <ul>
+ * <li>a grid line \(\vec{l} = (a_0, \ldots, a_{n-1})^T\);
+ * <li>a parameter \(\vec{q} = (\frac{a_0}{d}, \ldots, \frac{a_{n-1}}{d})^T\);
+ * <li>a grid point \(\vec{p} = (\frac{a_0}{d}, \ldots, \frac{a_{n-1}}{d})^T\);
+ * </ul>
+ * <p>
+ * where \(n\) is the dimension of the space and, for grid_points and
+ * parameters,
+ * \(d &gt; 0\) is the divisor.
+ * </p>
+ */
 public class GridGenerator {
     Pointer pplObj;
 
+    /**
+     * Enumerates the possible types of a grid generator.
+     */
     public enum GridGeneratorType {
         LINE, PARAMETER, POINT;
 
+        /**
+         * Returns the enum corrisponding to its ordinal value.
+         *
+         * @throws IllegalArgumentException if t is not a valid ordinal value.
+         */
         static GridGeneratorType valueOf(int t) {
             switch (t) {
-            case 0:
-                return LINE;
-            case 1:
-                return PARAMETER;
-            case 2:
-                return POINT;
+                case 0:
+                    return LINE;
+                case 1:
+                    return PARAMETER;
+                case 2:
+                    return POINT;
             }
             throw new IllegalStateException("Unexpected GridGenerator type " + t);
         }
-    }
-
-    public static enum ZeroDimGridGenerator {
-        POINT, CLOSURE_POINT
-    }
-
-    public static class RelationWithGridGenerator {
-        public static final int SUBSUMES = 1;
     }
 
     private static class GridGeneratorCleaner implements Runnable {
@@ -54,6 +71,12 @@ public class GridGenerator {
         PPL.cleaner.register(this, new GridGeneratorCleaner(pplObj));
     }
 
+    /**
+     * Creates a new grid generator of direction le and type t. If the grid
+     * generator to be created is a point or a parameter, the divisor d is applied
+     * to le. If it is a line, d is simply disregarded. The space dimension of the
+     * new grid generator is equal to the space dimension of le.
+     */
     public GridGenerator(LinearExpression le, GridGeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
@@ -62,6 +85,18 @@ public class GridGenerator {
         init(pg.getValue());
     }
 
+    /**
+     * Creates a new grid generator of direction le and type t. It is equivalent to
+     * {@code GridGenerator(le, t, Coefficient.ONE)}.
+     */
+    public GridGenerator(LinearExpression le, GridGeneratorType t) {
+        this(le, t, new Coefficient(1));
+    }
+
+    /**
+     * Creates the point that is the origin of the zero-dimensional space
+     * \(\mathbb{R}^0\).
+     */
     public GridGenerator() {
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator_zero_dim_point(pg);
@@ -70,6 +105,9 @@ public class GridGenerator {
         init(pg.getValue());
     }
 
+    /**
+     * Creates a copy of the GridGenerator g.
+     */
     public GridGenerator(GridGenerator g) {
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, g.pplObj);
@@ -78,14 +116,16 @@ public class GridGenerator {
         init(pg.getValue());
     }
 
-    public GridGenerator(LinearExpression le, GridGeneratorType t) {
-        this(le, t, new Coefficient(1));
-    }
-
+    /**
+     * Creates a GridGenerator obtained from the specified native object.
+     */
     GridGenerator(Pointer pplObj) {
         init(pplObj);
     }
 
+    /**
+     * Set the value of this GridGenerator to a copy of the GridGenerator g.
+     */
     public GridGenerator assign(GridGenerator g) {
         int result = ppl_assign_Grid_Generator_from_Grid_Generator(pplObj, g.pplObj);
         if (result < 0)
@@ -93,6 +133,9 @@ public class GridGenerator {
         return this;
     }
 
+    /**
+     * Returns the space dimension of this GridGenerator.
+     */
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Grid_Generator_space_dimension(pplObj, m);
@@ -101,6 +144,9 @@ public class GridGenerator {
         return m.getValue().longValue();
     }
 
+    /**
+     * Returns the type of this GridGenerator.
+     */
     public GridGeneratorType getType() {
         int result = ppl_Grid_Generator_type(pplObj);
         if (result < 0)
@@ -108,6 +154,9 @@ public class GridGenerator {
         return GridGeneratorType.valueOf(result);
     }
 
+    /**
+     * Returns the Coefficient for the variable \(x_i\).
+     */
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
         int result = ppl_Grid_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
@@ -116,6 +165,9 @@ public class GridGenerator {
         return n;
     }
 
+    /**
+     * Returns the divisor of this GridGenerator.
+     */
     public Coefficient getDivisor() {
         var d = new Coefficient();
         int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
@@ -124,6 +176,11 @@ public class GridGenerator {
         return d;
     }
 
+    /**
+     * Returns true if this GridGenerator satisfies all its implementation
+     * invariants; returns false and perhaps makes some noise if it is broken.
+     * Useful for debugging purposes.
+     */
     public boolean isOK() {
         int result = ppl_Grid_Generator_OK(pplObj);
         if (result < 0)
@@ -131,6 +188,9 @@ public class GridGenerator {
         return result > 0;
     }
 
+    /**
+     * Returns the string representation of this GridGenerator.
+     */
     @Override
     public String toString() {
         var pstr = new PointerByReference();
@@ -143,6 +203,12 @@ public class GridGenerator {
         return s;
     }
 
+    /**
+     * Returns whether obj is the same as this GridGenerator. Two grid generators
+     * are the same if they have the same type, space dimensions and coefficients.
+     * For points
+     * and parametes, the divisor should also be equal.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

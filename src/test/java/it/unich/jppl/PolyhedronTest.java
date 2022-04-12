@@ -1,14 +1,18 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.Constraint.RelationWithConstraint.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.unich.jppl.Property.RelationWithConstraint.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Generator.GeneratorType;
 import it.unich.jppl.Property.WideningToken;
-
-import org.junit.jupiter.api.Test;
 
 public class PolyhedronTest {
 

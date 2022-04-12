@@ -1,5 +1,8 @@
 package it.unich.jppl;
 
+/**
+ * The abstract domain of closed polyehdra.
+ */
 public class CPolyhedronDomain implements Domain<CPolyhedron> {
 
     public CPolyhedron createProperty(long d, DegenerateElement kind) {
@@ -34,6 +37,9 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
         return new CPolyhedron(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public CPolyhedron createProperty(CPolyhedron ph, ComplexityClass complexity) {
         return new CPolyhedron(ph, complexity);
     }
@@ -42,6 +48,9 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
         return new CPolyhedron(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public CPolyhedron createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
         return new CPolyhedron(ph, complexity);
     }
@@ -50,6 +59,9 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
         return new CPolyhedron(box);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public CPolyhedron createProperty(DoubleBox box, ComplexityClass complexity) {
         return new CPolyhedron(box, complexity);
     }

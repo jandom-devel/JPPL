@@ -125,7 +125,7 @@ public class Coefficient extends Number {
      * Returns a Coefficient whose value is equal to bi.
      */
     public Coefficient(BigInteger bi) {
-        // We use radix since32  we suspect it is faster than radix 10.
+        // We use radix 32 since we suspect it to be faster than radix 10.
         // Values bigger than 32 do not work.
         this(bi.toString(32), 32);
     }

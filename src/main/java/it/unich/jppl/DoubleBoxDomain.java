@@ -1,5 +1,8 @@
 package it.unich.jppl;
 
+/**
+ * The abstract domain of boxes, with bounds specified by doubles.
+ */
 public class DoubleBoxDomain implements Domain<DoubleBox> {
 
     public DoubleBox createProperty(long d, DegenerateElement kind) {
@@ -34,6 +37,9 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
         return new DoubleBox(box);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public DoubleBox createProperty(DoubleBox box, ComplexityClass complexity) {
         return new DoubleBox(box, complexity);
     }
@@ -42,6 +48,9 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
         return new DoubleBox(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public DoubleBox createProperty(CPolyhedron ph, ComplexityClass complexity) {
         return new DoubleBox(ph, complexity);
     }
@@ -50,6 +59,9 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
         return new DoubleBox(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public DoubleBox createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
         return new DoubleBox(ph, complexity);
     }

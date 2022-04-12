@@ -34,7 +34,7 @@ public class Constraint {
     Pointer pplObj;
 
     /**
-     * Describes the relations represented by a constraint.
+     * Enumerates the possible types of a constraint.
      */
     public static enum ConstraintType {
         /** The constraint is of the form \(e &lt; 0\). */
@@ -84,30 +84,6 @@ public class Constraint {
         POSITIVITY
     }
 
-    /**
-     * Class of constants representing the relation between a contraint and a
-     * geometric object.
-     */
-    public static class RelationWithConstraint {
-        /**
-         * The geometric oject and the set of points satisfying the constraint are disjoint.
-         */
-        public static final int IS_DISJOINT = 1;
-        /**
-         * The geometric object intersects the set of points satisfying the constraint, but it
-         * is not included in it.
-         */
-        public static final int STRICTLY_INTERSECTS = 2;
-        /**
-         * The geometric object is included in the set of points satisfying the constraint.
-         */
-        public static final int IS_INCLUDED = 4;
-        /**
-         * The geometric object is included in the set of points saturating the constraint.
-         */
-        public static final int SATURATES = 8;
-    }
-
     private static class ConstraintCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -139,11 +115,11 @@ public class Constraint {
     }
 
     /**
-     * Creates a new zero-dimensional Constraint according to t.
+     * Creates a new zero-dimensional Constraint according to type.
      */
-    public Constraint(ZeroDimConstraint t) {
+    public Constraint(ZeroDimConstraint type) {
         var pc = new PointerByReference();
-        int result = (t == ZeroDimConstraint.FALSITY) ? ppl_new_Constraint_zero_dim_false(pc)
+        int result = (type == ZeroDimConstraint.FALSITY) ? ppl_new_Constraint_zero_dim_false(pc)
                 : ppl_new_Constraint_zero_dim_positivity(pc);
         if (result < 0)
             throw new PPLError(result);
@@ -249,7 +225,7 @@ public class Constraint {
     }
 
     /**
-     * Returns whether obj is the same as this Congruence. Two congruences are the
+     * Returns whether obj is the same as this Constraint. Two constraints are the
      * same if they have the same space dimension, coefficients, inhomogeneous term
      * and type.
      */

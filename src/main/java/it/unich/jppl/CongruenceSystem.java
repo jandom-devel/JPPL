@@ -15,7 +15,7 @@ import com.sun.jna.ptr.PointerByReference;
  * A system of linear congruences.
  *
  * <p>
- * An object of the class Congruence_System is a system of linear congruences,
+ * An object of the class CongruenceSystem is a system of linear congruences,
  * i.e., a multiset of objects of the class Congruence. When inserting
  * congruences in a system, space dimensions are automatically adjusted so that
  * all the congruences in the system are defined on the same vector space.
@@ -25,14 +25,14 @@ public class CongruenceSystem implements Iterable<Congruence> {
     Pointer pplObj;
 
     /**
-     * Enumerates the possible zero-dimensional congruence systems which it is
+     * Enumerates the possible zero-dimensional CongruenceSystem which it is
      * possible to build with the CongruenceSystem constructor.
      */
     public enum ZeroDimCongruenceSystem {
-        /** Represents the empty zero-dimensional congruence system. */
+        /** Represents the empty zero-dimensional CongruenceSystem. */
         EMPTY,
         /**
-         * Represents the zero-dimensional congruence system that contains only the
+         * Represents the zero-dimensional CongruenceSystem that contains only the
          * falsity zero-dimensionality congruence.
          *
          * @see Congruence#Congruence(ZeroDimCongruence type)
@@ -135,7 +135,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * Returns an empty zero-dimensional congruence system.
+     * Returns an empty zero-dimensional CongruenceSystem.
      */
     public CongruenceSystem() {
         this(ZeroDimCongruenceSystem.EMPTY);

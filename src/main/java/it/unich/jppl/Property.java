@@ -47,6 +47,16 @@ public interface Property<T extends Property<T>> {
         public static final int SATURATES = 8;
     }
 
+    /**
+     * Class of constants representing the relation between a generator and a
+     * geometric object. At the moment, there is a single valid relation which
+     * is {@code SUBSUMES}.
+     */
+    public static class RelationWithGenerator {
+        /** It mans that adding the generator would not change the geometric object. */
+        public static final int SUBSUMES = 1;
+    }
+
     public static class WideningToken {
         public int tokens;
 

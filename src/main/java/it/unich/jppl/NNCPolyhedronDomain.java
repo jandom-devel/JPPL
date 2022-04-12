@@ -1,5 +1,6 @@
 package it.unich.jppl;
 
+/** The abstract doman of not-necessarily closed polyhedra. */
 public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
 
     public NNCPolyhedron createProperty(long d, DegenerateElement kind) {
@@ -34,6 +35,9 @@ public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
         return new NNCPolyhedron(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public NNCPolyhedron createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
         return new NNCPolyhedron(ph, complexity);
     }
@@ -42,6 +46,9 @@ public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
         return new NNCPolyhedron(ph);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public NNCPolyhedron createProperty(CPolyhedron ph, ComplexityClass complexity) {
         return new NNCPolyhedron(ph, complexity);
     }
@@ -50,6 +57,9 @@ public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
         return new NNCPolyhedron(box);
     }
 
+    /**
+     * @param complexity is ignored
+     */
     public NNCPolyhedron createProperty(DoubleBox box, ComplexityClass complexity) {
         return new NNCPolyhedron(box, complexity);
     }
