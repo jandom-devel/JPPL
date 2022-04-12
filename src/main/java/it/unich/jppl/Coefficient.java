@@ -31,17 +31,17 @@ public class Coefficient extends PPLObject<Coefficient> {
     /**
      * A coefficient which is equal to zero.
      */
-    public static final Coefficient ZERO = new Coefficient();
+    public static final Coefficient ZERO = Coefficient.zero();
 
     /**
      * A coefficient which is equal to one.
      */
-    public static final Coefficient ONE = new Coefficient(1);
+    public static final Coefficient ONE = Coefficient.valueOf(1);
 
     /**
      * A coefficient which is equal to minus one.
      */
-    public static final Coefficient MINUS_ONE = new Coefficient(-1);
+    public static final Coefficient MINUS_ONE = Coefficient.valueOf(-1);
 
     private static class CoefficientCleaner implements Runnable {
         private Pointer pplObj;
@@ -57,84 +57,74 @@ public class Coefficient extends PPLObject<Coefficient> {
     }
 
     /**
-     * Returns true is and only if the Coefficient class is implemented using native
-     * integral types.
+     * Creates a Coefficient.valueOf from the pointer p to a native object.
      */
-    public static boolean isBounded() {
-        int result = ppl_Coefficient_is_bounded();
-        if (result < 0)
-            throw new PPLError(result);
-        return result > 0;
-    }
-
-    private void init(Pointer p) {
+    private Coefficient(Pointer p) {
         pplObj = p;
         PPL.cleaner.register(this, new CoefficientCleaner(pplObj));
     }
 
     /**
-     * Creates a coefficient whose value is zero.
+     * Creates and returns a coefficient whose value is zero.
      */
-    public Coefficient() {
+    public static Coefficient zero() {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient(pc);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Coefficient(pc.getValue());
     }
 
     /**
-     * Creates a coefficient whose value is z.
+     * Creates and returns a coefficient whose value is z.
      */
-    public Coefficient(MPZ z) {
+    public static Coefficient valueOf(MPZ z) {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient_from_mpz_t(pc, z.getPointer());
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Coefficient(pc.getValue());
     }
 
     /**
-     * Creates a coefficient whose value is l.
+     * Creates and returns a coefficient whose value is l.
      */
-    public Coefficient(long l) {
-        this(new MPZ(l));
+    public static Coefficient valueOf(long l) {
+        return valueOf(new MPZ(l));
     }
 
     /**
-     * Creates a coefficient whose value is given by the string representation s in
-     * the specified radix.
+     * Creates and returns a coefficient whose value is given by the string
+     * representation s in the specified radix.
      */
-    public Coefficient(String s, int radix) {
-        this(new MPZ(s, radix));
+    public static Coefficient valueOf(String s, int radix) {
+        return valueOf(new MPZ(s, radix));
     }
 
     /**
-     * Cretes a coefficient whose value is given by the decimal string
+     * Cretes and returns a coefficient whose value is given by the decimal string
      * representation s. It is equivalent to {@code Coefficient(s, 10)}.
      */
-    public Coefficient(String s) {
-        this(s, 10);
+    public static Coefficient valueOf(String s) {
+        return valueOf(s, 10);
     }
 
     /**
-     * Creates a Coefficient whose value is equal to bi.
+     * Creates and returns a Coefficient whose value is equal to bi.
      */
-    public Coefficient(BigInteger bi) {
+    public static Coefficient valueOf(BigInteger bi) {
         // We use radix 32 since we suspect it to be faster than radix 10.
         // Values bigger than 32 do not work.
-        this(bi.toString(32), 32);
+        return valueOf(bi.toString(32), 32);
     }
 
-    /**
-     * Creates a copy of the Coefficient c.
-     */
-    public Coefficient(Coefficient c) {
+    @Override
+    public Coefficient clone() {
         var pc = new PointerByReference();
-        int result = ppl_new_Coefficient_from_Coefficient(pc, c.pplObj);
+        int result = ppl_new_Coefficient_from_Coefficient(pc, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Coefficient(pc.getValue());
     }
 
     /**
@@ -156,7 +146,7 @@ public class Coefficient extends PPLObject<Coefficient> {
     }
 
     /**
-     * Convert the coefficient to a GNU MP integer.
+     * Converts the coefficient to a GNU MP integer.
      */
     public MPZ MPZValue() {
         var z = new MPZ();
@@ -167,14 +157,14 @@ public class Coefficient extends PPLObject<Coefficient> {
     }
 
     /**
-     * Convert the coefficient to its string representation in the specified radix.
+     * Converts the coefficient to its string representation in the specified radix.
      */
     public String stringValue(int radix) {
         return MPZValue().toString(radix);
     }
 
     /**
-     * Convert the coefficient to its decimal string representation. It is
+     * Converts the coefficient to its decimal string representation. It is
      * equivalent to {@code stringValue(10)}.
      */
     public String stringValue() {
@@ -182,35 +172,35 @@ public class Coefficient extends PPLObject<Coefficient> {
     }
 
     /**
-     * Convert the coefficient to a BigInteger.
+     * Converts the coefficient to a BigInteger.
      */
     public BigInteger bigIntegerValue() {
         return new BigInteger(stringValue(32), 32);
     }
 
     /**
-     * Convert the coefficient to a long.
+     * Converts the coefficient to a long.
      */
     public long longValue() {
         return MPZValue().longValue();
     }
 
     /**
-     * Convert the coefficient to an int.
+     * Converts the coefficient to an int.
      */
     public int intValue() {
         return MPZValue().intValue();
     }
 
     /**
-     * Convert the coefficient to a double.
+     * Converts the coefficient to a double.
      */
     public double doubleValue() {
         return MPZValue().doubleValue();
     }
 
     /**
-     * Convert the coefficient to a float.
+     * Converts the coefficient to a float.
      */
     public float floatValue() {
         return MPZValue().floatValue();
@@ -250,7 +240,7 @@ public class Coefficient extends PPLObject<Coefficient> {
     }
 
     /**
-     * Returns whether obj is the same as this Coefficient.
+     * Returns whether obj is the same as this coefficient.
      */
     @Override
     public boolean equals(Object obj) {
@@ -261,6 +251,17 @@ public class Coefficient extends PPLObject<Coefficient> {
             return MPZValue().equals(c.MPZValue());
         }
         return false;
+    }
+
+    /**
+     * Returns true if and only if the Coefficient class is implemented using native
+     * integral types.
+     */
+    public static boolean isBounded() {
+        int result = ppl_Coefficient_is_bounded();
+        if (result < 0)
+            throw new PPLError(result);
+        return result > 0;
     }
 
 }

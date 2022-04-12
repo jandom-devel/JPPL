@@ -18,8 +18,8 @@ public class PolyhedronTest {
 
     @Test
     void testCConstructors() {
-        var le = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+        var le = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
 
         var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
         assertTrue(ph1.isOK());
@@ -48,8 +48,8 @@ public class PolyhedronTest {
 
     @Test
     void testNNCConstructors() {
-        var le = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
+        var le = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
 
         var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
         assertTrue(ph1.isOK());
@@ -78,10 +78,10 @@ public class PolyhedronTest {
 
     @Test
     void testGetConstraints() {
-        var le = new LinearExpression(2).add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
-        le.add(new Coefficient(-1), 1);
-        var c2 = new Constraint(le, ConstraintType.EQUAL);
+        var le = LinearExpression.zero(2).add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
+        le.add(Coefficient.valueOf(-1), 1);
+        var c2 = Constraint.of(le, ConstraintType.EQUAL);
 
         var ph = new NNCPolyhedron(2, DegenerateElement.UNIVERSE);
         ph.addConstraint(c1).addConstraint(c2);
@@ -92,11 +92,11 @@ public class PolyhedronTest {
 
     @Test
     void testUnconstraints() {
-        var c0 = new Constraint(new LinearExpression().add(new Coefficient(-3)).add(new Coefficient(1), 0),
+        var c0 = Constraint.of(LinearExpression.zero().add(Coefficient.valueOf(-3)).add(Coefficient.valueOf(1), 0),
                 ConstraintType.GREATER_OR_EQUAL);
-        var c1 = new Constraint(new LinearExpression().add(new Coefficient(-2)).add(new Coefficient(1), 1),
+        var c1 = Constraint.of(LinearExpression.zero().add(Coefficient.valueOf(-2)).add(Coefficient.valueOf(1), 1),
                 ConstraintType.GREATER_OR_EQUAL);
-        var c2 = new Constraint(new LinearExpression().add(new Coefficient(-1)).add(new Coefficient(1), 2),
+        var c2 = Constraint.of(LinearExpression.zero().add(Coefficient.valueOf(-1)).add(Coefficient.valueOf(1), 2),
                 ConstraintType.GREATER_OR_EQUAL);
         var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0).addConstraint(c1).addConstraint(c2);
         ph.unconstrainSpaceDimension(0);
@@ -109,10 +109,10 @@ public class PolyhedronTest {
 
     @Test
     void testWidenings() {
-        var le = new LinearExpression().add(new Coefficient(1), 0);
-        var c0 = new Constraint(new LinearExpression(le).add(new Coefficient(-3)), ConstraintType.GREATER_OR_EQUAL);
-        var c1 = new Constraint(new LinearExpression(le).add(new Coefficient(-2)), ConstraintType.GREATER_OR_EQUAL);
-        var c2 = new Constraint(new LinearExpression(le).add(new Coefficient(-1)), ConstraintType.GREATER_OR_EQUAL);
+        var le = LinearExpression.zero().add(Coefficient.valueOf(1), 0);
+        var c0 = Constraint.of(le.clone().add(Coefficient.valueOf(-3)), ConstraintType.GREATER_OR_EQUAL);
+        var c1 = Constraint.of(le.clone().add(Coefficient.valueOf(-2)), ConstraintType.GREATER_OR_EQUAL);
+        var c2 = Constraint.of(le.clone().add(Coefficient.valueOf(-1)), ConstraintType.GREATER_OR_EQUAL);
         var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0);
         var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1);
         var w = new WideningToken(1);
@@ -121,7 +121,7 @@ public class PolyhedronTest {
         var optMin = ph1.minimize(le);
         assertTrue(optMin.isPresent());
         var min = optMin.get();
-        assertEquals(new Coefficient(2), min.supN);
+        assertEquals(Coefficient.valueOf(2), min.supN);
         var ph2 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c2);
         ph2.H79WideningAssign(ph1, w);
         assertTrue(ph2.minimize(le).isEmpty());
@@ -129,10 +129,10 @@ public class PolyhedronTest {
 
     @Test
     void test1() {
-        var lec = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(lec, ConstraintType.GREATER_THAN);
-        lec.add(new Coefficient(-1), 1);
-        var c2 = new Constraint(lec, ConstraintType.EQUAL);
+        var lec = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(lec, ConstraintType.GREATER_THAN);
+        lec.add(Coefficient.valueOf(-1), 1);
+        var c2 = Constraint.of(lec, ConstraintType.EQUAL);
 
         var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
         ph1.refineWithConstraint(c1);
@@ -149,7 +149,7 @@ public class PolyhedronTest {
         assertEquals(STRICTLY_INTERSECTS, ph1.getRelationWithConstraint(c1));
 
         // boundsFromAbove / boundsFromBelow
-        var le = new LinearExpression().add(new Coefficient(1), 0);
+        var le = LinearExpression.zero().add(Coefficient.valueOf(1), 0);
         assertFalse(ph1.boundsFromAbove(le));
         assertTrue(ph1.boundsFromBelow(le));
 
@@ -157,11 +157,10 @@ public class PolyhedronTest {
         var res = ph1.minimizeWithPoint(le);
         assertTrue(res.isPresent());
         var extremals = res.get();
-        assertEquals(new Coefficient(-3), extremals.supN);
-        assertEquals(new Coefficient(1), extremals.supD);
+        assertEquals(Coefficient.valueOf(-3), extremals.supN);
+        assertEquals(Coefficient.valueOf(1), extremals.supD);
         assertTrue(extremals.isMaximum);
-        Generator g = new Generator(new LinearExpression(3).add(new Coefficient(-3), 0), GeneratorType.POINT,
-                new Coefficient(1));
+        Generator g = Generator.of(LinearExpression.zero(3).add(Coefficient.valueOf(-3), 0), GeneratorType.POINT);
         assertEquals(g, extremals.point);
 
         res = ph1.maximize(le);
@@ -188,10 +187,10 @@ public class PolyhedronTest {
 
     @Test
     void test2() {
-        var lec = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(lec, ConstraintType.GREATER_THAN);
-        lec.add(new Coefficient(-1), 1);
-        var c2 = new Constraint(lec, ConstraintType.EQUAL);
+        var lec = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(lec, ConstraintType.GREATER_THAN);
+        lec.add(Coefficient.valueOf(-1), 1);
+        var c2 = Constraint.of(lec, ConstraintType.EQUAL);
 
         var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
         ph1.refineWithConstraint(c1);
@@ -199,8 +198,8 @@ public class PolyhedronTest {
         assertFalse(ph1.constraints(2));
         assertEquals(IS_INCLUDED, ph1.getRelationWithConstraint(c1));
 
-        var le = new LinearExpression();
-        le.add(new Coefficient(1), 0);
+        var le = LinearExpression.zero();
+        le.add(Coefficient.valueOf(1), 0);
         assertFalse(ph1.boundsFromAbove(le));
         assertTrue(ph1.boundsFromBelow(le));
         assertFalse(ph1.isDiscrete());
@@ -208,8 +207,8 @@ public class PolyhedronTest {
         var res = ph1.minimize(le);
         assertTrue(res.isPresent());
         var extremals = res.get();
-        assertEquals(new Coefficient(-3), extremals.supN);
-        assertEquals(new Coefficient(1), extremals.supD);
+        assertEquals(Coefficient.valueOf(-3), extremals.supN);
+        assertEquals(Coefficient.valueOf(1), extremals.supD);
         assertFalse(extremals.isMaximum);
 
         res = ph1.maximize(le);

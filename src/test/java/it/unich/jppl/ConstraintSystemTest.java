@@ -3,7 +3,6 @@ package it.unich.jppl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import it.unich.jppl.Constraint.ConstraintType;
-import it.unich.jppl.ConstraintSystem.ZeroDimConstraintSystem;
 
 import java.util.NoSuchElementException;
 
@@ -16,17 +15,17 @@ public class ConstraintSystemTest {
 
     @BeforeAll
     static void init() {
-        var le = new LinearExpression();
-        le.add(new Coefficient(3));
-        le.add(new Coefficient(1), 0);
-        c1 = new Constraint(le, ConstraintType.GREATER_THAN);
-        le.add(new Coefficient(-1), 1);
-        c2 = new Constraint(le, ConstraintType.EQUAL);
+        var le = LinearExpression.zero();
+        le.add(Coefficient.valueOf(3));
+        le.add(Coefficient.valueOf(1), 0);
+        c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
+        le.add(Coefficient.valueOf(-1), 1);
+        c2 = Constraint.of(le, ConstraintType.EQUAL);
     }
 
     @Test
     void testEmptyConstructor() {
-        var cs = new ConstraintSystem();
+        var cs = ConstraintSystem.empty();
         assertTrue(cs.isOK());
         assertTrue(cs.isEmpty());
         assertEquals(0, cs.getSpaceDimension());
@@ -35,12 +34,12 @@ public class ConstraintSystemTest {
 
     @Test
     void testZeroDimConstructor() {
-        var cs = new ConstraintSystem(ZeroDimConstraintSystem.EMPTY);
+        var cs = ConstraintSystem.empty();
         assertTrue(cs.isOK());
         assertTrue(cs.isEmpty());
         assertEquals(0, cs.getSpaceDimension());
         assertFalse(cs.hasStrictInequalities());
-        cs = new ConstraintSystem(ZeroDimConstraintSystem.UNSATISFIABLE);
+        cs = ConstraintSystem.zeroDimFalse();
         assertTrue(cs.isOK());
         assertFalse(cs.isEmpty());
         assertEquals(0, cs.getSpaceDimension());
@@ -49,7 +48,7 @@ public class ConstraintSystemTest {
 
     @Test
     void testInsert() {
-        var cs = new ConstraintSystem();
+        var cs = ConstraintSystem.empty();
         cs.add(c1);
         assertTrue(cs.isOK());
         assertFalse(cs.isEmpty());
@@ -62,7 +61,7 @@ public class ConstraintSystemTest {
 
     @Test
     void testToString() {
-        var cs = new ConstraintSystem();
+        var cs = ConstraintSystem.empty();
         cs.add(c1);
         cs.add(c2);
         assertEquals("A > -3, A - B = -3", cs.toString());
@@ -70,13 +69,13 @@ public class ConstraintSystemTest {
 
     @Test
     void testIterator() {
-        var cs = new ConstraintSystem();
+        var cs = ConstraintSystem.empty();
         cs.add(c1);
         cs.add(c2);
-        var le = new LinearExpression(2);
-        le.add(new Coefficient(3));
-        le.add(new Coefficient(1), 0);
-        var c1bis = new Constraint(le, ConstraintType.GREATER_THAN);
+        var le = LinearExpression.zero(2);
+        le.add(Coefficient.valueOf(3));
+        le.add(Coefficient.valueOf(1), 0);
+        var c1bis = Constraint.of(le, ConstraintType.GREATER_THAN);
         var csi = cs.iterator();
         assertEquals(c1bis, csi.next());
         assertEquals(c2, csi.next());

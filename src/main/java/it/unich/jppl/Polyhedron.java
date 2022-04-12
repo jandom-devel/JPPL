@@ -76,7 +76,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_constraints(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new ConstraintSystem(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue(), false);
     }
 
     public CongruenceSystem getCongruences() {
@@ -84,7 +84,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_congruences(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new CongruenceSystem(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue(), false);
     }
 
     public ConstraintSystem getMinimizedConstraints() {
@@ -92,7 +92,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_minimized_constraints(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new ConstraintSystem(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue(), false);
     }
 
     public CongruenceSystem getMinimizedCongruences() {
@@ -100,7 +100,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_minimized_congruences(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new CongruenceSystem(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue(), false);
     }
 
     public boolean isEmpty() {
@@ -167,8 +167,8 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
         var pmaximum = new IntByReference();
         int result = ppl_Polyhedron_maximize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
@@ -180,9 +180,9 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
-        var point = new Generator();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
+        var point = Generator.zeroDimPoint();
         var pmaximum = new IntByReference();
         int result = ppl_Polyhedron_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
                 point.pplObj);
@@ -191,12 +191,12 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, point.clone()));
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
         var pmaximum = new IntByReference();
         int result = ppl_Polyhedron_minimize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
@@ -208,9 +208,9 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
-        var point = new Generator();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
+        var point = Generator.zeroDimPoint();
         var pmaximum = new IntByReference();
         int result = ppl_Polyhedron_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
                 point.pplObj);
@@ -219,7 +219,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, point.clone()));
     }
 
     public boolean contains(T ph) {
@@ -514,7 +514,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_generators(pplObj, pgs);
         if (result < 0)
             throw new PPLError(result);
-        return new GeneratorSystem(pgs.getValue());
+        return new GeneratorSystem(pgs.getValue(), false);
     }
 
     public GeneratorSystem getMinimizedGenerators() {
@@ -522,7 +522,7 @@ abstract class Polyhedron<T extends Polyhedron<T> & Property<T>> {
         int result = ppl_Polyhedron_get_minimized_generators(pplObj, pgs);
         if (result < 0)
             throw new PPLError(result);
-        return new GeneratorSystem(pgs.getValue());
+        return new GeneratorSystem(pgs.getValue(), false);
     }
 
     public T addGenerator(Generator g) {

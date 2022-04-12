@@ -186,7 +186,7 @@ public class DoubleBox implements Property<DoubleBox> {
         int result = ppl_Double_Box_get_constraints(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new ConstraintSystem(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue(), false);
     }
 
     public CongruenceSystem getCongruences() {
@@ -194,7 +194,7 @@ public class DoubleBox implements Property<DoubleBox> {
         int result = ppl_Double_Box_get_congruences(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new CongruenceSystem(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue(), false);
     }
 
     public ConstraintSystem getMinimizedConstraints() {
@@ -202,7 +202,7 @@ public class DoubleBox implements Property<DoubleBox> {
         int result = ppl_Double_Box_get_minimized_constraints(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new ConstraintSystem(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue(), false);
     }
 
     public CongruenceSystem getMinimizedCongruences() {
@@ -210,7 +210,7 @@ public class DoubleBox implements Property<DoubleBox> {
         int result = ppl_Double_Box_get_minimized_congruences(pplObj, pcs);
         if (result < 0)
             throw new PPLError(result);
-        return new CongruenceSystem(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue(), false);
     }
 
     public boolean isEmpty() {
@@ -277,8 +277,8 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public Optional<ExtremalOutput> maximize(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
         var pmaximum = new IntByReference();
         int result = ppl_Double_Box_maximize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
@@ -290,9 +290,9 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
-        var point = new Generator();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
+        var point = Generator.zeroDimPoint();
         var pmaximum = new IntByReference();
         int result = ppl_Double_Box_maximize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
                 point.pplObj);
@@ -301,12 +301,12 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, point.clone()));
     }
 
     public Optional<ExtremalOutput> minimize(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
         var pmaximum = new IntByReference();
         int result = ppl_Double_Box_minimize(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum);
         if (result < 0)
@@ -318,9 +318,9 @@ public class DoubleBox implements Property<DoubleBox> {
     }
 
     public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le) {
-        var cn = new Coefficient();
-        var cd = new Coefficient();
-        var point = new Generator();
+        var cn = Coefficient.zero();
+        var cd = Coefficient.zero();
+        var point = Generator.zeroDimPoint();
         var pmaximum = new IntByReference();
         int result = ppl_Double_Box_minimize_with_point(pplObj, le.pplObj, cn.pplObj, cd.pplObj, pmaximum,
                 point.pplObj);
@@ -329,7 +329,7 @@ public class DoubleBox implements Property<DoubleBox> {
         else if (result == 0)
             return Optional.empty();
         else
-            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, new Generator(point)));
+            return Optional.of(new ExtremalOutput(cn, cd, pmaximum.getValue() != 0, point.clone()));
     }
 
     public boolean contains(DoubleBox box) {

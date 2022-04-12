@@ -7,7 +7,6 @@ import it.unich.jppl.LibPPL.SizeTByReference;
 
 import java.math.BigInteger;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -41,8 +40,7 @@ import com.sun.jna.ptr.PointerByReference;
  * generates an error.
  * </p>
  */
-public class LinearExpression {
-    Pointer pplObj;
+public class LinearExpression extends GeometricDescriptor<LinearExpression> {
 
     private static class LinearExpressionCleaner implements Runnable {
         private Pointer pplObj;
@@ -57,101 +55,95 @@ public class LinearExpression {
         }
     }
 
-    private void init(Pointer p) {
+    private LinearExpression(Pointer p) {
         pplObj = p;
         PPL.cleaner.register(this, new LinearExpressionCleaner(pplObj));
     }
 
     /**
-     * Returns a new linear expression corresponding to the constant 0 in a
+     * Creates and returns a linear expression corresponding to the constant 0 in a
      * zero-dimensional space.
      */
-    public LinearExpression() {
+    public static LinearExpression zero() {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression(ple);
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
     /**
-     * Returns a new linear expression corresponding the constant 0 in a
+     * Creates and returns a linear expression corresponding the constant 0 in a
      * d-dimensional space.
      */
-    public LinearExpression(long d) {
+    public static LinearExpression zero(long d) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_with_dimension(ple, new SizeT(d));
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
     /**
-     * Returns a linear expression corresponding to the Constraint c.
+     * Copies and returns the linear expression contained in the constraint c.
      */
-    public LinearExpression(Constraint c) {
+    public static LinearExpression of(Constraint c) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Constraint(ple, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
     /**
-     * Returns a linear expression corresponding to the Generator g.
+     * Copies and returns the linear expression contained in the generator g.
      */
-    public LinearExpression(Generator g) {
+    public static LinearExpression of(Generator g) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Generator(ple, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
     /**
-     * Returns a linear expression corresponding to the Conguence g.
+     * Copies and returns the linear expression contained in the congruence c.
      */
-    public LinearExpression(Congruence c) {
+    public static LinearExpression of(Congruence c) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Congruence(ple, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
     /*
-    public LinearExpression(GridGenerator g) {
+    public static LinearExpression of(GridGenerator g) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.pplObj);
         if (result < 0) throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
     */
 
-    /**
-     * Returns a copy of the linear expressione le.
-     */
-    public LinearExpression(LinearExpression le) {
+    @Override
+    public LinearExpression clone() {
         var ple = new PointerByReference();
-        int result = ppl_new_Linear_Expression_from_Linear_Expression(ple, le.pplObj);
+        int result = ppl_new_Linear_Expression_from_Linear_Expression(ple, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(ple.getValue());
+        return new LinearExpression(ple.getValue());
     }
 
-    /**
-     * Assign to this linear expression a copy of the linear expressione le.
-     */
-    public LinearExpression set(LinearExpression le) {
+    @Override
+    public LinearExpression assign(LinearExpression le) {
         int result = ppl_assign_Linear_Expression_from_Linear_Expression(pplObj, le.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
-    /**
-     * Returns the space dimension of this linear expression.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Linear_Expression_space_dimension(pplObj, m);
@@ -160,11 +152,9 @@ public class LinearExpression {
         return m.getValue().longValue();
     }
 
-    /**
-     * Returns the Coefficient for the variable \(x_i\).
-     */
+    @Override
     public Coefficient getCoefficient(long i) {
-        var c = new Coefficient();
+        var c = Coefficient.zero();
         int result = ppl_Linear_Expression_coefficient(pplObj, new SizeT(i), c.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -172,21 +162,17 @@ public class LinearExpression {
     }
 
     /**
-     * Returns the inhomogeneous term.
+     * Returns the inhomogeneous term of this linear expression.
      */
     public Coefficient getInhomogeneousTerm() {
-        var c = new Coefficient();
+        var c = Coefficient.zero();
         int result = ppl_Linear_Expression_inhomogeneous_term(pplObj, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return c;
     }
 
-    /**
-     * Returns true if this Coefficient satisfies all its implementation invariants;
-     * returns false and perhaps makes some noise if it is broken. Useful for
-     * debugging purposes.
-     */
+    @Override
     boolean isOK() {
         int result = ppl_Linear_Expression_OK(pplObj);
         if (result < 0)
@@ -195,7 +181,7 @@ public class LinearExpression {
     }
 
     /**
-     * Returns true if and only if this linear expression is zero.
+     * Returns true if and only if this linear expression is the constant zero.
      */
     public boolean isZero() {
         int result = ppl_Linear_Expression_is_zero(pplObj);
@@ -262,19 +248,9 @@ public class LinearExpression {
         return this;
     }
 
-    /**
-     * Returns the string representation of the linear expression.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Linear_Expression(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Linear_Expression(pstr, pplObj);
     }
 
     /**
@@ -288,8 +264,8 @@ public class LinearExpression {
             return true;
         if (obj instanceof LinearExpression) {
             var le1 = (LinearExpression) obj;
-            var le2 = new LinearExpression(this);
-            le2.multiply(new Coefficient(-1));
+            var le2 = this.clone();
+            le2.multiply(Coefficient.MINUS_ONE);
             le2.add(le1);
             return le2.isZero();
         }
@@ -302,7 +278,7 @@ public class LinearExpression {
      * coefficient of the variables \(x_0, \x_1, \ldots\)
      */
     public static LinearExpression of(Coefficient c, Coefficient... args) {
-        var le = new LinearExpression();
+        var le = LinearExpression.zero(args.length);
         le.add(c);
         for (int i = 0; i < args.length; i++) {
             le.add(args[i], i);
@@ -315,10 +291,10 @@ public class LinearExpression {
      * c, Coefficient... args)} constructor but with BigInteger parameters.
      */
     public static LinearExpression of(BigInteger c, BigInteger... args) {
-        var le = new LinearExpression();
-        le.add(new Coefficient(c));
+        var le = LinearExpression.zero(args.length);
+        le.add(Coefficient.valueOf(c));
         for (int i = 0; i < args.length; i++) {
-            le.add(new Coefficient(args[i]), i);
+            le.add(Coefficient.valueOf(args[i]), i);
         }
         return le;
     }
@@ -328,10 +304,10 @@ public class LinearExpression {
      * Coefficient... args)} constructor but with long parameters.
      */
     public static LinearExpression of(long c, long... args) {
-        var le = new LinearExpression();
-        le.add(new Coefficient(c));
+        var le = LinearExpression.zero(args.length);
+        le.add(Coefficient.valueOf(c));
         for (int i = 0; i < args.length; i++) {
-            le.add(new Coefficient(args[i]), i);
+            le.add(Coefficient.valueOf(args[i]), i);
         }
         return le;
     }

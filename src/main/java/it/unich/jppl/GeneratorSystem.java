@@ -22,14 +22,6 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  */
 public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, GeneratorSystem> {
-    /**
-     * Enumerates the possible zero-dimensional GeneratorSystem which it is possible
-     * to build with the GeneratorSystem constructor.
-     */
-    public enum ZeroDimGeneratorSystem {
-        /** Represents the empty zero-dimensional GeneratorSystem. */
-        EMPTY, UNSATISFIABLE
-    }
 
     private static class GeneratorSystemCleaner implements Runnable {
         private Pointer pplObj;
@@ -116,53 +108,59 @@ public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, Gener
             result = ppl_Generator_System_const_iterator_increment(cit);
             if (result < 0)
                 throw new PPLError(result);
-            return new Generator(pc.getValue());
+            return new Generator(pc.getValue(), false);
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a generator system obtained from the specified native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the generator system is garbage collected.
+     */
+    GeneratorSystem(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new GeneratorSystemCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new GeneratorSystemCleaner(pplObj));
     }
 
     /**
-     * Returns an empty zero-dimensional GeneratorSystem.
+     * Creates a generator system obtained from the specified native object. It is
+     * equivalent to {@code GeneratorSystem(p, true)}.
      */
-    public GeneratorSystem() {
+    private GeneratorSystem(Pointer p) {
+        this(p, false);
+    }
+
+    /**
+     * Creates and returns an empty zero-dimensional GeneratorSystem.
+     */
+    public static GeneratorSystem empty() {
         var pgs = new PointerByReference();
         int result = ppl_new_Generator_System(pgs);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
+        return new GeneratorSystem(pgs.getValue());
     }
 
     /**
-     * Returns a new GeneratorSystem containing only a copy of the Constraint c.
+     * Creates and returns a generator system containing only a copy of the generator g.
      */
-    public GeneratorSystem(Generator g) {
+    public static GeneratorSystem of(Generator g) {
         var pgs = new PointerByReference();
         int result = ppl_new_Generator_System_from_Generator(pgs, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
+        return new GeneratorSystem(pgs.getValue());
     }
 
-    /**
-     * Returns a copy of the GeneratorSystem gs.
-     */
-    public GeneratorSystem(GeneratorSystem gs) {
+    @Override
+    public GeneratorSystem clone() {
         var pgs = new PointerByReference();
-        int result = ppl_new_Generator_System_from_Generator_System(pgs, gs.pplObj);
+        int result = ppl_new_Generator_System_from_Generator_System(pgs, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
-    }
-
-    /**
-     * Returns a GeneratorSystem obtained from the specified native object.
-     */
-    GeneratorSystem(Pointer pplObj) {
-        init(pplObj);
+        return new GeneratorSystem(pgs.getValue());
     }
 
     @Override
@@ -223,4 +221,5 @@ public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, Gener
     protected int toStringByReference(PointerByReference pstr) {
         return ppl_io_asprint_Generator_System(pstr, pplObj);
     }
+
 }

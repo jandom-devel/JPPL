@@ -15,24 +15,6 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public class ConstraintSystem extends GeometricDescriptorsSystem<Constraint, ConstraintSystem> {
 
-    /**
-     * Enumerates the zero-dimensional constraint systems which it is possible to
-     * build with the ConstraintSystem constructor.
-     */
-    public enum ZeroDimConstraintSystem {
-        /**
-         * Represents the empty zero-dimensional constraint system.
-         */
-        EMPTY,
-        /**
-         * Represents the zero-dimensional constraint system that contains only the
-         * falsity zero-dimensionality constraint.
-         *
-         * @see Constraint#Constraint(ZeroDimConstraint type)
-         */
-        UNSATISFIABLE
-    }
-
     private static class ConstraintSystemCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -118,61 +100,73 @@ public class ConstraintSystem extends GeometricDescriptorsSystem<Constraint, Con
             result = ppl_Constraint_System_const_iterator_increment(cit);
             if (result < 0)
                 throw new PPLError(result);
-            return new Constraint(pc.getValue());
+            return new Constraint(pc.getValue(), false);
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a constraint system from a native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the congruence system is garbage collected.
+     */
+    ConstraintSystem(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new ConstraintSystemCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new ConstraintSystemCleaner(pplObj));
     }
 
     /**
-     * Creates an empty zero-dimensional constraint system.
+     * Creates a constraint system from a native object. It is equivalent to
+     * {@code ConstraintSystem(p, true)}.
      */
-    public ConstraintSystem() {
-        this(ZeroDimConstraintSystem.EMPTY);
+    private ConstraintSystem(Pointer p) {
+        this(p, false);
     }
 
     /**
-     * Creates a zero-dimensional constraint system of the specified type.
+     * Creates and returns an empty constraint system.
      */
-    public ConstraintSystem(ZeroDimConstraintSystem type) {
+    public static ConstraintSystem empty() {
         var pcs = new PointerByReference();
-        int result = (type == ZeroDimConstraintSystem.EMPTY) ? ppl_new_Constraint_System(pcs)
-                : ppl_new_Constraint_System_zero_dim_empty(pcs);
+        int result = ppl_new_Constraint_System(pcs);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue());
+    }
+
+    /**
+     * Creates and returns a constraint system that contains only the falsity
+     * zero-dimensionality constraint.
+     *
+     * @see Constraint#zeroDimFalse
+     */
+    public static ConstraintSystem zeroDimFalse() {
+        var pcs = new PointerByReference();
+        int result = ppl_new_Constraint_System_zero_dim_empty(pcs);
+        if (result < 0)
+            throw new PPLError(result);
+        return new ConstraintSystem(pcs.getValue());
     }
 
     /**
      * Create a constraint system containing only a copy of the constraint c.
      */
-    public ConstraintSystem(Constraint c) {
+    public static ConstraintSystem of(Constraint c) {
         var pcs = new PointerByReference();
         int result = ppl_new_Constraint_System_from_Constraint(pcs, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
+        return new ConstraintSystem(pcs.getValue());
     }
 
-    /**
-     * Creates a copy of the constraint system cs.
-     */
-    public ConstraintSystem(ConstraintSystem cs) {
+    @Override
+    public ConstraintSystem clone() {
         var pcs = new PointerByReference();
-        int result = ppl_new_Constraint_System_from_Constraint_System(pcs, cs.pplObj);
+        int result = ppl_new_Constraint_System_from_Constraint_System(pcs, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
-    }
-
-    /**
-     * Creates a constraint system from a native object.
-     */
-    ConstraintSystem(Pointer pplObj) {
-        init(pplObj);
+        return new ConstraintSystem(pcs.getValue());
     }
 
     @Override

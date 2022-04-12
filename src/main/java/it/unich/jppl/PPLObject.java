@@ -13,11 +13,10 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public abstract class PPLObject<T extends PPLObject<T>> implements Cloneable {
 
-    /** Creates an uninitialized PPLObject */
-    protected PPLObject() { }
-
-    /** Pointer to the PPL native object. */
-    public Pointer pplObj;
+    /**
+     * Pointer to the PPL native object.
+     */
+    protected Pointer pplObj;
 
     /**
      * Assign to this object a copy of the object obj.
@@ -32,14 +31,23 @@ public abstract class PPLObject<T extends PPLObject<T>> implements Cloneable {
     abstract boolean isOK();
 
     /**
-     * This method should be provided by concrete subclasses. It must call the
-     * correct C function from the family {@code ppl_io_asprint_}.
+     * Returns in pstr the string representation of this object.
+     *
+     * <p>
+     * The method provided by concrete subclasses should call the correct C function
+     * from the family {@code ppl_io_asprint_}.
+     * </p>
      */
     protected abstract int toStringByReference(PointerByReference pstr);
 
     /**
-     * Returns the pointer to the PPL native object. Useless if you do not plan to
-     * interface with some native library.
+     * Create and returns a copy of this object.
+     */
+    public abstract T clone();
+
+    /**
+     * Returns the pointer to the PPL native object. Useless you plan to interface
+     * JPPL with some native code, you do not need this method.
      */
     public Pointer getNative() {
         return pplObj;

@@ -63,61 +63,55 @@ public class GridGenerator extends GeometricDescriptor<GridGenerator> {
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a grid generator obtained from the specified native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the grid generator is garbage collected.
+     */
+    GridGenerator(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new GridGeneratorCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new GridGeneratorCleaner(pplObj));
     }
 
     /**
-     * Creates a new grid generator of direction le and type t. If the grid
+     * Creates a grid generator obtained from the specified native object. It is
+     * equivalent to {@code GridGenerator(p, true)}.
+     */
+    private GridGenerator(Pointer p) {
+        this(p, false);
+    }
+
+    /**
+     * Creates and returns a grid generator of direction le and type t. If the grid
      * generator to be created is a point or a parameter, the divisor d is applied
      * to le. If it is a line, d is simply disregarded. The space dimension of the
      * new grid generator is equal to the space dimension of le.
      */
-    public GridGenerator(LinearExpression le, GridGeneratorType t, Coefficient d) {
+    public static GridGenerator of(LinearExpression le, GridGeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pg.getValue());
+        return new GridGenerator(pg.getValue());
     }
 
     /**
-     * Creates a new grid generator of direction le and type t. It is equivalent to
-     * {@code GridGenerator(le, t, Coefficient.ONE)}.
+     * Creates and returns a grid generator of direction le and type t. It is
+     * equivalent to {@code GridGenerator(le, t, Coefficient.ONE)}.
      */
-    public GridGenerator(LinearExpression le, GridGeneratorType t) {
-        this(le, t, new Coefficient(1));
+    public static GridGenerator of(LinearExpression le, GridGeneratorType t) {
+        return of(le, t, Coefficient.ONE);
     }
 
-    /**
-     * Creates the point that is the origin of the zero-dimensional space
-     * \(\mathbb{R}^0\).
-     */
-    public GridGenerator() {
+    @Override
+    public GridGenerator clone() {
         var pg = new PointerByReference();
-        int result = ppl_new_Grid_Generator_zero_dim_point(pg);
+        int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pg.getValue());
-    }
-
-    /**
-     * Creates a copy of the GridGenerator g.
-     */
-    public GridGenerator(GridGenerator g) {
-        var pg = new PointerByReference();
-        int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, g.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        init(pg.getValue());
-    }
-
-    /**
-     * Creates a GridGenerator obtained from the specified native object.
-     */
-    GridGenerator(Pointer pplObj) {
-        init(pplObj);
+        return new GridGenerator(pg.getValue());
     }
 
     @Override
@@ -139,7 +133,7 @@ public class GridGenerator extends GeometricDescriptor<GridGenerator> {
 
     @Override
     public Coefficient getCoefficient(long var) {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Grid_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -201,11 +195,23 @@ public class GridGenerator extends GeometricDescriptor<GridGenerator> {
      * Returns the divisor of this GridGenerator.
      */
     public Coefficient getDivisor() {
-        var d = new Coefficient();
+        var d = Coefficient.zero();
         int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return d;
+    }
+
+    /**
+     * Creates the point that is the origin of the zero-dimensional space
+     * \(\mathbb{R}^0\).
+     */
+    public static GridGenerator point() {
+        var pg = new PointerByReference();
+        int result = ppl_new_Grid_Generator_zero_dim_point(pg);
+        if (result < 0)
+            throw new PPLError(result);
+        return new GridGenerator(pg.getValue());
     }
 
 }

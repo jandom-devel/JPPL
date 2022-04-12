@@ -11,10 +11,10 @@ public class DoubleBoxTest {
 
     @Test
     void testAddConstraints() {
-        var le = new LinearExpression().add(new Coefficient(3)).add(new Coefficient(1), 0);
-        var c1 = new Constraint(le, ConstraintType.GREATER_THAN);
-        le.add(new Coefficient(-1), 1);
-        var c2 = new Constraint(le, ConstraintType.EQUAL);
+        var le = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
+        var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
+        le.add(Coefficient.valueOf(-1), 1);
+        var c2 = Constraint.of(le, ConstraintType.EQUAL);
 
         var box = new DoubleBox(2, DegenerateElement.UNIVERSE);
         assertFalse(box.constraints(0));

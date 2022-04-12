@@ -30,22 +30,6 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public class Congruence extends GeometricDescriptor<Congruence> {
 
-    /**
-     * Enumerates the zero-dimensional congruences which it is possible to build
-     * with the Congruence constructor.
-     */
-    public static enum ZeroDimCongruence {
-        /**
-         * Refers to the false zero-dimensional congruence \(0 \equiv 1 \pmod 0\).
-         */
-        FALSITY,
-        /**
-         * Refers to the true zero-dimensional congruence \(0 \equiv 1 \pmod 1\), also
-         * known as the <em>integrality congruence</em>.
-         */
-        INTEGRALITY
-    }
-
     private static class CongruenceCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -59,50 +43,67 @@ public class Congruence extends GeometricDescriptor<Congruence> {
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a congruence from a native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the congruence is garbage collected.
+     */
+    Congruence(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new CongruenceCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new CongruenceCleaner(p));
     }
 
     /**
-     * Creates the new congruence \(le \equiv 0 \pmod m\).
+     * Creates a congruence from a native object. It is equivalent to
+     * {@code Congruence(p, true)}.
      */
-    public Congruence(LinearExpression le, Coefficient m) {
+    private Congruence(Pointer p) {
+        this(p, true);
+    }
+
+    /**
+     * Creates and returns the congruence \(le \equiv 0 \pmod m\).
+     */
+    public static Congruence of(LinearExpression le, Coefficient m) {
         var pc = new PointerByReference();
         int result = ppl_new_Congruence(pc, le.pplObj, m.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Congruence(pc.getValue());
     }
 
     /**
-     * Creates the zero-dimensional congruence specified by type.
+     * Creates the false zero-dimensional congruence \(0 \equiv 1 \pmod 0\).
      */
-    public Congruence(ZeroDimCongruence type) {
+    public static Congruence zeroDimFalse() {
         var pc = new PointerByReference();
-        int result = (type == ZeroDimCongruence.FALSITY) ? ppl_new_Congruence_zero_dim_false(pc)
-                : ppl_new_Congruence_zero_dim_integrality(pc);
+        int result = ppl_new_Congruence_zero_dim_false(pc);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Congruence(pc.getValue());
     }
 
     /**
-     * Creates a copy of the congruence c.
+     * Create and returns the true zero-dimensional congruence \(0 \equiv 1 \pmod
+     * 1\), also known as the <em>integrality congruence</em>.
      */
-    public Congruence(Congruence c) {
+    public static Congruence zeroDimIntegrality() {
         var pc = new PointerByReference();
-        int result = ppl_new_Congruence_from_Congruence(pc, c.pplObj);
+        int result = ppl_new_Congruence_zero_dim_integrality(pc);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Congruence(pc.getValue());
     }
 
-    /**
-     * Creates a congruence from a native object.
-     */
-    Congruence(Pointer pplObj) {
-        init(pplObj);
+    @Override
+    public Congruence clone() {
+        var pc = new PointerByReference();
+        int result = ppl_new_Congruence_from_Congruence(pc, pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return new Congruence(pc.getValue());
     }
 
     @Override
@@ -124,7 +125,7 @@ public class Congruence extends GeometricDescriptor<Congruence> {
 
     @Override
     public Coefficient getCoefficient(long var) {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Congruence_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -178,7 +179,7 @@ public class Congruence extends GeometricDescriptor<Congruence> {
      * Returns the inhomogeneous term of this congruence.
      */
     public Coefficient getInhomogeneousTerm() {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -189,7 +190,7 @@ public class Congruence extends GeometricDescriptor<Congruence> {
      * Returns the modulus of this congruence.
      */
     public Coefficient getModulus() {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Congruence_modulus(pplObj, n.pplObj);
         if (result < 0)
             throw new PPLError(result);

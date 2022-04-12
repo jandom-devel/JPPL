@@ -15,16 +15,16 @@ public class GeneratorSystemTest {
 
     @BeforeAll
     static void init() {
-        var le = new LinearExpression();
-        le.add(new Coefficient(1), 0);
-        g1 = new Generator(le, GeneratorType.RAY, new Coefficient(0));
-        le.add(new Coefficient(-1), 1);
-        g2 = new Generator(le, GeneratorType.POINT, new Coefficient(1));
+        var le = LinearExpression.zero();
+        le.add(Coefficient.valueOf(1), 0);
+        g1 = Generator.of(le, GeneratorType.RAY);
+        le.add(Coefficient.valueOf(-1), 1);
+        g2 = Generator.of(le, GeneratorType.POINT);
     }
 
     @Test
     void testEmptyConstructor() {
-        var gs = new GeneratorSystem();
+        var gs = GeneratorSystem.empty();
         assertTrue(gs.isOK());
         assertTrue(gs.isEmpty());
         assertEquals(0, gs.getSpaceDimension());
@@ -32,7 +32,7 @@ public class GeneratorSystemTest {
 
     @Test
     void testInsert() {
-        var gs = new GeneratorSystem();
+        var gs = GeneratorSystem.empty();
         gs.add(g1);
         assertTrue(gs.isOK());
         assertFalse(gs.isEmpty());
@@ -44,7 +44,7 @@ public class GeneratorSystemTest {
 
     @Test
     void testToString() {
-        var gs = new GeneratorSystem();
+        var gs = GeneratorSystem.empty();
         gs.add(g1);
         gs.add(g2);
         assertEquals("r(A), p(A - B)", gs.toString());
@@ -52,12 +52,12 @@ public class GeneratorSystemTest {
 
     @Test
     void testIterator() {
-        var gs = new GeneratorSystem();
+        var gs = GeneratorSystem.empty();
         gs.add(g1);
         gs.add(g2);
-        var le = new LinearExpression(2);
-        le.add(new Coefficient(1), 0);
-        var c1bis = new Generator(le, GeneratorType.RAY, new Coefficient(1));
+        var le = LinearExpression.zero(2);
+        le.add(Coefficient.valueOf(1), 0);
+        var c1bis = Generator.of(le, GeneratorType.RAY);
         var gsi = gs.iterator();
         assertEquals(c1bis, gsi.next());
         assertEquals(g2, gsi.next());

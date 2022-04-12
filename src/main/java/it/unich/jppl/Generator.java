@@ -59,23 +59,6 @@ public class Generator extends GeometricDescriptor<Generator> {
         }
     }
 
-    /**
-     * Enumeration for the two possible generators of space dimension 0. It is used
-     * by the constructor of Generator.
-     */
-    public static enum ZeroDimGenerator {
-        /**
-         * Represents the point that is the origin of the zero-dimensional space
-         * \(\mathbb{R}^0\).
-         */
-        POINT,
-        /**
-         * Represents the point that is the origin of the zero-dimensional space
-         * \(\mathbb{R}^0\), viewed as a closure point.
-         */
-        CLOSURE_POINT
-    }
-
     private static class GeneratorCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -89,68 +72,79 @@ public class Generator extends GeometricDescriptor<Generator> {
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a generator obtained from the specified native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the generator is garbage collected.
+     */
+    Generator(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new GeneratorCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new GeneratorCleaner(pplObj));
     }
 
     /**
-     * Creates a new generator of direction le and type t. If the generator to be
-     * created is a point or a closure point, the divisor d is applied to le. For
-     * other types of generators d is simply disregarded. The space dimension of the
-     * new generator is equal to the space dimension of le.
+     * Creates a generator obtained from the specified native object. It is
+     * equivalent to {@code Generator(p, true)}.
      */
-    public Generator(LinearExpression le, GeneratorType t, Coefficient d) {
+    private Generator(Pointer p) {
+        this(p, false);
+    }
+
+    /**
+     * Creates and returns a generator of direction le and type t. If the generator
+     * to be created is a point or a closure point, the divisor d is applied to le.
+     * For other types of generators d is simply disregarded. The space dimension of
+     * the new generator is equal to the space dimension of le.
+     */
+    public static Generator of(LinearExpression le, GeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
         int result = ppl_new_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pg.getValue());
+        return new Generator(pg.getValue());
     }
 
     /**
-     * Creates a new generator of direction le and type t. It is equivalent to
-     * {@code Generator(le, t, Coefficient.ONE)}.
+     * Creates and returns a generator of direction le and type t. It is equivalent
+     * to {@code Generator(le, t, Coefficient.ONE)}.
      */
-    public Generator(LinearExpression le, GeneratorType t) {
-        this(le, t, Coefficient.ONE);
+    public static Generator of(LinearExpression le, GeneratorType t) {
+        return of(le, t, Coefficient.ONE);
     }
 
     /**
-     * Creates a new zero-dimensional Generator according to type.
+     * Creates and returns the point which is the origin of the zero-dimensional
+     * space \(\mathbb{R}^0\).
      */
-    public Generator(ZeroDimGenerator type) {
+    public static Generator zeroDimPoint() {
         var pg = new PointerByReference();
-        int result = type == ZeroDimGenerator.CLOSURE_POINT ? ppl_new_Generator_zero_dim_closure_point(pg)
-                : ppl_new_Generator_zero_dim_point(pg);
+        int result = ppl_new_Generator_zero_dim_point(pg);
         if (result < 0)
             throw new PPLError(result);
-        init(pg.getValue());
+        return new Generator(pg.getValue());
     }
 
     /**
-     * Creates a new zero-dimensional Generator.
+     * Creates and returns, as a closure point, the point which is the origin of the
+     * zero-dimensional space \(\mathbb{R}^0\).
      */
-    Generator() {
-        this(ZeroDimGenerator.CLOSURE_POINT);
-    }
-
-    /**
-     * Creates a copy of the Generator g.
-     */
-    public Generator(Generator g) {
+    public static Generator zeroDimClosurePoint() {
         var pg = new PointerByReference();
-        int result = ppl_new_Generator_from_Generator(pg, g.pplObj);
+        int result = ppl_new_Generator_zero_dim_closure_point(pg);
         if (result < 0)
             throw new PPLError(result);
-        init(pg.getValue());
+        return new Generator(pg.getValue());
     }
 
-    /**
-     * Creates a Generator obtained from the specified native object.
-     */
-    Generator(Pointer pplObj) {
-        init(pplObj);
+    @Override
+    public Generator clone() {
+        var pg = new PointerByReference();
+        int result = ppl_new_Generator_from_Generator(pg, pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return new Generator(pg.getValue());
     }
 
     @Override
@@ -172,7 +166,7 @@ public class Generator extends GeometricDescriptor<Generator> {
 
     @Override
     public Coefficient getCoefficient(long var) {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -233,7 +227,7 @@ public class Generator extends GeometricDescriptor<Generator> {
      * Returns the divisor of this Generator.
      */
     public Coefficient getDivisor() {
-        var d = new Coefficient();
+        var d = Coefficient.zero();
         int result = ppl_Generator_divisor(pplObj, d.pplObj);
         if (result < 0)
             throw new PPLError(result);

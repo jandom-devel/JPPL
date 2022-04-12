@@ -68,22 +68,6 @@ public class Constraint extends GeometricDescriptor<Constraint> {
         }
     }
 
-    /**
-     * Enumerates the zero-dimensional constraints which it is possible to build
-     * with the Constraint constructor.
-     */
-    public static enum ZeroDimConstraint {
-        /**
-         * Referes to the unsatisfiable zero-dimensional constraint \(0 = 1\).
-         */
-        FALSITY,
-        /**
-         * Referes to the true zero-dimensional constraint \(0 \leq 1\), also known as
-         * <em>positivity constraint</em>.
-         */
-        POSITIVITY
-    }
-
     private static class ConstraintCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -97,50 +81,67 @@ public class Constraint extends GeometricDescriptor<Constraint> {
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a constraint from a native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the constraint is garbage collected.
+     */
+    Constraint(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new ConstraintCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new ConstraintCleaner(p));
     }
 
     /**
-     * Creates the constraint \(le \textrm{rel} 0\).
+     * Creates a constraint from a native object. It is equivalent to
+     * {@code Constraint(p, true)}.
      */
-    public Constraint(LinearExpression le, ConstraintType rel) {
+    private Constraint(Pointer p) {
+        this(p, false);
+    }
+
+    /**
+     * Creates and returns the constraint \(le \textrm{rel} 0\).
+     */
+    public static Constraint of(LinearExpression le, ConstraintType rel) {
         var pc = new PointerByReference();
         int result = ppl_new_Constraint(pc, le.pplObj, rel.ordinal());
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Constraint(pc.getValue());
     }
 
     /**
-     * Creates a new zero-dimensional constraint specified by type.
+     * Creates and returns the unsatisfiable zero-dimensional constraint \(0 = 1\).
      */
-    public Constraint(ZeroDimConstraint type) {
+    public static Constraint zeroDimFalse() {
         var pc = new PointerByReference();
-        int result = (type == ZeroDimConstraint.FALSITY) ? ppl_new_Constraint_zero_dim_false(pc)
-                : ppl_new_Constraint_zero_dim_positivity(pc);
+        int result = ppl_new_Constraint_zero_dim_false(pc);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Constraint(pc.getValue());
     }
 
     /**
-     * Creates a copy of the constraint c.
+     * Creates and returns the zero-dimensional constraint \(0 \leq 1\), also known
+     * as <em>positivity constraint</em>.
      */
-    public Constraint(Constraint c) {
+    public static Constraint zeroDimPositivity() {
         var pc = new PointerByReference();
-        int result = ppl_new_Constraint_from_Constraint(pc, c.pplObj);
+        int result = ppl_new_Constraint_zero_dim_positivity(pc);
         if (result < 0)
             throw new PPLError(result);
-        init(pc.getValue());
+        return new Constraint(pc.getValue());
     }
 
-    /**
-     * Creates a constraint from a native object.
-     */
-    Constraint(Pointer pplObj) {
-        init(pplObj);
+    @Override
+    public Constraint clone() {
+        var pc = new PointerByReference();
+        int result = ppl_new_Constraint_from_Constraint(pc, pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return new Constraint(pc.getValue());
     }
 
     @Override
@@ -162,7 +163,7 @@ public class Constraint extends GeometricDescriptor<Constraint> {
 
     @Override
     public Coefficient getCoefficient(long var) {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Constraint_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
@@ -225,7 +226,7 @@ public class Constraint extends GeometricDescriptor<Constraint> {
      * Returns the inhomogeneous term of this constraint.
      */
     public Coefficient getInhomogeneousTerm() {
-        var n = new Coefficient();
+        var n = Coefficient.zero();
         int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
         if (result < 0)
             throw new PPLError(result);

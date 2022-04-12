@@ -107,53 +107,61 @@ public class GridGeneratorSystem extends GeometricDescriptorsSystem<GridGenerato
             result = ppl_Grid_Generator_System_const_iterator_increment(cit);
             if (result < 0)
                 throw new PPLError(result);
-            return new GridGenerator(pc.getValue());
+            return new GridGenerator(pc.getValue(), false);
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a grid generator system obtained from the specified native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the frid generator system is garbage collected.
+     */
+    GridGeneratorSystem(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new GridGeneratorSystemCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new GridGeneratorSystemCleaner(pplObj));
     }
 
     /**
-     * Returns an empty zero-dimensional GridGeneratorSystem.
+     * Creates a grid generator system obtained from the specified native object. It
+     * is equivalent to {@code GridGeneratorSystem(p, true)}.
      */
-    public GridGeneratorSystem() {
+    private GridGeneratorSystem(Pointer p) {
+        this(p, false);
+    }
+
+    /**
+     * Creates and returns an empty zero-dimensional GridGeneratorSystem.
+     */
+    public static GridGeneratorSystem empty() {
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System(pgs);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
+        return new GridGeneratorSystem(pgs.getValue());
     }
 
     /**
      * Returns a new GeneratorSystem containing only a copy of the GridGenerator c.
      */
-    public GridGeneratorSystem(GridGenerator g) {
+    public static GridGeneratorSystem of(GridGenerator g) {
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System_from_Grid_Generator(pgs, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
+        return new GridGeneratorSystem(pgs.getValue());
     }
 
     /**
      * Returns a copy of the GridGeneratorSystem gs.
      */
-    public GridGeneratorSystem(GridGeneratorSystem gs) {
+    public GridGeneratorSystem clone() {
         var pgs = new PointerByReference();
-        int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, gs.pplObj);
+        int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pgs.getValue());
-    }
-
-    /**
-     * Returns a GridGeneratorSystem obtained from the specified native object.
-     */
-    GridGeneratorSystem(Pointer pplObj) {
-        init(pplObj);
+        return new GridGeneratorSystem(pgs.getValue());
     }
 
     @Override
@@ -196,7 +204,6 @@ public class GridGeneratorSystem extends GeometricDescriptorsSystem<GridGenerato
             throw new PPLError(result);
         return this;
     }
-
 
     @Override
     public GridGeneratorSystem add(GridGenerator g) {

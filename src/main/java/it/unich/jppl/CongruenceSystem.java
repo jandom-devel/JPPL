@@ -15,24 +15,6 @@ import com.sun.jna.ptr.PointerByReference;
  */
 public class CongruenceSystem extends GeometricDescriptorsSystem<Congruence, CongruenceSystem> {
 
-    /**
-     * Enumerates the zero-dimensional congruence systems which it is possible to
-     * build with the CongruenceSystem constructor.
-     */
-    public enum ZeroDimCongruenceSystem {
-        /**
-         * Represents the empty zero-dimensional congruence system.
-         */
-        EMPTY,
-        /**
-         * Represents the zero-dimensional congruence system that contains only the
-         * falsity zero-dimensional congruence.
-         *
-         * @see Congruence#Congruence(ZeroDimCongruence type)
-         */
-        UNSATISFIABLE
-    }
-
     private static class CongruenceSystemCleaner implements Runnable {
         private Pointer pplObj;
 
@@ -118,61 +100,74 @@ public class CongruenceSystem extends GeometricDescriptorsSystem<Congruence, Con
             result = ppl_Congruence_System_const_iterator_increment(cit);
             if (result < 0)
                 throw new PPLError(result);
-            return new Congruence(pc.getValue());
+            return new Congruence(pc.getValue(), false);
         }
     }
 
-    private void init(Pointer p) {
+    /**
+     * Creates a congruence system from a native object.
+     *
+     * @param registerCleaner if true, the native object is registered for deletion
+     *                        when the congruence system is garbage collected.
+     */
+    CongruenceSystem(Pointer p, boolean registerCleaner) {
         pplObj = p;
-        PPL.cleaner.register(this, new CongruenceSystemCleaner(pplObj));
+        if (registerCleaner)
+            PPL.cleaner.register(this, new CongruenceSystemCleaner(pplObj));
     }
 
     /**
-     * Creates an empty zero-dimensional congruence system.
+     * Creates a congruence system from a native object. It is equivalent to
+     * {@code CongruenceSystem(p, true}
      */
-    public CongruenceSystem() {
-        this(ZeroDimCongruenceSystem.EMPTY);
+    private CongruenceSystem(Pointer p) {
+        this(p, false);
     }
 
     /**
-     * Creates a zero-dimensional congruence system of the specified type.
+     * Creates and returns an empty congruence system.
      */
-    public CongruenceSystem(ZeroDimCongruenceSystem type) {
+    public static CongruenceSystem empty() {
         var pcs = new PointerByReference();
-        int result = (type == ZeroDimCongruenceSystem.EMPTY) ? ppl_new_Congruence_System(pcs)
-                : ppl_new_Congruence_System_zero_dim_empty(pcs);
+        int result = ppl_new_Congruence_System(pcs);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue());
     }
 
     /**
-     * Create a congruence system containing only a copy of the congruence c.
+     * Creates and returns a congruence system that contains only the false
+     * zero-dimensional congruence.
+     *
+     * @see Congruence#zeroDimFalse
      */
-    public CongruenceSystem(Congruence c) {
+    public CongruenceSystem zeroDimFalse() {
+        var pcs = new PointerByReference();
+        int result = ppl_new_Congruence_System_zero_dim_empty(pcs);
+        if (result < 0)
+            throw new PPLError(result);
+        return new CongruenceSystem(pcs.getValue());
+    }
+
+    /**
+     * Create and returns a congruence system containing only a copy of the
+     * congruence c.
+     */
+    public static CongruenceSystem of(Congruence c) {
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System_from_Congruence(pcs, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
+        return new CongruenceSystem(pcs.getValue());
     }
 
-    /**
-     * Create a copy of the congruence system cs.
-     */
-    public CongruenceSystem(CongruenceSystem cs) {
+    @Override
+    public CongruenceSystem clone() {
         var pcs = new PointerByReference();
-        int result = ppl_new_Congruence_System_from_Congruence_System(pcs, cs.pplObj);
+        int result = ppl_new_Congruence_System_from_Congruence_System(pcs, pplObj);
         if (result < 0)
             throw new PPLError(result);
-        init(pcs.getValue());
-    }
-
-    /**
-     * Create a congruence system from a native object.
-     */
-    CongruenceSystem(Pointer pplObj) {
-        init(pplObj);
+        return new CongruenceSystem(pcs.getValue());
     }
 
     @Override
