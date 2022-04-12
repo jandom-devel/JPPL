@@ -1,68 +1,88 @@
 package it.unich.jppl;
 
+import it.unich.jppl.Property.ComplexityClass;
+
 /**
  * The abstract domain of closed polyehdra.
  */
 public class CPolyhedronDomain implements Domain<CPolyhedron> {
 
-    public CPolyhedron createProperty(long d, DegenerateElement kind) {
-        return new CPolyhedron(d, kind);
+    @Override
+    public CPolyhedron createEmpty(long d) {
+        return CPolyhedron.empty(d);
     }
 
-    public CPolyhedron createProperty(ConstraintSystem cs) {
-        return new CPolyhedron(cs);
+    @Override
+    public CPolyhedron createUniverse(long d) {
+        return CPolyhedron.universe(d);
     }
 
-    public CPolyhedron createProperty(ConstraintSystem cs, RecycleInput dummy) {
-        return new CPolyhedron(cs, dummy);
+    @Override
+    public CPolyhedron createFrom(ConstraintSystem cs) {
+        return CPolyhedron.from(cs);
     }
 
-    public CPolyhedron createProperty(CongruenceSystem cs) {
-        return new CPolyhedron(cs);
+    @Override
+    public CPolyhedron createRecycledFrom(ConstraintSystem cs) {
+        return CPolyhedron.recycledFrom(cs);
     }
 
-    public CPolyhedron createProperty(CongruenceSystem cs, RecycleInput dummy) {
-        return new CPolyhedron(cs, dummy);
+    @Override
+    public CPolyhedron createFrom(CongruenceSystem cs) {
+        return CPolyhedron.from(cs);
     }
 
-    public CPolyhedron createProperty(GeneratorSystem gs) {
-        return new CPolyhedron(gs);
+    @Override
+    public CPolyhedron createRecycledFrom(CongruenceSystem cs) {
+        return CPolyhedron.recycledFrom(cs);
     }
 
-    public CPolyhedron createProperty(GeneratorSystem gs, RecycleInput dummy) {
-        return new CPolyhedron(gs, dummy);
+    @Override
+    public CPolyhedron createFrom(GeneratorSystem gs) {
+        return CPolyhedron.from(gs);
     }
 
-    public CPolyhedron createProperty(CPolyhedron ph) {
-        return new CPolyhedron(ph);
+    @Override
+    public CPolyhedron createRecycledFrom(GeneratorSystem gs) {
+        return CPolyhedron.recycledFrom(gs);
     }
 
-    /**
-     * @param complexity is ignored
-     */
-    public CPolyhedron createProperty(CPolyhedron ph, ComplexityClass complexity) {
-        return new CPolyhedron(ph, complexity);
-    }
-
-    public CPolyhedron createProperty(NNCPolyhedron ph) {
-        return new CPolyhedron(ph);
-    }
-
-    /**
-     * @param complexity is ignored
-     */
-    public CPolyhedron createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
-        return new CPolyhedron(ph, complexity);
-    }
-
-    public CPolyhedron createProperty(DoubleBox box) {
-        return new CPolyhedron(box);
+    @Override
+    public CPolyhedron createFrom(CPolyhedron ph) {
+        return CPolyhedron.from(ph);
     }
 
     /**
      * @param complexity is ignored
      */
-    public CPolyhedron createProperty(DoubleBox box, ComplexityClass complexity) {
-        return new CPolyhedron(box, complexity);
+    @Override
+    public CPolyhedron createFrom(CPolyhedron ph, ComplexityClass complexity) {
+        return CPolyhedron.from(ph, complexity);
+    }
+
+    @Override
+    public CPolyhedron createFrom(NNCPolyhedron ph) {
+        return CPolyhedron.from(ph);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public CPolyhedron createFrom(NNCPolyhedron ph, ComplexityClass complexity) {
+        return CPolyhedron.from(ph, complexity);
+    }
+
+    @Override
+    public CPolyhedron createFrom(DoubleBox box) {
+        return CPolyhedron.from(box);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public CPolyhedron createFrom(DoubleBox box, ComplexityClass complexity) {
+        return CPolyhedron.from(box, complexity);
     }
 }

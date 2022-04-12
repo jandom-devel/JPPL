@@ -1,67 +1,89 @@
 package it.unich.jppl;
 
-/** The abstract doman of not-necessarily closed polyhedra. */
+import it.unich.jppl.Property.ComplexityClass;
+
+/**
+ * The abstract doman of not-necessarily closed polyhedra.
+ */
 public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
 
-    public NNCPolyhedron createProperty(long d, DegenerateElement kind) {
-        return new NNCPolyhedron(d, kind);
+    @Override
+    public NNCPolyhedron createEmpty(long d) {
+        return NNCPolyhedron.empty(d);
     }
 
-    public NNCPolyhedron createProperty(ConstraintSystem cs) {
-        return new NNCPolyhedron(cs);
+    @Override
+    public NNCPolyhedron createUniverse(long d) {
+        return NNCPolyhedron.universe(d);
     }
 
-    public NNCPolyhedron createProperty(ConstraintSystem cs, RecycleInput dummy) {
-        return new NNCPolyhedron(cs, dummy);
+    @Override
+    public NNCPolyhedron createFrom(ConstraintSystem cs) {
+        return NNCPolyhedron.from(cs);
     }
 
-    public NNCPolyhedron createProperty(CongruenceSystem cs) {
-        return new NNCPolyhedron(cs);
+    @Override
+    public NNCPolyhedron createRecycledFrom(ConstraintSystem cs) {
+        return NNCPolyhedron.recycledFrom(cs);
     }
 
-    public NNCPolyhedron createProperty(CongruenceSystem cs, RecycleInput dummy) {
-        return new NNCPolyhedron(cs, dummy);
+    @Override
+    public NNCPolyhedron createFrom(CongruenceSystem cs) {
+        return NNCPolyhedron.from(cs);
     }
 
-    public NNCPolyhedron createProperty(GeneratorSystem gs) {
-        return new NNCPolyhedron(gs);
+    @Override
+    public NNCPolyhedron createRecycledFrom(CongruenceSystem cs) {
+        return NNCPolyhedron.recycledFrom(cs);
     }
 
-    public NNCPolyhedron createProperty(GeneratorSystem gs, RecycleInput dummy) {
-        return new NNCPolyhedron(gs, dummy);
+    @Override
+    public NNCPolyhedron createFrom(GeneratorSystem gs) {
+        return NNCPolyhedron.from(gs);
     }
 
-    public NNCPolyhedron createProperty(NNCPolyhedron ph) {
-        return new NNCPolyhedron(ph);
+    @Override
+    public NNCPolyhedron createRecycledFrom(GeneratorSystem gs) {
+        return NNCPolyhedron.from(gs);
     }
 
-    /**
-     * @param complexity is ignored
-     */
-    public NNCPolyhedron createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
-        return new NNCPolyhedron(ph, complexity);
-    }
-
-    public NNCPolyhedron createProperty(CPolyhedron ph) {
-        return new NNCPolyhedron(ph);
-    }
-
-    /**
-     * @param complexity is ignored
-     */
-    public NNCPolyhedron createProperty(CPolyhedron ph, ComplexityClass complexity) {
-        return new NNCPolyhedron(ph, complexity);
-    }
-
-    public NNCPolyhedron createProperty(DoubleBox box) {
-        return new NNCPolyhedron(box);
+    @Override
+    public NNCPolyhedron createFrom(NNCPolyhedron ph) {
+        return NNCPolyhedron.from(ph);
     }
 
     /**
      * @param complexity is ignored
      */
-    public NNCPolyhedron createProperty(DoubleBox box, ComplexityClass complexity) {
-        return new NNCPolyhedron(box, complexity);
+    @Override
+    public NNCPolyhedron createFrom(NNCPolyhedron ph, ComplexityClass complexity) {
+        return NNCPolyhedron.from(ph, complexity);
+    }
+
+    @Override
+    public NNCPolyhedron createFrom(CPolyhedron ph) {
+        return NNCPolyhedron.from(ph);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public NNCPolyhedron createFrom(CPolyhedron ph, ComplexityClass complexity) {
+        return NNCPolyhedron.from(ph, complexity);
+    }
+
+    @Override
+    public NNCPolyhedron createFrom(DoubleBox box) {
+        return NNCPolyhedron.from(box);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public NNCPolyhedron createFrom(DoubleBox box, ComplexityClass complexity) {
+        return NNCPolyhedron.from(box, complexity);
     }
 
 }

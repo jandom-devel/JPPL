@@ -87,7 +87,7 @@ public class LinearExpression extends GeometricDescriptor<LinearExpression> {
     /**
      * Copies and returns the linear expression contained in the constraint c.
      */
-    public static LinearExpression of(Constraint c) {
+    public static LinearExpression from(Constraint c) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Constraint(ple, c.pplObj);
         if (result < 0)
@@ -98,7 +98,7 @@ public class LinearExpression extends GeometricDescriptor<LinearExpression> {
     /**
      * Copies and returns the linear expression contained in the generator g.
      */
-    public static LinearExpression of(Generator g) {
+    public static LinearExpression from(Generator g) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Generator(ple, g.pplObj);
         if (result < 0)
@@ -109,7 +109,7 @@ public class LinearExpression extends GeometricDescriptor<LinearExpression> {
     /**
      * Copies and returns the linear expression contained in the congruence c.
      */
-    public static LinearExpression of(Congruence c) {
+    public static LinearExpression from(Congruence c) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Congruence(ple, c.pplObj);
         if (result < 0)
@@ -118,7 +118,7 @@ public class LinearExpression extends GeometricDescriptor<LinearExpression> {
     }
 
     /*
-    public static LinearExpression of(GridGenerator g) {
+    public static LinearExpression from(GridGenerator g) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.pplObj);
         if (result < 0) throw new PPLError(result);

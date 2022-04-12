@@ -1,134 +1,109 @@
 package it.unich.jppl;
 
+import it.unich.jppl.Property.ComplexityClass;
 /**
  * The interface for abstract domains.
- * 
+ *
  * <p>
- * The interface Domain should be implemented by all classes which represents
- * an abstract domain. A {@code Domain<T>} is a factory for geometric objects of
- * type {@code T}.
+ * This interface is implemented by all classes representing an abstract domain.
+ * A {@code Domain<T>} is a factory for properties (semantic geomtric
+ * descriptors) of type {@code T}.
  * </p>
  */
 public interface Domain<T extends Property<T>> {
 
     /**
-     * Enumerates the kinds of degenerate abstract elements.
+     * Creates and returns an empty d-dimensional abstract object.
      */
-    public static enum DegenerateElement {
-        /** Referes to the universe element, i.e., the whole vector space. */
-        UNIVERSE,
-        /** Rgers to the empty element, i.e., the empty set. */
-        EMPTY
-    }
+    public T createEmpty(long d);
 
     /**
-     * Complexity pseudo-classes.
+     * Creates and returns an universe d-dimensional abstract object, i.e., the full
+     * vector space \(\mathbb{R}^d\).
      */
-    public static enum ComplexityClass {
-        /** Worst-case polynomial complexity. */
-        POLYNOMIAL_COMPLEXITY,
-        /** Worst-case exponential complexity but typically polynomial behavior. */
-        SIMPLEX_COMPLEXITY,
-        /** Any complexity. */
-        ANY_COMPLEXITY
-    }
+    public T createUniverse(long d);
 
     /**
-     * A tag enumeration.
-     * 
-     * <p>
-     * Tag enumeration used to distinguish those constructors that recycle the data
-     * structures of their arguments, instead of taking a copy.
-     * </p>
+     * Creates and returns an abstract object from the constraints in cs. The
+     * abstract object inherits the space dimension of cs.
      */
-    public static enum RecycleInput {
-        RECYCLE
-    }
+    public T createFrom(ConstraintSystem cs);
 
     /**
-     * Builds an abstract object with d space dimensions of the special type
-     * prescribed by kind.
+     * Creates and returns an abstract object from the constraints in cs, possibly
+     * recycling their internal structure. The abstract object inherits the space
+     * dimension of cs.
      */
-    public T createProperty(long d, DegenerateElement kind);
+    public T createRecycledFrom(ConstraintSystem cs);
 
     /**
-     * Builds an abstract object from the constraints in cs. The abstract object
-     * inherits the space dimension of cs.
+     * Creates and returns an abstract object from the congruences in cs. The
+     * abstract object inherits the space dimension of cs.
      */
-    public T createProperty(ConstraintSystem cs);
+    public T createFrom(CongruenceSystem cs);
 
     /**
-     * Builds an abstract object from the constraints in cs, possibly recycling its
-     * internal structure. The abstract object inherits the space dimension of cs.
+     * Creates and returns an abstract object from the congruences in cs, possibly
+     * recycling their internal structure. The abstract object inherits the space
+     * dimension of cs.
      */
-    public T createProperty(ConstraintSystem cs, RecycleInput dummy);
+    public T createRecycledFrom(CongruenceSystem cs);
 
     /**
-     * Builds an abstract object from the congruences in cs. The abstract object
-     * inherits the space dimension of cs.
+     * Creates and returns an abstract object from the generators in gs. The
+     * abstract object inherits the space dimension of gs.
      */
-    public T createProperty(CongruenceSystem cs);
+    public T createFrom(GeneratorSystem gs);
 
     /**
-     * Builds an abstract object from the congruences in cs, possibly recycling its
-     * internal structure. The abstract object inherits the space dimension of cs.
+     * Creates and returns an abstract object from the generators in gs, possibly
+     * recycling their internal structure. The abstract object inherits the space
+     * dimension of gs.
      */
-    public T createProperty(CongruenceSystem cs, RecycleInput dummy);
+    public T createRecycledFrom(GeneratorSystem gs);
 
     /**
-     * Builds an abstract object from the generators in gs. The abstract object
-     * inherits the space dimension of gs.
+     * Creates and returns a copy of the abstract object p.
      */
-    public T createProperty(GeneratorSystem gs);
+    public T createFrom(T p);
 
     /**
-     * Builds an abstract object from the generators in gs, possibly recycling its
-     * internal structure. The abstract object inherits the space dimension of gs.
-     */
-    public T createProperty(GeneratorSystem gs, RecycleInput dummy);
-
-    /**
-     * Builds a copy of the abstract object p.
-     */
-    public T createProperty(T p);
-
-    /**
-     * Builds a copy of the abstract object p, using an algorithm whose complexity
-     * does not exceed the one specified.
-     */
-    public T createProperty(T p, ComplexityClass complexity);
-
-    /**
-     * Builds an abstract object which over-approximates p.
-     */
-    public T createProperty(CPolyhedron p);
-
-    /**
-     * Builds an abstract object which over-approximates p, using an algorithm whose
+     * Creates and returns a copy of the abstract object p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createProperty(CPolyhedron p, ComplexityClass complexity);
+    public T createFrom(T p, ComplexityClass complexity);
 
     /**
-     * Builds an abstract object which over-approximates p.
+     * Creates and returns an abstract object which over-approximates p.
      */
-    public T createProperty(NNCPolyhedron p);
+    public T createFrom(CPolyhedron p);
 
     /**
-     * Builds an abstract object which over-approximates p, using an algorithm whose
+     * Creates and returns an abstract object which over-approximates p, using an
+     * algorithm whose complexity does not exceed the one specified.
+     */
+    public T createFrom(CPolyhedron p, ComplexityClass complexity);
+
+    /**
+     * Creates and returns an abstract object which over-approximates p.
+     */
+    public T createFrom(NNCPolyhedron p);
+
+    /**
+     * Creates and returns an abstract object which over-approximates p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createProperty(NNCPolyhedron p, ComplexityClass complexity);
+    public T createFrom(NNCPolyhedron p, ComplexityClass complexity);
 
     /**
-     * Builds an abstract object which over-approximates p.
+     * Creates and returns an abstract object which over-approximates p.
      */
-    public T createProperty(DoubleBox p);
+    public T createFrom(DoubleBox p);
 
     /**
-     * Builds an abstract object which over-approximates p, using an algorithm whose
+     * Creates and returns an abstract object which over-approximates p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createProperty(DoubleBox p, ComplexityClass complexity);
+    public T createFrom(DoubleBox p, ComplexityClass complexity);
 
 }

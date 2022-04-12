@@ -3,7 +3,6 @@ package it.unich.jppl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import it.unich.jppl.Constraint.ConstraintType;
-import it.unich.jppl.Domain.DegenerateElement;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,7 @@ public class DoubleBoxTest {
         le.add(Coefficient.valueOf(-1), 1);
         var c2 = Constraint.of(le, ConstraintType.EQUAL);
 
-        var box = new DoubleBox(2, DegenerateElement.UNIVERSE);
+        var box = DoubleBox.universe(2);
         assertFalse(box.constraints(0));
         box.addConstraint(c1);
 

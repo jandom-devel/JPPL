@@ -1,69 +1,89 @@
 package it.unich.jppl;
 
+import it.unich.jppl.Property.ComplexityClass;
+
 /**
  * The abstract domain of boxes, with bounds specified by doubles.
  */
 public class DoubleBoxDomain implements Domain<DoubleBox> {
 
-    public DoubleBox createProperty(long d, DegenerateElement kind) {
-        return new DoubleBox(d, kind);
+    @Override
+    public DoubleBox createEmpty(long d) {
+        return DoubleBox.empty(d);
     }
 
-    public DoubleBox createProperty(ConstraintSystem cs) {
-        return new DoubleBox(cs);
+    @Override
+    public DoubleBox createUniverse(long d) {
+        return DoubleBox.universe(d);
     }
 
-    public DoubleBox createProperty(ConstraintSystem cs, RecycleInput dummy) {
-        return new DoubleBox(cs, dummy);
+    @Override
+    public DoubleBox createFrom(ConstraintSystem cs) {
+        return DoubleBox.from(cs);
     }
 
-    public DoubleBox createProperty(CongruenceSystem cs) {
-        return new DoubleBox(cs);
+    @Override
+    public DoubleBox createRecycledFrom(ConstraintSystem cs) {
+        return DoubleBox.recycledFrom(cs);
     }
 
-    public DoubleBox createProperty(CongruenceSystem cs, RecycleInput dummy) {
-        return new DoubleBox(cs, dummy);
+    @Override
+    public DoubleBox createFrom(CongruenceSystem cs) {
+        return DoubleBox.from(cs);
     }
 
-    public DoubleBox createProperty(GeneratorSystem gs) {
-        return new DoubleBox(gs);
+    @Override
+    public DoubleBox createRecycledFrom(CongruenceSystem cs) {
+        return DoubleBox.recycledFrom(cs);
     }
 
-    public DoubleBox createProperty(GeneratorSystem gs, RecycleInput dummy) {
-        return new DoubleBox(gs, dummy);
+    @Override
+    public DoubleBox createFrom(GeneratorSystem gs) {
+        return DoubleBox.from(gs);
     }
 
-    public DoubleBox createProperty(DoubleBox box) {
-        return new DoubleBox(box);
+    @Override
+    public DoubleBox createRecycledFrom(GeneratorSystem gs) {
+        return DoubleBox.recycledFrom(gs);
     }
 
-    /**
-     * @param complexity is ignored
-     */
-    public DoubleBox createProperty(DoubleBox box, ComplexityClass complexity) {
-        return new DoubleBox(box, complexity);
-    }
-
-    public DoubleBox createProperty(CPolyhedron ph) {
-        return new DoubleBox(ph);
-    }
-
-    /**
-     * @param complexity is ignored
-     */
-    public DoubleBox createProperty(CPolyhedron ph, ComplexityClass complexity) {
-        return new DoubleBox(ph, complexity);
-    }
-
-    public DoubleBox createProperty(NNCPolyhedron ph) {
-        return new DoubleBox(ph);
+    @Override
+    public DoubleBox createFrom(DoubleBox box) {
+        return DoubleBox.from(box);
     }
 
     /**
      * @param complexity is ignored
      */
-    public DoubleBox createProperty(NNCPolyhedron ph, ComplexityClass complexity) {
-        return new DoubleBox(ph, complexity);
+    @Override
+    public DoubleBox createFrom(DoubleBox box, ComplexityClass complexity) {
+        return DoubleBox.from(box, complexity);
+    }
+
+    @Override
+    public DoubleBox createFrom(CPolyhedron ph) {
+        return DoubleBox.from(ph);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public DoubleBox createFrom(CPolyhedron ph, ComplexityClass complexity) {
+        return DoubleBox.from(ph, complexity);
+    }
+
+    @Override
+    public DoubleBox createFrom(NNCPolyhedron ph) {
+        return DoubleBox.from(ph);
+    }
+
+    /**
+     * @param complexity is ignored
+     */
+    @Override
+    public DoubleBox createFrom(NNCPolyhedron ph, ComplexityClass complexity) {
+        return DoubleBox.from(ph, complexity);
     }
 
 }

@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import it.unich.jppl.Constraint.ConstraintType;
-import it.unich.jppl.Domain.DegenerateElement;
 import it.unich.jppl.Generator.GeneratorType;
 import it.unich.jppl.Property.WideningToken;
 
@@ -21,7 +20,7 @@ public class PolyhedronTest {
         var le = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
         var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
 
-        var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
+        var ph1 = CPolyhedron.universe(3);
         assertTrue(ph1.isOK());
         assertTrue(ph1.isUniverse());
         assertFalse(ph1.isEmpty());
@@ -33,7 +32,7 @@ public class PolyhedronTest {
         assertFalse(ph1.constraints(0));
         assertEquals(STRICTLY_INTERSECTS, ph1.getRelationWithConstraint(c1));
 
-        var ph2 = new CPolyhedron(3, DegenerateElement.EMPTY);
+        var ph2 = CPolyhedron.empty(3);
         assertTrue(ph2.isOK());
         assertFalse(ph2.isUniverse());
         assertTrue(ph2.isEmpty());
@@ -51,7 +50,7 @@ public class PolyhedronTest {
         var le = LinearExpression.zero().add(Coefficient.valueOf(3)).add(Coefficient.valueOf(1), 0);
         var c1 = Constraint.of(le, ConstraintType.GREATER_THAN);
 
-        var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
+        var ph1 = NNCPolyhedron.universe(3);
         assertTrue(ph1.isOK());
         assertTrue(ph1.isUniverse());
         assertFalse(ph1.isEmpty());
@@ -63,7 +62,7 @@ public class PolyhedronTest {
         assertFalse(ph1.constraints(0));
         assertEquals(STRICTLY_INTERSECTS, ph1.getRelationWithConstraint(c1));
 
-        var ph2 = new NNCPolyhedron(3, DegenerateElement.EMPTY);
+        var ph2 = NNCPolyhedron.empty(3);
         assertTrue(ph2.isOK());
         assertFalse(ph2.isUniverse());
         assertTrue(ph2.isEmpty());
@@ -83,7 +82,7 @@ public class PolyhedronTest {
         le.add(Coefficient.valueOf(-1), 1);
         var c2 = Constraint.of(le, ConstraintType.EQUAL);
 
-        var ph = new NNCPolyhedron(2, DegenerateElement.UNIVERSE);
+        var ph = NNCPolyhedron.universe(2);
         ph.addConstraint(c1).addConstraint(c2);
         var constraints = ph.getConstraints();
         for (var c : constraints)
@@ -98,13 +97,13 @@ public class PolyhedronTest {
                 ConstraintType.GREATER_OR_EQUAL);
         var c2 = Constraint.of(LinearExpression.zero().add(Coefficient.valueOf(-1)).add(Coefficient.valueOf(1), 2),
                 ConstraintType.GREATER_OR_EQUAL);
-        var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0).addConstraint(c1).addConstraint(c2);
+        var ph = CPolyhedron.universe(3).addConstraint(c0).addConstraint(c1).addConstraint(c2);
         ph.unconstrainSpaceDimension(0);
-        assertEquals(new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1).addConstraint(c2), ph);
-        ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0).addConstraint(c1).addConstraint(c2);
+        assertEquals(CPolyhedron.universe(3).addConstraint(c1).addConstraint(c2), ph);
+        ph = CPolyhedron.universe(3).addConstraint(c0).addConstraint(c1).addConstraint(c2);
         long[] ds = { 0, 2 };
         ph.unconstrainSpaceDimensions(ds);
-        assertEquals(new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1), ph);
+        assertEquals(CPolyhedron.universe(3).addConstraint(c1), ph);
     }
 
     @Test
@@ -113,8 +112,8 @@ public class PolyhedronTest {
         var c0 = Constraint.of(le.clone().add(Coefficient.valueOf(-3)), ConstraintType.GREATER_OR_EQUAL);
         var c1 = Constraint.of(le.clone().add(Coefficient.valueOf(-2)), ConstraintType.GREATER_OR_EQUAL);
         var c2 = Constraint.of(le.clone().add(Coefficient.valueOf(-1)), ConstraintType.GREATER_OR_EQUAL);
-        var ph = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c0);
-        var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c1);
+        var ph = CPolyhedron.universe(3).addConstraint(c0);
+        var ph1 = CPolyhedron.universe(3).addConstraint(c1);
         var w = new WideningToken(1);
         ph1.H79WideningAssign(ph, w);
         assertEquals(0, w.tokens);
@@ -122,7 +121,7 @@ public class PolyhedronTest {
         assertTrue(optMin.isPresent());
         var min = optMin.get();
         assertEquals(Coefficient.valueOf(2), min.supN);
-        var ph2 = new CPolyhedron(3, DegenerateElement.UNIVERSE).addConstraint(c2);
+        var ph2 = CPolyhedron.universe(3).addConstraint(c2);
         ph2.H79WideningAssign(ph1, w);
         assertTrue(ph2.minimize(le).isEmpty());
     }
@@ -134,7 +133,7 @@ public class PolyhedronTest {
         lec.add(Coefficient.valueOf(-1), 1);
         var c2 = Constraint.of(lec, ConstraintType.EQUAL);
 
-        var ph1 = new CPolyhedron(3, DegenerateElement.UNIVERSE);
+        var ph1 = CPolyhedron.universe(3);
         ph1.refineWithConstraint(c1);
         assertEquals(3, ph1.getSpaceDimension());
         assertEquals(3, ph1.getAffineDimension());
@@ -172,7 +171,7 @@ public class PolyhedronTest {
         assertTrue(memex > 0);
         assertTrue(memtot >= memex);
 
-        var ph2 = new CPolyhedron(ph1);
+        var ph2 = ph1.clone();
         assertEquals(ph1, ph2);
 
         // contains / strictlyContains
@@ -192,7 +191,7 @@ public class PolyhedronTest {
         lec.add(Coefficient.valueOf(-1), 1);
         var c2 = Constraint.of(lec, ConstraintType.EQUAL);
 
-        var ph1 = new NNCPolyhedron(3, DegenerateElement.UNIVERSE);
+        var ph1 = NNCPolyhedron.universe(3);
         ph1.refineWithConstraint(c1);
         assertTrue(ph1.constraints(0));
         assertFalse(ph1.constraints(2));
@@ -214,7 +213,7 @@ public class PolyhedronTest {
         res = ph1.maximize(le);
         assertTrue(res.isEmpty());
 
-        var ph2 = new CPolyhedron(ph1);
+        var ph2 = CPolyhedron.from(ph1);
         assertNotEquals(ph1, ph2);
 
         ph2.refineWithConstraint(c2);

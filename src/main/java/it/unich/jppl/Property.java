@@ -4,14 +4,51 @@ import it.unich.jppl.Constraint.ConstraintType;
 
 import java.util.Optional;
 
+/**
+ * The interface for properties, i.e., elements of an abstract domain.
+ *
+ * <p>
+ * Properties are semantic geometric descriptors, i.e., subsets of a
+ * d-dimentsional vector space \(\mathbb{R}^d\). They are also called abstract
+ * objects, since they are elements of an abstract domain. Refer to the <a href=
+ * "https://www.bugseng.com/external/ppl/documentation/user/ppl-user-c-interface-1.2-html/">PPL
+ * official documentation</a> for further information.
+ * </p>
+ */
 public interface Property<T extends Property<T>> {
 
+    /**
+     * Class containing the result of a minimize(WithPoint) or maximize(WithPoint)
+     * method.
+     */
     static class ExtremalOutput {
+        /**
+         * The numerator of a fraction which is the result of the minimization or
+         * maximization method.
+         */
         public final Coefficient supN;
+
+        /**
+         * The denominator of a fraction which is the result of the minimization or
+         * maximization method.
+         */
         public final Coefficient supD;
+
+        /**
+         * This is true if the extremal value is a maximum or minimum, false if it only
+         * a greatest lower bound or lowest upper bound.
+         */
         public final boolean isMaximum;
+
+        /**
+         * This is the point in the abstract object where the extremal value is
+         * obtained. May be null.
+         */
         public final Generator point;
 
+        /**
+         * Creates an ExtremalOutput by providing all required fields.
+         */
         ExtremalOutput(Coefficient supN, Coefficient supD, boolean isMaximum, Generator point) {
             this.supN = supN;
             this.supD = supD;
@@ -21,7 +58,19 @@ public interface Property<T extends Property<T>> {
     }
 
     /**
-     * Class of constants representing the relation between a contraint and a
+     * Complexity pseudo-classes.
+     */
+    public static enum ComplexityClass {
+        /** Worst-case polynomial complexity. */
+        POLYNOMIAL_COMPLEXITY,
+        /** Worst-case exponential complexity but typically polynomial behavior. */
+        SIMPLEX_COMPLEXITY,
+        /** Any complexity. */
+        ANY_COMPLEXITY
+    }
+
+    /**
+     * Class of constants representing the relation between a contraint and an
      * geometric object.
      */
     public static class RelationWithConstraint {
@@ -49,23 +98,48 @@ public interface Property<T extends Property<T>> {
 
     /**
      * Class of constants representing the relation between a generator and a
-     * geometric object. At the moment, there is a single valid relation which
-     * is {@code SUBSUMES}.
+     * geometric object. At the moment, there is a single valid relation which is
+     * {@code SUBSUMES}.
      */
     public static class RelationWithGenerator {
-        /** It mans that adding the generator would not change the geometric object. */
+
+        /**
+         * It mans that adding the generator would not change the geometric object.
+         */
         public static final int SUBSUMES = 1;
     }
 
+    /**
+     * A class which holds an integer value which is the number of available tokens
+     * for a widening with tokens.
+     */
     public static class WideningToken {
-        public int tokens;
+        /**
+         * Number of abailable tokens.
+         */
+        int tokens;
 
+        /**
+         * Returns the current number of tokens.
+         */
+        int getTokens() {
+            return tokens;
+        }
+
+        /**
+         * Set the number of available tokens.
+         */
+        void setTokens(int n) {
+            tokens =  n;
+        }
+
+        /**
+         * Creates a WideningToken object by specifying the number of initial tokens.
+         */
         WideningToken(int tokens) {
             this.tokens = tokens;
         }
     }
-
-    public T assign(T p);
 
     public long getSpaceDimension();
 
