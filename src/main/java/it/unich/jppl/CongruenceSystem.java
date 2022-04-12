@@ -7,33 +7,26 @@ import it.unich.jppl.LibPPL.SizeTByReference;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
  * A system of linear congruences.
- *
- * <p>
- * An object of the class CongruenceSystem is a system of linear congruences,
- * i.e., a multiset of objects of the class Congruence. When inserting
- * congruences in a system, space dimensions are automatically adjusted so that
- * all the congruences in the system are defined on the same vector space.
- * </p>
  */
-public class CongruenceSystem implements Iterable<Congruence> {
-    Pointer pplObj;
+public class CongruenceSystem extends GeometricDescriptorsSystem<Congruence, CongruenceSystem> {
 
     /**
-     * Enumerates the possible zero-dimensional CongruenceSystem which it is
-     * possible to build with the CongruenceSystem constructor.
+     * Enumerates the zero-dimensional congruence systems which it is possible to
+     * build with the CongruenceSystem constructor.
      */
     public enum ZeroDimCongruenceSystem {
-        /** Represents the empty zero-dimensional CongruenceSystem. */
+        /**
+         * Represents the empty zero-dimensional congruence system.
+         */
         EMPTY,
         /**
-         * Represents the zero-dimensional CongruenceSystem that contains only the
-         * falsity zero-dimensionality congruence.
+         * Represents the zero-dimensional congruence system that contains only the
+         * falsity zero-dimensional congruence.
          *
          * @see Congruence#Congruence(ZeroDimCongruence type)
          */
@@ -67,11 +60,11 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * An iterator over a CongruenceSystem.
+     * An iterator over a congruence system.
      *
      * <p>
      * Note that the congruences extracted from the iterator are not going to
-     * survive operations which manipulate the original CongruenceSystem.
+     * survive operations which manipulate the original congruence system.
      * </p>
      */
     public class CongruenceSystemIterator implements Iterator<Congruence> {
@@ -111,8 +104,8 @@ public class CongruenceSystem implements Iterable<Congruence> {
 
         /**
          * Returns the next element in the iteration. Note that the congruence extracted
-         * from the iterator is not going to survive operations which manipulate the
-         * original CongruenceSystem.
+         * from the iterator are not going to survive operations which manipulate the
+         * original congruence system.
          */
         @Override
         public Congruence next() {
@@ -135,14 +128,14 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * Returns an empty zero-dimensional CongruenceSystem.
+     * Creates an empty zero-dimensional congruence system.
      */
     public CongruenceSystem() {
         this(ZeroDimCongruenceSystem.EMPTY);
     }
 
     /**
-     * Returns a zero-dimensional CongruenceSystem according of the specified type.
+     * Creates a zero-dimensional congruence system of the specified type.
      */
     public CongruenceSystem(ZeroDimCongruenceSystem type) {
         var pcs = new PointerByReference();
@@ -154,7 +147,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * Returns a new CongruenceSystem containing only a copy of the Congruence c.
+     * Create a congruence system containing only a copy of the congruence c.
      */
     public CongruenceSystem(Congruence c) {
         var pcs = new PointerByReference();
@@ -165,7 +158,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * Returns a copy of the CongruenceSystem cs.
+     * Create a copy of the congruence system cs.
      */
     public CongruenceSystem(CongruenceSystem cs) {
         var pcs = new PointerByReference();
@@ -176,25 +169,21 @@ public class CongruenceSystem implements Iterable<Congruence> {
     }
 
     /**
-     * Returns a CongruenceSystem obtained from the specified native object.
+     * Create a congruence system from a native object.
      */
     CongruenceSystem(Pointer pplObj) {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this CongruenceSystem to a copy of the CongruenceSystem cs.
-     */
-    public CongruenceSystem assign(CongruenceSystem cs) {
+    @Override
+    CongruenceSystem assign(CongruenceSystem cs) {
         int result = ppl_assign_Congruence_System_from_Congruence_System(pplObj, cs.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
-    /**
-     * Returns the space dimension of this CongruenceSystem.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Congruence_System_space_dimension(pplObj, m);
@@ -203,10 +192,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
         return m.getValue().longValue();
     }
 
-    /**
-     * Return true if and only if this CongruenceSystem contains no (non-trivial)
-     * congruences.
-     */
+    @Override
     public boolean isEmpty() {
         int result = ppl_Congruence_System_empty(pplObj);
         if (result < 0)
@@ -214,21 +200,15 @@ public class CongruenceSystem implements Iterable<Congruence> {
         return result > 0;
     }
 
-    /**
-     * Returns true if this CongruenceSystem satisfies all its implementation
-     * invariants; returns false and perhaps makes some noise if it is broken.
-     * Useful for debugging purposes.
-     */
-    public boolean isOK() {
+    @Override
+    boolean isOK() {
         int result = ppl_Congruence_System_OK(pplObj);
         if (result < 0)
             throw new PPLError(result);
         return result > 0;
     }
 
-    /**
-     * Removes all the congruences from this CongruenceSystem.
-     */
+    @Override
     public CongruenceSystem clear() {
         int result = ppl_Congruence_System_clear(pplObj);
         if (result < 0)
@@ -236,9 +216,7 @@ public class CongruenceSystem implements Iterable<Congruence> {
         return this;
     }
 
-    /**
-     * Add the Congruence c to this CongruenceSystem.
-     */
+    @Override
     public CongruenceSystem add(Congruence c) {
         int result = ppl_Congruence_System_insert_Congruence(pplObj, c.pplObj);
         if (result < 0)
@@ -246,25 +224,14 @@ public class CongruenceSystem implements Iterable<Congruence> {
         return this;
     }
 
-    /**
-     * Returns an iterator for this Congruencesystem.
-     */
+    @Override
     public Iterator<Congruence> iterator() {
         return new CongruenceSystemIterator();
     }
 
-    /**
-     * Returns a string representation of this CongruenceSystem.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Congruence_System(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Congruence_System(pstr, pplObj);
     }
+
 }

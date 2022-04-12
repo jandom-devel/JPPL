@@ -5,12 +5,11 @@ import static it.unich.jppl.LibPPL.*;
 import it.unich.jppl.LibPPL.SizeT;
 import it.unich.jppl.LibPPL.SizeTByReference;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * A linear conguence
+ * A linear congruence.
  *
  * <p>
  * An object of the class Congruence is a congruence:
@@ -21,7 +20,7 @@ import com.sun.jna.ptr.PointerByReference;
  * of variable \(x_i\), \(b\) is the integer inhomogeneous term and \(m\) is the
  * integer modulus; if \(m = 0\), then $\cg$ represents the equality congruence
  * \(\sum_{i=0}^{n-1} a_i x_i + b = 0\) and, if \(m \neq 0\), then the
- * congruence \(\text{cg}\) is said to be a <em>proper</em> congruence.
+ * congruence \(\text{cg}\) is said to be a <em>proper congruence</em>.
  * </p>
  * <p>
  * If using only public methods, the Congruence class may be considered
@@ -29,20 +28,19 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Congruence {
-    Pointer pplObj;
+public class Congruence extends GeometricDescriptor<Congruence> {
 
     /**
-     * Enumeration for the two possible congruences of space dimension 0. It is used
-     * by the constructor of Congruence.
+     * Enumerates the zero-dimensional congruences which it is possible to build
+     * with the Congruence constructor.
      */
     public static enum ZeroDimCongruence {
         /**
-         * Refers to the false (zero-dimensional) congruence \(0 \equiv 1 \pmod 0\).
+         * Refers to the false zero-dimensional congruence \(0 \equiv 1 \pmod 0\).
          */
         FALSITY,
         /**
-         * Refers to the true (zero-dimensional) congruence \(0 \equiv 1 \pmod 1\), also
+         * Refers to the true zero-dimensional congruence \(0 \equiv 1 \pmod 1\), also
          * known as the <em>integrality congruence</em>.
          */
         INTEGRALITY
@@ -67,7 +65,7 @@ public class Congruence {
     }
 
     /**
-     * Returns the new Congruence \(le \equiv 0 \pmod m\).
+     * Creates the new congruence \(le \equiv 0 \pmod m\).
      */
     public Congruence(LinearExpression le, Coefficient m) {
         var pc = new PointerByReference();
@@ -78,7 +76,7 @@ public class Congruence {
     }
 
     /**
-     * Returns the zero-dimensional congruence specified by type
+     * Creates the zero-dimensional congruence specified by type.
      */
     public Congruence(ZeroDimCongruence type) {
         var pc = new PointerByReference();
@@ -90,7 +88,7 @@ public class Congruence {
     }
 
     /**
-     * Returns a copy of the Congruence c.
+     * Creates a copy of the congruence c.
      */
     public Congruence(Congruence c) {
         var pc = new PointerByReference();
@@ -101,15 +99,13 @@ public class Congruence {
     }
 
     /**
-     * Returns a Congruence obtained from the specified native object.
+     * Creates a congruence from a native object.
      */
     Congruence(Pointer pplObj) {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this Congruence to a copy of the Congruence c.
-     */
+    @Override
     Congruence assign(Congruence c) {
         int result = ppl_assign_Congruence_from_Congruence(pplObj, c.pplObj);
         if (result < 0)
@@ -117,9 +113,7 @@ public class Congruence {
         return this;
     }
 
-    /**
-     * Returns the space dimension of this Congruence.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Congruence_space_dimension(pplObj, m);
@@ -128,9 +122,7 @@ public class Congruence {
         return m.getValue().longValue();
     }
 
-    /**
-     * Returns the Coefficient for the variable \(x_i\).
-     */
+    @Override
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
         int result = ppl_Congruence_coefficient(pplObj, new SizeT(var), n.pplObj);
@@ -139,57 +131,21 @@ public class Congruence {
         return n;
     }
 
-    /**
-     * Returns the inhomogeneous term of this Congruence.
-     */
-    public Coefficient getInhomogeneousTerm() {
-        var n = new Coefficient();
-        int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
-    }
-
-    /**
-     * Returns the modulus of this Congruence.
-     */
-    public Coefficient getModulus() {
-        var n = new Coefficient();
-        int result = ppl_Congruence_modulus(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
-    }
-
-    /**
-     * Returns true if this Congruence satisfies all its implementation invariants;
-     * returns false and perhaps makes some noise if it is broken. Useful for
-     * debugging purposes.
-     */
-    public boolean isOK() {
+    @Override
+    boolean isOK() {
         int result = ppl_Congruence_OK(pplObj);
         if (result < 0)
             throw new PPLError(result);
         return result > 0;
     }
 
-    /**
-     * Returns the string representation of this Congruence.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Congruence(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Congruence(pstr, pplObj);
     }
 
     /**
-     * Returns whether obj is the same as this Congruence. Two congruences are the
+     * Returns whether obj is the same as this congruence. Two congruences are the
      * same if they have the same space dimension, coefficients, inhomogeneous term
      * and modulus.
      */
@@ -216,5 +172,27 @@ public class Congruence {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns the inhomogeneous term of this congruence.
+     */
+    public Coefficient getInhomogeneousTerm() {
+        var n = new Coefficient();
+        int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
+    }
+
+    /**
+     * Returns the modulus of this congruence.
+     */
+    public Coefficient getModulus() {
+        var n = new Coefficient();
+        int result = ppl_Congruence_modulus(pplObj, n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
     }
 }

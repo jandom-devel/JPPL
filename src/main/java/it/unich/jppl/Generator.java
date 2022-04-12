@@ -5,13 +5,12 @@ import static it.unich.jppl.LibPPL.*;
 import it.unich.jppl.LibPPL.SizeT;
 import it.unich.jppl.LibPPL.SizeTByReference;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
  * A line, ray, point or closure point.
- * 
+ *
  * <p>
  * An object of the class Generator is one of the following:
  * </p>
@@ -26,10 +25,13 @@ import com.sun.jna.ptr.PointerByReference;
  * where \(n\) is the dimension of the space and, for points and closure points,
  * \(d &gt; 0\) is the divisor.
  * </p>
- * 
+ * <p>
+ * If using only public methods, the Congruence class may be considered
+ * immutable. Almost all methods throw {@link PPLError} when the underlying PPL
+ * library generates an error.
+ * </p>
  */
-public class Generator {
-    Pointer pplObj;
+public class Generator extends GeometricDescriptor<Generator> {
 
     /**
      * Enumerates the possible types of a generator.
@@ -44,14 +46,14 @@ public class Generator {
          */
         static GeneratorType valueOf(int t) {
             switch (t) {
-                case 0:
-                    return LINE;
-                case 1:
-                    return RAY;
-                case 2:
-                    return POINT;
-                case 3:
-                    return CLOSURE_POINT;
+            case 0:
+                return LINE;
+            case 1:
+                return RAY;
+            case 2:
+                return POINT;
+            case 3:
+                return CLOSURE_POINT;
             }
             throw new IllegalStateException("Unexpected generator type " + t);
         }
@@ -151,9 +153,7 @@ public class Generator {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this Generator to a copy of the Generator g.
-     */
+    @Override
     public Generator assign(Generator g) {
         int result = ppl_assign_Generator_from_Generator(pplObj, g.pplObj);
         if (result < 0)
@@ -161,9 +161,7 @@ public class Generator {
         return this;
     }
 
-    /**
-     * Returns the space dimension of this Generator.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Generator_space_dimension(pplObj, m);
@@ -172,19 +170,7 @@ public class Generator {
         return m.getValue().longValue();
     }
 
-    /**
-     * Returns the type of this Generator.
-     */
-    public GeneratorType getType() {
-        int result = ppl_Generator_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return GeneratorType.valueOf(result);
-    }
-
-    /**
-     * Returns the Coefficient for the variable \(x_i\).
-     */
+    @Override
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
         int result = ppl_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
@@ -193,22 +179,7 @@ public class Generator {
         return n;
     }
 
-    /**
-     * Returns the divisor of this Generator.
-     */
-    public Coefficient getDivisor() {
-        var d = new Coefficient();
-        int result = ppl_Generator_divisor(pplObj, d.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return d;
-    }
-
-    /**
-     * Returns true if this Generator satisfies all its implementation invariants;
-     * returns false and perhaps makes some noise if it is broken. Useful for
-     * debugging purposes.
-     */
+    @Override
     public boolean isOK() {
         int result = ppl_Generator_OK(pplObj);
         if (result < 0)
@@ -216,25 +187,15 @@ public class Generator {
         return result > 0;
     }
 
-    /**
-     * Returns the string representation of this Generator.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Generator(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Generator(pstr, pplObj);
     }
 
     /**
      * Returns whether obj is the same as this Generator. Two generators are the
-     * same if they have the same space type, dimension, coefficients. For points and
-     * closure point, the divisor should also be equal.
+     * same if they have the same space type, dimension, coefficients. For points
+     * and closure point, the divisor should also be equal.
      */
     @Override
     public boolean equals(Object obj) {
@@ -257,4 +218,26 @@ public class Generator {
         }
         return false;
     }
+
+    /**
+     * Returns the type of this Generator.
+     */
+    public GeneratorType getType() {
+        int result = ppl_Generator_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return GeneratorType.valueOf(result);
+    }
+
+    /**
+     * Returns the divisor of this Generator.
+     */
+    public Coefficient getDivisor() {
+        var d = new Coefficient();
+        int result = ppl_Generator_divisor(pplObj, d.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return d;
+    }
+
 }

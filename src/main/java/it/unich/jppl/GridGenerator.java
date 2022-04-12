@@ -5,13 +5,12 @@ import static it.unich.jppl.LibPPL.*;
 import it.unich.jppl.LibPPL.SizeT;
 import it.unich.jppl.LibPPL.SizeTByReference;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
  * A grid line, parameter or grid point.
- * 
+ *
  * <p>
  * An object of the class GridGenerator is one of the following:
  * </p>
@@ -22,12 +21,10 @@ import com.sun.jna.ptr.PointerByReference;
  * </ul>
  * <p>
  * where \(n\) is the dimension of the space and, for grid_points and
- * parameters,
- * \(d &gt; 0\) is the divisor.
+ * parameters, \(d &gt; 0\) is the divisor.
  * </p>
  */
-public class GridGenerator {
-    Pointer pplObj;
+public class GridGenerator extends GeometricDescriptor<GridGenerator> {
 
     /**
      * Enumerates the possible types of a grid generator.
@@ -42,12 +39,12 @@ public class GridGenerator {
          */
         static GridGeneratorType valueOf(int t) {
             switch (t) {
-                case 0:
-                    return LINE;
-                case 1:
-                    return PARAMETER;
-                case 2:
-                    return POINT;
+            case 0:
+                return LINE;
+            case 1:
+                return PARAMETER;
+            case 2:
+                return POINT;
             }
             throw new IllegalStateException("Unexpected GridGenerator type " + t);
         }
@@ -123,19 +120,15 @@ public class GridGenerator {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this GridGenerator to a copy of the GridGenerator g.
-     */
-    public GridGenerator assign(GridGenerator g) {
+    @Override
+    GridGenerator assign(GridGenerator g) {
         int result = ppl_assign_Grid_Generator_from_Grid_Generator(pplObj, g.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
-    /**
-     * Returns the space dimension of this GridGenerator.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Grid_Generator_space_dimension(pplObj, m);
@@ -144,19 +137,7 @@ public class GridGenerator {
         return m.getValue().longValue();
     }
 
-    /**
-     * Returns the type of this GridGenerator.
-     */
-    public GridGeneratorType getType() {
-        int result = ppl_Grid_Generator_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return GridGeneratorType.valueOf(result);
-    }
-
-    /**
-     * Returns the Coefficient for the variable \(x_i\).
-     */
+    @Override
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
         int result = ppl_Grid_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
@@ -165,22 +146,7 @@ public class GridGenerator {
         return n;
     }
 
-    /**
-     * Returns the divisor of this GridGenerator.
-     */
-    public Coefficient getDivisor() {
-        var d = new Coefficient();
-        int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return d;
-    }
-
-    /**
-     * Returns true if this GridGenerator satisfies all its implementation
-     * invariants; returns false and perhaps makes some noise if it is broken.
-     * Useful for debugging purposes.
-     */
+    @Override
     public boolean isOK() {
         int result = ppl_Grid_Generator_OK(pplObj);
         if (result < 0)
@@ -188,26 +154,15 @@ public class GridGenerator {
         return result > 0;
     }
 
-    /**
-     * Returns the string representation of this GridGenerator.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Grid_Generator(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Grid_Generator(pstr, pplObj);
     }
 
     /**
      * Returns whether obj is the same as this GridGenerator. Two grid generators
      * are the same if they have the same type, space dimensions and coefficients.
-     * For points
-     * and parametes, the divisor should also be equal.
+     * For points and parametes, the divisor should also be equal.
      */
     @Override
     public boolean equals(Object obj) {
@@ -231,4 +186,26 @@ public class GridGenerator {
         }
         return false;
     }
+
+    /**
+     * Returns the type of this GridGenerator.
+     */
+    public GridGeneratorType getType() {
+        int result = ppl_Grid_Generator_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return GridGeneratorType.valueOf(result);
+    }
+
+    /**
+     * Returns the divisor of this GridGenerator.
+     */
+    public Coefficient getDivisor() {
+        var d = new Coefficient();
+        int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return d;
+    }
+
 }

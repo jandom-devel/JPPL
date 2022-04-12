@@ -5,7 +5,6 @@ import static it.unich.jppl.LibPPL.*;
 import it.unich.jppl.LibPPL.SizeT;
 import it.unich.jppl.LibPPL.SizeTByReference;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -30,8 +29,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Constraint {
-    Pointer pplObj;
+public class Constraint extends GeometricDescriptor<Constraint> {
 
     /**
      * Enumerates the possible types of a constraint.
@@ -49,7 +47,7 @@ public class Constraint {
         GREATER_THAN;
 
         /**
-         * Returns the enum corrisponding to its ordinal value.
+         * Returns the ConstraintType corrisponding to its ordinal value.
          *
          * @throws IllegalArgumentException if t is not a valid ordinal value.
          */
@@ -71,15 +69,17 @@ public class Constraint {
     }
 
     /**
-     * Enumeration for the two possible constraints of space dimension 0. It is used
-     * by the constructor of Constraint.
+     * Enumerates the zero-dimensional constraints which it is possible to build
+     * with the Constraint constructor.
      */
     public static enum ZeroDimConstraint {
-        /** Referes to the unsatisfiable (zero-dimension space) constraint \(0 = 1\). */
+        /**
+         * Referes to the unsatisfiable zero-dimensional constraint \(0 = 1\).
+         */
         FALSITY,
         /**
-         * Referes to the true (zero-dimension space) constraint \(0 \leq 1\), also
-         * known as <em>positivity constraint</em>.
+         * Referes to the true zero-dimensional constraint \(0 \leq 1\), also known as
+         * <em>positivity constraint</em>.
          */
         POSITIVITY
     }
@@ -103,8 +103,7 @@ public class Constraint {
     }
 
     /**
-     * Creates the new Constraint "le rel 0". The space dimension of the new
-     * constraint is equal to the space dimension of le.
+     * Creates the constraint \(le \textrm{rel} 0\).
      */
     public Constraint(LinearExpression le, ConstraintType rel) {
         var pc = new PointerByReference();
@@ -115,7 +114,7 @@ public class Constraint {
     }
 
     /**
-     * Creates a new zero-dimensional Constraint according to type.
+     * Creates a new zero-dimensional constraint specified by type.
      */
     public Constraint(ZeroDimConstraint type) {
         var pc = new PointerByReference();
@@ -127,7 +126,7 @@ public class Constraint {
     }
 
     /**
-     * Creates a copy of the Constraint c.
+     * Creates a copy of the constraint c.
      */
     public Constraint(Constraint c) {
         var pc = new PointerByReference();
@@ -138,25 +137,21 @@ public class Constraint {
     }
 
     /**
-     * Creates a Constraint obtained from the specified native object.
+     * Creates a constraint from a native object.
      */
     Constraint(Pointer pplObj) {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this Constraint to a copy of the Constraint c.
-     */
-    public Constraint assign(Constraint c) {
+    @Override
+    Constraint assign(Constraint c) {
         int result = ppl_assign_Constraint_from_Constraint(pplObj, c.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return this;
     }
 
-    /**
-     * Returns the space dimension of this Constraint.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Constraint_space_dimension(pplObj, m);
@@ -165,19 +160,7 @@ public class Constraint {
         return m.getValue().longValue();
     }
 
-    /**
-     * Returns the type of this Constraint.
-     */
-    public ConstraintType getType() {
-        int result = ppl_Constraint_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return ConstraintType.valueOf(result);
-    }
-
-    /**
-     * Returns the Coefficient for the variable \(x_i\).
-     */
+    @Override
     public Coefficient getCoefficient(long var) {
         var n = new Coefficient();
         int result = ppl_Constraint_coefficient(pplObj, new SizeT(var), n.pplObj);
@@ -186,46 +169,21 @@ public class Constraint {
         return n;
     }
 
-    /**
-     * Returns the inhomogeneous term of this Constraint.
-     */
-    public Coefficient getInhomogeneousTerm() {
-        var n = new Coefficient();
-        int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
-    }
-
-    /**
-     * Returns true if this Constraint satisfies all its implementation invariants;
-     * returns false and perhaps makes some noise if it is broken. Useful for
-     * debugging purposes.
-     */
-    public boolean isOK() {
+    @Override
+    boolean isOK() {
         int result = ppl_Constraint_OK(pplObj);
         if (result < 0)
             throw new PPLError(result);
         return result > 0;
     }
 
-    /**
-     * Returns the string representation of this Constraint.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Constraint(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Constraint(pstr, pplObj);
     }
 
     /**
-     * Returns whether obj is the same as this Constraint. Two constraints are the
+     * Returns whether obj is the same as this constraint. Two constraints are the
      * same if they have the same space dimension, coefficients, inhomogeneous term
      * and type.
      */
@@ -252,4 +210,26 @@ public class Constraint {
         }
         return false;
     }
+
+    /**
+     * Returns the type of this Constraint.
+     */
+    public ConstraintType getType() {
+        int result = ppl_Constraint_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return ConstraintType.valueOf(result);
+    }
+
+    /**
+     * Returns the inhomogeneous term of this constraint.
+     */
+    public Coefficient getInhomogeneousTerm() {
+        var n = new Coefficient();
+        int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
+    }
+
 }

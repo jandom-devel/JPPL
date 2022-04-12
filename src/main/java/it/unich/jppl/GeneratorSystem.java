@@ -7,7 +7,6 @@ import it.unich.jppl.LibPPL.SizeTByReference;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -15,28 +14,21 @@ import com.sun.jna.ptr.PointerByReference;
  * A system of generators.
  *
  * <p>
- * An object of the class GeneratorSystem is a system of generators, i.e., a
- * multiset of objects of the class Generator (lines, rays, points and closure
- * points). When inserting generators in a system, space dimensions are
- * automatically adjusted so that all the generators in the system are defined
- * on the same vector space. A system of generators which is meant to define a
- * non-empty polyhedron must include at least one point: the reason is that
- * lines, rays and closure points need a supporting point (lines and rays only
- * specify directions while closure points only specify points in the
- * topological closure of the NNC polyhedron).
+ * A system of generators which is meant to define a non-empty abstract object
+ * must include at least one point: the reason is that lines, rays and closure
+ * points need a supporting point (lines and rays only specify directions while
+ * closure points only specify points in the topological closure of the NNC
+ * polyhedron).
  * </p>
  */
-public class GeneratorSystem implements Iterable<Generator> {
-    Pointer pplObj;
-
+public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, GeneratorSystem> {
     /**
-     * Enumerates the possible zero-dimensional GeneratorSystem which it is
-     * possible to build with the GeneratorSystem constructor.
+     * Enumerates the possible zero-dimensional GeneratorSystem which it is possible
+     * to build with the GeneratorSystem constructor.
      */
     public enum ZeroDimGeneratorSystem {
         /** Represents the empty zero-dimensional GeneratorSystem. */
-        EMPTY,
-        UNSATISFIABLE
+        EMPTY, UNSATISFIABLE
     }
 
     private static class GeneratorSystemCleaner implements Runnable {
@@ -69,8 +61,8 @@ public class GeneratorSystem implements Iterable<Generator> {
      * An iterator over a GeneratorSystem.
      *
      * <p>
-     * Note that the generators extracted from the iterator are not going to
-     * survive operations which manipulate the original GeneratorSystem.
+     * Note that the generators extracted from the iterator are not going to survive
+     * operations which manipulate the original GeneratorSystem.
      * </p>
      */
     public class GeneratorSystemIterator implements Iterator<Generator> {
@@ -173,9 +165,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this GeneratorSystem to a copy of the GeneratorSystem gs.
-     */
+    @Override
     public GeneratorSystem assign(GeneratorSystem gs) {
         int result = ppl_assign_Generator_System_from_Generator_System(pplObj, gs.pplObj);
         if (result < 0)
@@ -183,9 +173,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         return this;
     }
 
-    /**
-     * Returns the space dimension of this GeneratorSystem.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Generator_System_space_dimension(pplObj, m);
@@ -194,9 +182,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         return m.getValue().longValue();
     }
 
-    /**
-     * Return true if and only if this GeneratorSystem contains no generators.
-     */
+    @Override
     public boolean isEmpty() {
         int result = ppl_Generator_System_empty(pplObj);
         if (result < 0)
@@ -204,11 +190,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         return result > 0;
     }
 
-    /**
-     * Returns true if this GeneratorSystem satisfies all its implementation
-     * invariants; returns false and perhaps makes some noise if it is broken.
-     * Useful for debugging purposes.
-     */
+    @Override
     public boolean isOK() {
         int result = ppl_Generator_System_OK(pplObj);
         if (result < 0)
@@ -216,9 +198,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         return result > 0;
     }
 
-    /**
-     * Removes all the generators from this GeneratorSystem.
-     */
+    @Override
     public GeneratorSystem clear() {
         int result = ppl_Generator_System_clear(pplObj);
         if (result < 0)
@@ -226,9 +206,7 @@ public class GeneratorSystem implements Iterable<Generator> {
         return this;
     }
 
-    /**
-     * Add the Generator g to this GeneratorSystem.
-     */
+    @Override
     public GeneratorSystem add(Generator g) {
         int result = ppl_Generator_System_insert_Generator(pplObj, g.pplObj);
         if (result < 0)
@@ -236,25 +214,13 @@ public class GeneratorSystem implements Iterable<Generator> {
         return this;
     }
 
-    /**
-     * Returns an iterator for this GeneratorSystem.
-     */
+    @Override
     public Iterator<Generator> iterator() {
         return new GeneratorSystemIterator();
     }
 
-    /**
-     * Returns a string representation of this GeneratorSystem.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Generator_System(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Generator_System(pstr, pplObj);
     }
 }

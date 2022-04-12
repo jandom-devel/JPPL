@@ -22,19 +22,6 @@ public class CoefficientTest {
     }
 
     @Test
-    void testAssignment() {
-        var c = new Coefficient();
-        assertEquals("0", c.toString());
-        c.assign(2);
-        assertEquals("2", c.toString());
-        c.assign("29383734");
-        assertEquals("29383734", c.toString());
-        c.assign(new BigInteger("29383735"));
-        assertEquals("29383735", c.toString());
-        assertEquals(new BigInteger("29383735"), c.bigIntegerValue());
-    }
-
-    @Test
     void testIsOK() {
         var c = new Coefficient(35);
         assertTrue(c.isOK());

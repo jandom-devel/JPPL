@@ -6,7 +6,6 @@ import it.unich.jgmp.*;
 
 import java.math.BigInteger;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -27,8 +26,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Coefficient extends Number {
-    Pointer pplObj;
+public class Coefficient extends PPLObject<Coefficient> {
 
     /**
      * A coefficient which is equal to zero.
@@ -59,8 +57,8 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns true if and only if the Coefficient class is implemented with
-     * integral types and overflow detection.
+     * Returns true is and only if the Coefficient class is implemented using native
+     * integral types.
      */
     public static boolean isBounded() {
         int result = ppl_Coefficient_is_bounded();
@@ -75,11 +73,9 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a Coefficient whose value is zero. This constructor has package level
-     * visibility since end users are encouraged to use the Coefficient.ZERO
-     * constant.
+     * Creates a coefficient whose value is zero.
      */
-    Coefficient() {
+    public Coefficient() {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient(pc);
         if (result < 0)
@@ -88,7 +84,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a Coefficient whose value is z.
+     * Creates a coefficient whose value is z.
      */
     public Coefficient(MPZ z) {
         var pc = new PointerByReference();
@@ -99,14 +95,14 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a Coefficient whose value is l.
+     * Creates a coefficient whose value is l.
      */
     public Coefficient(long l) {
         this(new MPZ(l));
     }
 
     /**
-     * Returns a Coefficient whose value is given by the string representation s in
+     * Creates a coefficient whose value is given by the string representation s in
      * the specified radix.
      */
     public Coefficient(String s, int radix) {
@@ -114,7 +110,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a Coefficient whose value is given by the decimal string
+     * Cretes a coefficient whose value is given by the decimal string
      * representation s. It is equivalent to {@code Coefficient(s, 10)}.
      */
     public Coefficient(String s) {
@@ -122,7 +118,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a Coefficient whose value is equal to bi.
+     * Creates a Coefficient whose value is equal to bi.
      */
     public Coefficient(BigInteger bi) {
         // We use radix 32 since we suspect it to be faster than radix 10.
@@ -131,9 +127,9 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Returns a copy of the Coefficient c.
+     * Creates a copy of the Coefficient c.
      */
-    Coefficient(Coefficient c) {
+    public Coefficient(Coefficient c) {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient_from_Coefficient(pc, c.pplObj);
         if (result < 0)
@@ -142,7 +138,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Set the value of this Coefficient to z.
+     * Set the value of this coefficient to z.
      */
     Coefficient assign(MPZ z) {
         int result = ppl_assign_Coefficient_from_mpz_t(pplObj, z.getPointer());
@@ -151,39 +147,7 @@ public class Coefficient extends Number {
         return this;
     }
 
-    /**
-     * Set the value of this Coefficient to l.
-     */
-    Coefficient assign(long l) {
-        return assign(new MPZ(l));
-    }
-
-    /**
-     * Set the value of this Coefficient to the value given by the string
-     * representation s in the specified radix.
-     */
-    Coefficient assign(String s, int radix) {
-        return assign(new MPZ(s, radix));
-    }
-
-    /**
-     * Set the value of this Coefficientto the value given by the decimal string
-     * representation s. It is equivalent to {@code set(s,10)}.
-     */
-    Coefficient assign(String s) {
-        return assign(s, 10);
-    }
-
-    /**
-     * Set the value of this Coefficient to bi.
-     */
-    Coefficient assign(BigInteger bi) {
-        return assign(bi.toString(32), 32);
-    }
-
-    /**
-     * Set the value of this Coefficient to a copy of the Coefficient c.
-     */
+    @Override
     Coefficient assign(Coefficient c) {
         int result = ppl_assign_Coefficient_from_Coefficient(pplObj, this.pplObj);
         if (result < 0)
@@ -192,7 +156,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Convert the Coefficient to a GNU MP integer.
+     * Convert the coefficient to a GNU MP integer.
      */
     public MPZ MPZValue() {
         var z = new MPZ();
@@ -203,14 +167,14 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Convert the Coefficient to its string representation in the specified radix.
+     * Convert the coefficient to its string representation in the specified radix.
      */
     public String stringValue(int radix) {
         return MPZValue().toString(radix);
     }
 
     /**
-     * Convert the Coefficient to its decimal string representation. It is
+     * Convert the coefficient to its decimal string representation. It is
      * equivalent to {@code stringValue(10)}.
      */
     public String stringValue() {
@@ -218,45 +182,41 @@ public class Coefficient extends Number {
     }
 
     /**
-     * Convert the Coefficient to a BigInteger.
+     * Convert the coefficient to a BigInteger.
      */
     public BigInteger bigIntegerValue() {
         return new BigInteger(stringValue(32), 32);
     }
 
     /**
-     * Convert the Coefficient to a long.
+     * Convert the coefficient to a long.
      */
     public long longValue() {
         return MPZValue().longValue();
     }
 
     /**
-     * Convert the Coefficient to an int.
+     * Convert the coefficient to an int.
      */
     public int intValue() {
         return MPZValue().intValue();
     }
 
     /**
-     * Convert the Coefficient to a double.
+     * Convert the coefficient to a double.
      */
     public double doubleValue() {
         return MPZValue().doubleValue();
     }
 
     /**
-     * Convert the Coefficient to a float.
+     * Convert the coefficient to a float.
      */
     public float floatValue() {
         return MPZValue().floatValue();
     }
 
-    /**
-     * Returns true if this Coefficient satisfies all its implementation invariants;
-     * returns false and perhaps makes some noise if it is broken. Useful for
-     * debugging purposes.
-     */
+    @Override
     boolean isOK() {
         int result = ppl_Coefficient_OK(pplObj);
         if (result < 0)
@@ -265,7 +225,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * If coeffients are native integral types, returns their minimum value.
+     * If coefficients are native integral types, returns their minimum value.
      */
     public int minAllowed() {
         int result = ppl_Coefficient_min(pplObj);
@@ -275,7 +235,7 @@ public class Coefficient extends Number {
     }
 
     /**
-     * If coeffients are native integral types, returns their maximum value.
+     * If coefficients are native integral types, returns their maximum value.
      */
     public int maxAllowed() {
         int result = ppl_Coefficient_max(pplObj);
@@ -284,25 +244,13 @@ public class Coefficient extends Number {
         return result;
     }
 
-    /**
-     * Returns the string representation of the linear expression. It should be
-     * equivalent to {@link stringValue() stringValue()}, but it uses a different
-     * native method.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Coefficient(pstr, pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Coefficient(pstr, pplObj);
     }
 
     /**
-     * Indicates whether some other object is "equal to" this Coefficient.
+     * Returns whether obj is the same as this Coefficient.
      */
     @Override
     public boolean equals(Object obj) {

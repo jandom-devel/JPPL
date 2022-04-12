@@ -7,33 +7,26 @@ import it.unich.jppl.LibPPL.SizeTByReference;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
  * A system of constraints.
- * 
- * <p>
- * An object of the class ConstraintSystem is a system of constraints, i.e., a
- * multiset of objects of the class Constraint. When inserting constraints in a
- * system, space dimensions are automatically adjusted so that all the
- * constraints in the system are defined on the same vector space.
- * </p>
  */
-public class ConstraintSystem implements Iterable<Constraint> {
-    Pointer pplObj;
+public class ConstraintSystem extends GeometricDescriptorsSystem<Constraint, ConstraintSystem> {
 
     /**
-     * Enumerates the possible zero-dimensional ConstraintSystem which it is
-     * possible to build with the ConstraintSystem constructor.
+     * Enumerates the zero-dimensional constraint systems which it is possible to
+     * build with the ConstraintSystem constructor.
      */
     public enum ZeroDimConstraintSystem {
-        /** Represents the empty zero-dimensional ConstraintSystem. */
+        /**
+         * Represents the empty zero-dimensional constraint system.
+         */
         EMPTY,
         /**
-         * Represents the zero-dimensional ConstraintSystem that contains only the
-         * falsity zero-dimensionality congruence.
+         * Represents the zero-dimensional constraint system that contains only the
+         * falsity zero-dimensionality constraint.
          *
          * @see Constraint#Constraint(ZeroDimConstraint type)
          */
@@ -67,11 +60,11 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     /**
-     * An iterator over a ConstraintSystem.
+     * An iterator over a constraint system.
      *
      * <p>
      * Note that the constraints extracted from the iterator are not going to
-     * survive operations which manipulate the original CongruenceSystem.
+     * survive operations which manipulate the original constraint system.
      * </p>
      */
     public class ConstraintSystemIterator implements Iterator<Constraint> {
@@ -112,7 +105,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         /**
          * Returns the next element in the iteration. Note that the constraints
          * extracted from the iterator are not going to survive operations which
-         * manipulate the original ConstraintSystem.
+         * manipulate the original constraint system.
          */
         @Override
         public Constraint next() {
@@ -135,14 +128,14 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     /**
-     * Returns an empty zero-dimensional ConstraintSystem.
+     * Creates an empty zero-dimensional constraint system.
      */
     public ConstraintSystem() {
         this(ZeroDimConstraintSystem.EMPTY);
     }
 
     /**
-     * Returns a zero-dimensional ConstraintSystem according of the specified type.
+     * Creates a zero-dimensional constraint system of the specified type.
      */
     public ConstraintSystem(ZeroDimConstraintSystem type) {
         var pcs = new PointerByReference();
@@ -154,7 +147,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     /**
-     * Returns a new ConstraintSystem containing only a copy of the Constraint c.
+     * Create a constraint system containing only a copy of the constraint c.
      */
     public ConstraintSystem(Constraint c) {
         var pcs = new PointerByReference();
@@ -165,7 +158,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     /**
-     * Returns a copy of the ConstraintSystem cs.
+     * Creates a copy of the constraint system cs.
      */
     public ConstraintSystem(ConstraintSystem cs) {
         var pcs = new PointerByReference();
@@ -176,15 +169,13 @@ public class ConstraintSystem implements Iterable<Constraint> {
     }
 
     /**
-     * Returns a ConstraintSystem obtained from the specified native object.
+     * Creates a constraint system from a native object.
      */
     ConstraintSystem(Pointer pplObj) {
         init(pplObj);
     }
 
-    /**
-     * Set the value of this ConstraintSystem to a copy of the ConstraintSystem cs.
-     */
+    @Override
     public ConstraintSystem assign(ConstraintSystem cs) {
         int result = ppl_assign_Constraint_System_from_Constraint_System(pplObj, cs.pplObj);
         if (result < 0)
@@ -192,9 +183,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return this;
     }
 
-    /**
-     * Returns the space dimension of this ConstraintSystem.
-     */
+    @Override
     public long getSpaceDimension() {
         var m = new SizeTByReference();
         int result = ppl_Constraint_System_space_dimension(pplObj, m);
@@ -203,10 +192,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return m.getValue().longValue();
     }
 
-    /**
-     * Return true if and only if this ConstraintSystem contains no (non-trivial)
-     * constraints.
-     */
+    @Override
     public boolean isEmpty() {
         int result = ppl_Constraint_System_empty(pplObj);
         if (result < 0)
@@ -214,22 +200,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return result > 0;
     }
 
-    /**
-     * Returns true if and only if this ConstraintSystem contains any (non-trivial)
-     * strict inequality.
-     */
-    public boolean hasStrictInequalities() {
-        int result = ppl_Constraint_System_has_strict_inequalities(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return result > 0;
-    }
-
-    /**
-     * Returns true if this ConstraintSystem satisfies all its implementation
-     * invariants; returns false and perhaps makes some noise if it is broken.
-     * Useful for debugging purposes.
-     */
+    @Override
     public boolean isOK() {
         int result = ppl_Constraint_System_OK(pplObj);
         if (result < 0)
@@ -237,9 +208,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return result > 0;
     }
 
-    /**
-     * Removes all the constraints from this ConstraintSystem.
-     */
+    @Override
     public ConstraintSystem clear() {
         int result = ppl_Constraint_System_clear(pplObj);
         if (result < 0)
@@ -247,9 +216,7 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return this;
     }
 
-    /**
-     * Add the Constraint c to this ConstraintSystem.
-     */
+    @Override
     public ConstraintSystem add(Constraint c) {
         int result = ppl_Constraint_System_insert_Constraint(pplObj, c.pplObj);
         if (result < 0)
@@ -257,25 +224,24 @@ public class ConstraintSystem implements Iterable<Constraint> {
         return this;
     }
 
-    /**
-     * Returns an iterator for this ConstraintSystem.
-     */
+    @Override
     public Iterator<Constraint> iterator() {
         return new ConstraintSystemIterator();
     }
 
-    /**
-     * Returns a string representation of this ConstraintSystem.
-     */
     @Override
-    public String toString() {
-        var pstr = new PointerByReference();
-        int result = ppl_io_asprint_Constraint_System(pstr, pplObj);
+    protected int toStringByReference(PointerByReference pstr) {
+        return ppl_io_asprint_Constraint_System(pstr, pplObj);
+    }
+
+    /**
+     * Returns true if and only if this constraint system contains any (non-trivial)
+     * strict inequality.
+     */
+    public boolean hasStrictInequalities() {
+        int result = ppl_Constraint_System_has_strict_inequalities(pplObj);
         if (result < 0)
             throw new PPLError(result);
-        var p = pstr.getValue();
-        var s = p.getString(0);
-        Native.free(Pointer.nativeValue(p));
-        return s;
+        return result > 0;
     }
 }
