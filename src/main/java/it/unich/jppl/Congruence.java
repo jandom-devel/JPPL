@@ -28,7 +28,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Congruence extends GeometricDescriptor<Congruence> {
+public class Congruence extends AbstractPPLObject<Congruence> implements GeometricDescriptor<Congruence> {
 
     private static class CongruenceCleaner implements Runnable {
         private Pointer pplObj;

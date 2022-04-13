@@ -31,7 +31,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Generator extends GeometricDescriptor<Generator> {
+public class Generator extends AbstractPPLObject<Generator> implements GeometricDescriptor<Generator> {
 
     /**
      * Enumerates the possible types of a generator.

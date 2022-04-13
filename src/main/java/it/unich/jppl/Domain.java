@@ -15,95 +15,95 @@ public interface Domain<T extends Property<T>> {
     /**
      * Creates and returns an empty d-dimensional abstract object.
      */
-    public T createEmpty(long d);
+    T createEmpty(long d);
 
     /**
      * Creates and returns an universe d-dimensional abstract object, i.e., the full
      * vector space \(\mathbb{R}^d\).
      */
-    public T createUniverse(long d);
+    T createUniverse(long d);
 
     /**
      * Creates and returns an abstract object from the constraints in cs. The
      * abstract object inherits the space dimension of cs.
      */
-    public T createFrom(ConstraintSystem cs);
+    T createFrom(ConstraintSystem cs);
 
     /**
      * Creates and returns an abstract object from the constraints in cs, possibly
      * recycling their internal structure. The abstract object inherits the space
      * dimension of cs.
      */
-    public T createRecycledFrom(ConstraintSystem cs);
+    T createRecycledFrom(ConstraintSystem cs);
 
     /**
      * Creates and returns an abstract object from the congruences in cs. The
      * abstract object inherits the space dimension of cs.
      */
-    public T createFrom(CongruenceSystem cs);
+    T createFrom(CongruenceSystem cs);
 
     /**
      * Creates and returns an abstract object from the congruences in cs, possibly
      * recycling their internal structure. The abstract object inherits the space
      * dimension of cs.
      */
-    public T createRecycledFrom(CongruenceSystem cs);
+    T createRecycledFrom(CongruenceSystem cs);
 
     /**
      * Creates and returns an abstract object from the generators in gs. The
      * abstract object inherits the space dimension of gs.
      */
-    public T createFrom(GeneratorSystem gs);
+    T createFrom(GeneratorSystem gs);
 
     /**
      * Creates and returns an abstract object from the generators in gs, possibly
      * recycling their internal structure. The abstract object inherits the space
      * dimension of gs.
      */
-    public T createRecycledFrom(GeneratorSystem gs);
+    T createRecycledFrom(GeneratorSystem gs);
 
     /**
      * Creates and returns a copy of the abstract object p.
      */
-    public T createFrom(T p);
+    T createFrom(T p);
 
     /**
      * Creates and returns a copy of the abstract object p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createFrom(T p, ComplexityClass complexity);
+    T createFrom(T p, ComplexityClass complexity);
 
     /**
      * Creates and returns an abstract object which over-approximates p.
      */
-    public T createFrom(CPolyhedron p);
+    T createFrom(CPolyhedron p);
 
     /**
      * Creates and returns an abstract object which over-approximates p, using an
      * algorithm whose complexity does not exceed the one specified.
      */
-    public T createFrom(CPolyhedron p, ComplexityClass complexity);
+    T createFrom(CPolyhedron p, ComplexityClass complexity);
 
     /**
      * Creates and returns an abstract object which over-approximates p.
      */
-    public T createFrom(NNCPolyhedron p);
+    T createFrom(NNCPolyhedron p);
 
     /**
      * Creates and returns an abstract object which over-approximates p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createFrom(NNCPolyhedron p, ComplexityClass complexity);
+    T createFrom(NNCPolyhedron p, ComplexityClass complexity);
 
     /**
      * Creates and returns an abstract object which over-approximates p.
      */
-    public T createFrom(DoubleBox p);
+    T createFrom(DoubleBox p);
 
     /**
      * Creates and returns an abstract object which over-approximates p, using an algorithm whose
      * complexity does not exceed the one specified.
      */
-    public T createFrom(DoubleBox p, ComplexityClass complexity);
+    T createFrom(DoubleBox p, ComplexityClass complexity);
 
 }

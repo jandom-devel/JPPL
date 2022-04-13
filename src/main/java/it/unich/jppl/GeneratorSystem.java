@@ -21,7 +21,8 @@ import com.sun.jna.ptr.PointerByReference;
  * polyhedron).
  * </p>
  */
-public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, GeneratorSystem> {
+public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
+        implements GeometricDescriptorsSystem<Generator, GeneratorSystem> {
 
     private static class GeneratorSystemCleaner implements Runnable {
         private Pointer pplObj;
@@ -144,7 +145,8 @@ public class GeneratorSystem extends GeometricDescriptorsSystem<Generator, Gener
     }
 
     /**
-     * Creates and returns a generator system containing only a copy of the generator g.
+     * Creates and returns a generator system containing only a copy of the
+     * generator g.
      */
     public static GeneratorSystem of(Generator g) {
         var pgs = new PointerByReference();

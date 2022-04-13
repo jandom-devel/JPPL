@@ -20,7 +20,8 @@ import com.sun.jna.ptr.PointerByReference;
  * direction and distance.
  * </p>
  */
-public class GridGeneratorSystem extends GeometricDescriptorsSystem<GridGenerator, GridGeneratorSystem> {
+public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
+        implements GeometricDescriptorsSystem<GridGenerator, GridGeneratorSystem> {
 
     private static class GridGeneratorSystemCleaner implements Runnable {
         private Pointer pplObj;

@@ -13,7 +13,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
-public class DoubleBox extends PPLObject<DoubleBox> implements Property<DoubleBox> {
+public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<DoubleBox> {
 
     private static class DoubleBoxCleaner implements Runnable {
         private Pointer pplObj;

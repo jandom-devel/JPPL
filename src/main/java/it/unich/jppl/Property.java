@@ -141,149 +141,149 @@ public interface Property<T extends Property<T>> {
         }
     }
 
-    public long getSpaceDimension();
+    long getSpaceDimension();
 
-    public long getAffineDimension();
+    long getAffineDimension();
 
-    public int getRelationWithConstraint(Constraint c);
+    int getRelationWithConstraint(Constraint c);
 
-    public int getRelationWithGenerator(Generator g);
+    int getRelationWithGenerator(Generator g);
 
-    public ConstraintSystem getConstraints();
+    ConstraintSystem getConstraints();
 
-    public CongruenceSystem getCongruences();
+    CongruenceSystem getCongruences();
 
-    public ConstraintSystem getMinimizedConstraints();
+    ConstraintSystem getMinimizedConstraints();
 
-    public CongruenceSystem getMinimizedCongruences();
+    CongruenceSystem getMinimizedCongruences();
 
-    public boolean isEmpty();
+    boolean isEmpty();
 
-    public boolean isUniverse();
+    boolean isUniverse();
 
-    public boolean isBounded();
+    boolean isBounded();
 
-    public boolean containsIntegerPoint();
+    boolean containsIntegerPoint();
 
-    public boolean isTopologicallyClosed();
+    boolean isTopologicallyClosed();
 
-    public boolean isDiscrete();
+    boolean isDiscrete();
 
-    public boolean constraints(long var);
+    boolean constraints(long var);
 
-    public boolean boundsFromAbove(LinearExpression le);
+    boolean boundsFromAbove(LinearExpression le);
 
-    public boolean boundsFromBelow(LinearExpression le);
+    boolean boundsFromBelow(LinearExpression le);
 
-    public Optional<ExtremalOutput> maximize(LinearExpression le);
+    Optional<ExtremalOutput> maximize(LinearExpression le);
 
-    public Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le);
+    Optional<ExtremalOutput> maximizeWithPoint(LinearExpression le);
 
-    public Optional<ExtremalOutput> minimize(LinearExpression le);
+    Optional<ExtremalOutput> minimize(LinearExpression le);
 
-    public Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le);
+    Optional<ExtremalOutput> minimizeWithPoint(LinearExpression le);
 
-    public boolean contains(T p);
+    boolean contains(T p);
 
-    public boolean strictlyContains(T p);
+    boolean strictlyContains(T p);
 
-    public boolean isDisjointFrom(T p);
+    boolean isDisjointFrom(T p);
 
-    public boolean isOK();
+    boolean isOK();
 
-    public long getExternalMemoryInBytes();
+    long getExternalMemoryInBytes();
 
-    public long getTotalMemoryInBytes();
+    long getTotalMemoryInBytes();
 
-    public T addConstraint(Constraint c);
+    T addConstraint(Constraint c);
 
-    public T addCongruence(Congruence c);
+    T addCongruence(Congruence c);
 
-    public T addConstraints(ConstraintSystem cs);
+    T addConstraints(ConstraintSystem cs);
 
-    public T addCongruences(CongruenceSystem cs);
+    T addCongruences(CongruenceSystem cs);
 
-    public T addReycledConstraints(ConstraintSystem cs);
+    T addReycledConstraints(ConstraintSystem cs);
 
-    public T addRecycledCongruences(CongruenceSystem cs);
+    T addRecycledCongruences(CongruenceSystem cs);
 
-    public T refineWithConstraint(Constraint c);
+    T refineWithConstraint(Constraint c);
 
-    public T refineWithCongruence(Congruence c);
+    T refineWithCongruence(Congruence c);
 
-    public T refineWithConstraints(ConstraintSystem c);
+    T refineWithConstraints(ConstraintSystem c);
 
-    public T refineWithCongruences(CongruenceSystem c);
+    T refineWithCongruences(CongruenceSystem c);
 
-    public T intersectionAssign(T p);
+    T intersectionAssign(T p);
 
-    public T upperBoundAssign(T p);
+    T upperBoundAssign(T p);
 
-    public T differenceAssign(T p);
+    T differenceAssign(T p);
 
-    public T simplifyUsingContextAssign(T p);
+    T simplifyUsingContextAssign(T p);
 
-    public T timeElapseAssign(T p);
+    T timeElapseAssign(T p);
 
-    public T topologicalClosureAssign();
+    T topologicalClosureAssign();
 
-    public T unconstrainSpaceDimension(long var);
+    T unconstrainSpaceDimension(long var);
 
-    public T unconstrainSpaceDimensions(long[] ds);
+    T unconstrainSpaceDimensions(long[] ds);
 
-    public T affineImage(long var, LinearExpression le, Coefficient d);
+    T affineImage(long var, LinearExpression le, Coefficient d);
 
-    default public T affineImage(long var, LinearExpression le) {
+    default T affineImage(long var, LinearExpression le) {
         return affineImage(var, le, Coefficient.ONE);
     }
 
-    public T affinePreImage(long var, LinearExpression le, Coefficient d);
+    T affinePreImage(long var, LinearExpression le, Coefficient d);
 
-    default public T affinePreImage(long var, LinearExpression le) {
+    default T affinePreImage(long var, LinearExpression le) {
         return affinePreImage(var, le, Coefficient.ONE);
     }
 
-    public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
+    T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
 
-    default public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub) {
+    default T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub) {
         return boundedAffineImage(var, lb, ub, Coefficient.ONE);
     }
 
-    public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
+    T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d);
 
-    default public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub) {
+    default T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub) {
         return boundedAffinePreImage(var, lb, ub, Coefficient.ONE);
     }
 
-    public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
+    T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
 
-    default public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le) {
+    default T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le) {
         return generalizedAffineImage(var, relsym, le, Coefficient.ONE);
     }
 
-    public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
+    T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d);
 
-    default public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le) {
+    default T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le) {
         return generalizedAffinePreImage(var, relsym, le, Coefficient.ONE);
     }
 
-    public T generalizedAffineImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
+    T generalizedAffineImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
 
-    public T generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
+    T generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs);
 
-    public T concatenateAssign(T p);
+    T concatenateAssign(T p);
 
-    public T addSpaceDimensionsAndEmbed(long d);
+    T addSpaceDimensionsAndEmbed(long d);
 
-    public T addSpaceDimensionsAndProject(long d);
+    T addSpaceDimensionsAndProject(long d);
 
-    public T removeSpaceDimensions(long ds[]);
+    T removeSpaceDimensions(long ds[]);
 
-    public T removeHigherSpaceDimensions(long d);
+    T removeHigherSpaceDimensions(long d);
 
-    public T mapSpaceDimensions(long[] maps);
+    T mapSpaceDimensions(long[] maps);
 
-    public T expandSpaceDimension(long d, long m);
+    T expandSpaceDimension(long d, long m);
 
-    public T foldSpaceDimensions(long[] ds, long d);
+    T foldSpaceDimensions(long[] ds, long d);
 }

@@ -26,7 +26,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Coefficient extends PPLObject<Coefficient> {
+public class Coefficient extends AbstractPPLObject<Coefficient> {
 
     /**
      * A coefficient which is equal to zero.

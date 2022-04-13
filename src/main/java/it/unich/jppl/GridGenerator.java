@@ -24,7 +24,7 @@ import com.sun.jna.ptr.PointerByReference;
  * parameters, \(d &gt; 0\) is the divisor.
  * </p>
  */
-public class GridGenerator extends GeometricDescriptor<GridGenerator> {
+public class GridGenerator extends AbstractPPLObject<GridGenerator> implements GeometricDescriptor<GridGenerator> {
 
     /**
      * Enumerates the possible types of a grid generator.

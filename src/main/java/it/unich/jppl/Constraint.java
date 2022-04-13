@@ -29,7 +29,7 @@ import com.sun.jna.ptr.PointerByReference;
  * library generates an error.
  * </p>
  */
-public class Constraint extends GeometricDescriptor<Constraint> {
+public class Constraint extends AbstractPPLObject<Constraint> implements GeometricDescriptor<Constraint> {
 
     /**
      * Enumerates the possible types of a constraint.

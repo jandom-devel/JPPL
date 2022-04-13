@@ -13,7 +13,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
-abstract class Polyhedron<T extends Polyhedron<T>> extends PPLObject<T> implements Property<T> {
+abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> implements Property<T> {
 
     protected static class PolyhedronCleaner implements Runnable {
         private Pointer pplObj;

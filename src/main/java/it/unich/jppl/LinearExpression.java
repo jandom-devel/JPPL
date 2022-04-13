@@ -40,7 +40,7 @@ import com.sun.jna.ptr.PointerByReference;
  * generates an error.
  * </p>
  */
-public class LinearExpression extends GeometricDescriptor<LinearExpression> {
+public class LinearExpression extends AbstractPPLObject<LinearExpression> implements GeometricDescriptor<LinearExpression> {
 
     private static class LinearExpressionCleaner implements Runnable {
         private Pointer pplObj;
