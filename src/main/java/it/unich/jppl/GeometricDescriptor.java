@@ -4,10 +4,10 @@ package it.unich.jppl;
  * A geometric descriptor.
  *
  * <p>
- * Common interface for all (syntactic) geometric descriptors. Each geometric
- * descriptor has a space dimension and is associated with a linear expression.
- * Some geometric descriptors ignore the inhomogeneous term of the linear
- * expression.
+ * This is the common interface for all (syntactic) geometric descriptors. Each
+ * geometric descriptor has a space dimension and is associated with a linear
+ * expression. Some geometric descriptors ignore the inhomogeneous term of the
+ * linear expression.
  * </p>
  *
  * <p>
@@ -21,12 +21,12 @@ public interface GeometricDescriptor<GD extends GeometricDescriptor<GD>> extends
 
     /**
      * Returns the coefficient for the variable \(x_i\) of the associated linear
-     * form.
+     * expression.
      */
     Coefficient getCoefficient(long i);
 
     /**
-     * Returns the space dimension.
+     * Returns the space dimension of this geometric descriptor.
      */
     long getSpaceDimension();
 

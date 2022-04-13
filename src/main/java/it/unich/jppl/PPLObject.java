@@ -4,8 +4,7 @@ package it.unich.jppl;
 import com.sun.jna.Pointer;
 
 /**
- * Interface implemented by all Java classes which deals with native PPL
- * objects.
+ * Interface implemented by all Java classes dealing with native PPL objects.
  */
 public interface PPLObject<T extends PPLObject<T>> extends Cloneable {
 

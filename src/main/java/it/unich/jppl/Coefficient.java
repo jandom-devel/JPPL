@@ -10,6 +10,8 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
+ * Coefficient for syntactic and semantics descriptors.
+ *
  * <p>
  * Objects of type Coefficient are used to implement the integral valued
  * coefficients occurring in linear expressions, constraints, generators,
@@ -57,7 +59,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Creates a Coefficient.valueOf from the pointer p to a native object.
+     * Creates a coefficient from the pointer p to a native object.
      */
     private Coefficient(Pointer p) {
         pplObj = p;
@@ -110,7 +112,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Creates and returns a Coefficient whose value is equal to bi.
+     * Creates and returns a coefficient whose value is equal to bi.
      */
     public static Coefficient valueOf(BigInteger bi) {
         // We use radix 32 since we suspect it to be faster than radix 10.

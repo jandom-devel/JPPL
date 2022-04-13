@@ -138,7 +138,7 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
 
     /**
      * Creates and returns a constraint system that contains only the falsity
-     * zero-dimensionality constraint.
+     * zero-dimensional constraint.
      *
      * @see Constraint#zeroDimFalse
      */
@@ -151,7 +151,8 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
     }
 
     /**
-     * Create a constraint system containing only a copy of the constraint c.
+     * Creates and returns a constraint system containing only a copy of the
+     * constraint c.
      */
     public static ConstraintSystem of(Constraint c) {
         var pcs = new PointerByReference();
@@ -195,6 +196,17 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
         return result > 0;
     }
 
+    /**
+     * Returns true if and only if this constraint system contains any (non-trivial)
+     * strict inequality.
+     */
+    public boolean hasStrictInequalities() {
+        int result = ppl_Constraint_System_has_strict_inequalities(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return result > 0;
+    }
+
     @Override
     public boolean isOK() {
         int result = ppl_Constraint_System_OK(pplObj);
@@ -229,14 +241,4 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
         return ppl_io_asprint_Constraint_System(pstr, pplObj);
     }
 
-    /**
-     * Returns true if and only if this constraint system contains any (non-trivial)
-     * strict inequality.
-     */
-    public boolean hasStrictInequalities() {
-        int result = ppl_Constraint_System_has_strict_inequalities(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return result > 0;
-    }
 }

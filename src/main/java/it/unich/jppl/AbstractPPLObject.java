@@ -5,17 +5,17 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * Abstract parent for all Java classes which deals with native PPL objects.
+ * Abstract parent for all Java classes dealing with native PPL objects.
  */
 public abstract class AbstractPPLObject<T extends AbstractPPLObject<T>> implements PPLObject<T> {
 
     /**
-     * Pointer to the PPL native object.
+     * Pointer to the native PPL object.
      */
     protected Pointer pplObj;
 
     /**
-     * Assign to this object a copy of the object obj.
+     * Assigns to this object a copy of the object obj.
      */
     abstract T assign(T obj);
 
@@ -27,7 +27,7 @@ public abstract class AbstractPPLObject<T extends AbstractPPLObject<T>> implemen
     abstract boolean isOK();
 
     /**
-     * Returns in pstr the string representation of this object.
+     * Returns in pstr a pointer to the string representation of this object.
      *
      * <p>
      * The method provided by concrete subclasses should call the correct C function
@@ -39,10 +39,6 @@ public abstract class AbstractPPLObject<T extends AbstractPPLObject<T>> implemen
     @Override
     public abstract T clone();
 
-    /**
-     * Returns the pointer to the PPL native object. Useless you plan to interface
-     * JPPL with some native code, you do not need this method.
-     */
     @Override
     public Pointer getNative() {
         return pplObj;

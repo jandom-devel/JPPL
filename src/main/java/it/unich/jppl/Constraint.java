@@ -162,12 +162,33 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     }
 
     @Override
-    public Coefficient getCoefficient(long var) {
+    public Coefficient getCoefficient(long i) {
         var n = Coefficient.zero();
-        int result = ppl_Constraint_coefficient(pplObj, new SizeT(var), n.pplObj);
+        int result = ppl_Constraint_coefficient(pplObj, new SizeT(i), n.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return n;
+    }
+
+    /**
+     * Returns the inhomogeneous term of this constraint.
+     */
+    public Coefficient getInhomogeneousTerm() {
+        var n = Coefficient.zero();
+        int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
+    }
+
+    /**
+     * Returns the type of this constraint.
+     */
+    public ConstraintType getType() {
+        int result = ppl_Constraint_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return ConstraintType.valueOf(result);
     }
 
     @Override
@@ -210,27 +231,6 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns the type of this Constraint.
-     */
-    public ConstraintType getType() {
-        int result = ppl_Constraint_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return ConstraintType.valueOf(result);
-    }
-
-    /**
-     * Returns the inhomogeneous term of this constraint.
-     */
-    public Coefficient getInhomogeneousTerm() {
-        var n = Coefficient.zero();
-        int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
     }
 
 }

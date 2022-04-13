@@ -173,6 +173,27 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         return n;
     }
 
+    /**
+     * Returns the type of this generator.
+     */
+    public GeneratorType getType() {
+        int result = ppl_Generator_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return GeneratorType.valueOf(result);
+    }
+
+    /**
+     * Returns the divisor of this generator.
+     */
+    public Coefficient getDivisor() {
+        var d = Coefficient.zero();
+        int result = ppl_Generator_divisor(pplObj, d.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return d;
+    }
+
     @Override
     public boolean isOK() {
         int result = ppl_Generator_OK(pplObj);
@@ -211,27 +232,6 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns the type of this Generator.
-     */
-    public GeneratorType getType() {
-        int result = ppl_Generator_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return GeneratorType.valueOf(result);
-    }
-
-    /**
-     * Returns the divisor of this Generator.
-     */
-    public Coefficient getDivisor() {
-        var d = Coefficient.zero();
-        int result = ppl_Generator_divisor(pplObj, d.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return d;
     }
 
 }

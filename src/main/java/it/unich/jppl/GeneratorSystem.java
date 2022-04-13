@@ -51,11 +51,11 @@ public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
     }
 
     /**
-     * An iterator over a GeneratorSystem.
+     * An iterator over a generator system.
      *
      * <p>
      * Note that the generators extracted from the iterator are not going to survive
-     * operations which manipulate the original GeneratorSystem.
+     * operations which manipulate the original generator system.
      * </p>
      */
     public class GeneratorSystemIterator implements Iterator<Generator> {
@@ -96,7 +96,7 @@ public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
         /**
          * Returns the next element in the iteration. Note that the generators extracted
          * from the iterator are not going to survive operations which manipulate the
-         * original ConstraintSystem.
+         * original generator system.
          */
         @Override
         public Generator next() {
@@ -134,7 +134,7 @@ public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
     }
 
     /**
-     * Creates and returns an empty zero-dimensional GeneratorSystem.
+     * Creates and returns an empty zero-dimensional generator system.
      */
     public static GeneratorSystem empty() {
         var pgs = new PointerByReference();

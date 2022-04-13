@@ -7,6 +7,7 @@ import it.unich.jppl.LibPPL.SizeT;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 
+/** Not-necessarily closed polyehdron */
 public class NNCPolyhedron extends Polyhedron<NNCPolyhedron> {
 
     public NNCPolyhedron(Pointer p) {

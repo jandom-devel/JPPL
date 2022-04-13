@@ -3,7 +3,7 @@ package it.unich.jppl;
 import it.unich.jppl.Property.ComplexityClass;
 
 /**
- * The abstract domain of boxes, with bounds specified by doubles.
+ * The abstract domain of boxes, with bounds implemented using native doubles.
  */
 public class DoubleBoxDomain implements Domain<DoubleBox> {
 

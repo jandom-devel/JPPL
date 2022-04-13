@@ -124,9 +124,31 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     }
 
     @Override
-    public Coefficient getCoefficient(long var) {
+    public Coefficient getCoefficient(long i) {
         var n = Coefficient.zero();
-        int result = ppl_Congruence_coefficient(pplObj, new SizeT(var), n.pplObj);
+        int result = ppl_Congruence_coefficient(pplObj, new SizeT(i), n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
+    }
+
+    /**
+     * Returns the inhomogeneous term of this congruence.
+     */
+    public Coefficient getInhomogeneousTerm() {
+        var n = Coefficient.zero();
+        int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return n;
+    }
+
+    /**
+     * Returns the modulus of this congruence.
+     */
+    public Coefficient getModulus() {
+        var n = Coefficient.zero();
+        int result = ppl_Congruence_modulus(pplObj, n.pplObj);
         if (result < 0)
             throw new PPLError(result);
         return n;
@@ -175,25 +197,4 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         return false;
     }
 
-    /**
-     * Returns the inhomogeneous term of this congruence.
-     */
-    public Coefficient getInhomogeneousTerm() {
-        var n = Coefficient.zero();
-        int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
-    }
-
-    /**
-     * Returns the modulus of this congruence.
-     */
-    public Coefficient getModulus() {
-        var n = Coefficient.zero();
-        int result = ppl_Congruence_modulus(pplObj, n.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return n;
-    }
 }
