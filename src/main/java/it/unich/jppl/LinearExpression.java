@@ -213,7 +213,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Add the inhomogeneous term \(c\) to this linear expression.
+     * Adds the inhomogeneous term \(c\) to this linear expression.
      *
      * @return this linear expression.
      */
@@ -225,7 +225,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Add the linear expression le to this linear expression.
+     * Adds the linear expression le to this linear expression.
      *
      * @return this linear expression.
      */
@@ -237,7 +237,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Multiply this linear expression by the constant c.
+     * Multiplies this linear expression by the constant \(c\).
      *
      * @return this linear expression.
      */

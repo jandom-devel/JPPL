@@ -611,7 +611,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T BHRZ03WideningAssign(T ph, WideningToken w) {
+    public T BHRZ03WideningAssign(T ph, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_BHRZ03_widening_assign_with_tokens(pplObj, ph.pplObj, tp);
         w.tokens = tp.getValue();
@@ -627,7 +627,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T H79WideningAssign(T ph, WideningToken w) {
+    public T H79WideningAssign(T ph, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_H79_widening_assign_with_tokens(pplObj, ph.pplObj, tp);
         w.tokens = tp.getValue();
@@ -643,7 +643,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T limitedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningToken w) {
+    public T limitedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_limited_BHRZ03_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();
@@ -659,7 +659,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T limitedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningToken w) {
+    public T limitedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_limited_H79_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();
@@ -675,7 +675,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T boundedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningToken w) {
+    public T boundedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();
@@ -691,7 +691,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T boundedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningToken w) {
+    public T boundedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_bounded_H79_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();

@@ -50,11 +50,11 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     }
 
     /**
-     * An iterator over a GridGeneratorSystem.
+     * An iterator over a grid generator system.
      *
      * <p>
      * Note that the grid generators extracted from the iterator are not going to
-     * survive operations which manipulate the original GridGeneratorSystem.
+     * survive operations which manipulate the original grid generator system.
      * </p>
      */
     public class GridGeneratorSystemIterator implements Iterator<GridGenerator> {
@@ -95,7 +95,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         /**
          * Returns the next element in the iteration. Note that the grid generators
          * extracted from the iterator are not going to survive operations which
-         * manipulate the original GridGeneratorSystem.
+         * manipulate the original grid generator system.
          */
         @Override
         public GridGenerator next() {
@@ -133,7 +133,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     }
 
     /**
-     * Creates and returns an empty zero-dimensional GridGeneratorSystem.
+     * Creates and returns an empty zero-dimensional grid generator system.
      */
     public static GridGeneratorSystem empty() {
         var pgs = new PointerByReference();
@@ -144,7 +144,8 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     }
 
     /**
-     * Returns a new GeneratorSystem containing only a copy of the GridGenerator c.
+     * Creates and returns a new grid generator system containing only a copy of the
+     * grid generator c.
      */
     public static GridGeneratorSystem of(GridGenerator g) {
         var pgs = new PointerByReference();
@@ -154,9 +155,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         return new GridGeneratorSystem(pgs.getValue());
     }
 
-    /**
-     * Returns a copy of the GridGeneratorSystem gs.
-     */
+    @Override
     public GridGeneratorSystem clone() {
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, pplObj);

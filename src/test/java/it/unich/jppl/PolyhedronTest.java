@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Generator.GeneratorType;
-import it.unich.jppl.Property.WideningToken;
+import it.unich.jppl.Property.WideningTokens;
 
 public class PolyhedronTest {
 
@@ -114,7 +114,7 @@ public class PolyhedronTest {
         var c2 = Constraint.of(le.clone().add(Coefficient.valueOf(-1)), ConstraintType.GREATER_OR_EQUAL);
         var ph = CPolyhedron.universe(3).addConstraint(c0);
         var ph1 = CPolyhedron.universe(3).addConstraint(c1);
-        var w = new WideningToken(1);
+        var w = new WideningTokens(1);
         ph1.H79WideningAssign(ph, w);
         assertEquals(0, w.tokens);
         var optMin = ph1.minimize(le);

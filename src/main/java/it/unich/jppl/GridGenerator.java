@@ -105,6 +105,18 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         return of(le, t, Coefficient.ONE);
     }
 
+    /**
+     * Creates and returns the point which is the origin of the zero-dimensional space
+     * \(\mathbb{R}^0\).
+     */
+    public static GridGenerator zeroDimPooint() {
+        var pg = new PointerByReference();
+        int result = ppl_new_Grid_Generator_zero_dim_point(pg);
+        if (result < 0)
+            throw new PPLError(result);
+        return new GridGenerator(pg.getValue());
+    }
+
     @Override
     public GridGenerator clone() {
         var pg = new PointerByReference();
@@ -140,6 +152,27 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         return n;
     }
 
+    /**
+     * Returns the type of this grid generator.
+     */
+    public GridGeneratorType getType() {
+        int result = ppl_Grid_Generator_type(pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return GridGeneratorType.valueOf(result);
+    }
+
+    /**
+     * Returns the divisor of this grid generator.
+     */
+    public Coefficient getDivisor() {
+        var d = Coefficient.zero();
+        int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
+        if (result < 0)
+            throw new PPLError(result);
+        return d;
+    }
+
     @Override
     public boolean isOK() {
         int result = ppl_Grid_Generator_OK(pplObj);
@@ -154,9 +187,9 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     /**
-     * Returns whether obj is the same as this GridGenerator. Two grid generators
+     * Returns whether obj is the same as this grid generator. Two grid generators
      * are the same if they have the same type, space dimensions and coefficients.
-     * For points and parametes, the divisor should also be equal.
+     * For points and parameters, the divisor should also be equal.
      */
     @Override
     public boolean equals(Object obj) {
@@ -179,39 +212,6 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns the type of this GridGenerator.
-     */
-    public GridGeneratorType getType() {
-        int result = ppl_Grid_Generator_type(pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return GridGeneratorType.valueOf(result);
-    }
-
-    /**
-     * Returns the divisor of this GridGenerator.
-     */
-    public Coefficient getDivisor() {
-        var d = Coefficient.zero();
-        int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
-        if (result < 0)
-            throw new PPLError(result);
-        return d;
-    }
-
-    /**
-     * Creates the point that is the origin of the zero-dimensional space
-     * \(\mathbb{R}^0\).
-     */
-    public static GridGenerator point() {
-        var pg = new PointerByReference();
-        int result = ppl_new_Grid_Generator_zero_dim_point(pg);
-        if (result < 0)
-            throw new PPLError(result);
-        return new GridGenerator(pg.getValue());
     }
 
 }
