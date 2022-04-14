@@ -36,11 +36,12 @@ import com.sun.jna.ptr.PointerByReference;
  * dimension zero.
  * </p>
  * <p>
- * Almost all methods throw {@link PPLRuntimeException} when the underlying PPL library
- * generates an error.
+ * Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
+ * library generates an error.
  * </p>
  */
-public class LinearExpression extends AbstractPPLObject<LinearExpression> implements GeometricDescriptor<LinearExpression> {
+public class LinearExpression extends AbstractPPLObject<LinearExpression>
+        implements GeometricDescriptor<LinearExpression> {
 
     private static class LinearExpressionCleaner implements Runnable {
         private Pointer pplObj;
@@ -74,7 +75,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
 
     /**
      * Creates and returns a linear expression corresponding the constant 0 in a
-     * d-dimensional space.
+     * {@code d}-dimensional space.
      */
     public static LinearExpression zero(long d) {
         var ple = new PointerByReference();
@@ -85,7 +86,8 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Copies and returns the linear expression contained in the constraint c.
+     * Copies and returns the linear expression contained in the constraint
+     * {@code c}.
      */
     public static LinearExpression from(Constraint c) {
         var ple = new PointerByReference();
@@ -96,7 +98,8 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Copies and returns the linear expression contained in the generator g.
+     * Copies and returns the linear expression contained in the generator
+     * {@code g}.
      */
     public static LinearExpression from(Generator g) {
         var ple = new PointerByReference();
@@ -107,7 +110,8 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Copies and returns the linear expression contained in the congruence c.
+     * Copies and returns the linear expression contained in the congruence
+     * {@code c}.
      */
     public static LinearExpression from(Congruence c) {
         var ple = new PointerByReference();
@@ -213,7 +217,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Adds the inhomogeneous term \(c\) to this linear expression.
+     * Adds the inhomogeneous term {@code c} to this linear expression.
      *
      * @return this linear expression.
      */
@@ -225,7 +229,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Adds the linear expression le to this linear expression.
+     * Adds the linear expression {@code le} to this linear expression.
      *
      * @return this linear expression.
      */
@@ -237,7 +241,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Multiplies this linear expression by the constant \(c\).
+     * Multiplies this linear expression by the constant {@code c}.
      *
      * @return this linear expression.
      */
@@ -273,9 +277,9 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Convenience method which builds a linear expression given a list of
-     * coefficients, starting with the inhomogeneous term and continuing with the
-     * coefficient of the variables \(x_0, \x_1, \ldots\)
+     * Creates and returns a linear expression given a list of coefficients. The
+     * list starts with the inhomogeneous term and continues with the coefficients
+     * of the variables \(x_0, x_1, \ldots\) in increasing dimension order.
      */
     public static LinearExpression of(Coefficient c, Coefficient... args) {
         var le = LinearExpression.zero(args.length);
@@ -287,8 +291,8 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Similar to the {@link #of(Coefficient c, Coefficient... args) of(Coefficient
-     * c, Coefficient... args)} constructor but with BigInteger parameters.
+     * Similar to {@link #of(Coefficient, Coefficient...)} but with BigInteger
+     * parameters.
      */
     public static LinearExpression of(BigInteger c, BigInteger... args) {
         var le = LinearExpression.zero(args.length);
@@ -300,8 +304,34 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     }
 
     /**
-     * Similar to {@link #of(Coefficient c, Coefficient... args) of(Coefficient c,
-     * Coefficient... args)} constructor but with long parameters.
+     * Similar to {@link #of(Coefficient, Coefficient...)} but coefficients are
+     * provided by their string representation in the specified {@code radix}.
+     */
+    public static LinearExpression of(int radix, String c, String... args) {
+        var le = LinearExpression.zero(args.length);
+        le.add(Coefficient.valueOf(c, radix));
+        for (int i = 0; i < args.length; i++) {
+            le.add(Coefficient.valueOf(args[i], radix), i);
+        }
+        return le;
+    }
+
+    /**
+     * Similar to {@link #of(Coefficient, Coefficient...)} but coefficients are
+     * provided trough their decimal string representation.
+     */
+    public static LinearExpression of(String c, String... args) {
+        var le = LinearExpression.zero(args.length);
+        le.add(Coefficient.valueOf(c));
+        for (int i = 0; i < args.length; i++) {
+            le.add(Coefficient.valueOf(args[i]), i);
+        }
+        return le;
+    }
+
+    /**
+     * Similar to {@link #of(Coefficient, Coefficient...)} constructor but with long
+     * parameters.
      */
     public static LinearExpression of(long c, long... args) {
         var le = LinearExpression.zero(args.length);

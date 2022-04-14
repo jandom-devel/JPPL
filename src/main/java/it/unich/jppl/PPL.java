@@ -5,8 +5,8 @@ import static it.unich.jppl.LibPPL.*;
 import it.unich.jppl.LibPPL.SizeT;
 
 import java.lang.ref.Cleaner;
+import java.util.function.Function;
 
-import com.sun.jna.Callback;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
@@ -76,10 +76,10 @@ public class PPL {
     }
 
     /**
-     * An error handler which saves the code and description of natve PPL error.
+     * An error handler which saves the code and description of native PPL errors.
      * Uses the Singleton design pattern.
      */
-    static class JPPLErrorHandler implements Callback {
+    static class JPPLErrorHandler implements PPLErrorHandler {
         private static JPPLErrorHandler instance = null;
         static int code;
         static String description;
@@ -144,7 +144,8 @@ public class PPL {
      * point numbers work correctly.
      *
      * This is performed automatically at initialization-time. Calling this method
-     * is needed only if {@link #restorePrePPLRounding} has been previously called.
+     * is needed only if {@link #restorePrePPLRounding()} has been previously
+     * called.
      */
     public static void setRoundingForPPL() {
         int result = ppl_set_rounding_for_PPL();
@@ -156,7 +157,7 @@ public class PPL {
      * Sets the FPU rounding mode as it was before initialization of the PPL.
      *
      * After calling this method it is absolutely necessary to call
-     * {@link #setRoundingForPPL} before using any JPPL abstractions based on
+     * {@link #setRoundingForPPL()} before using any JPPL abstractions based on
      * floating point numbers. This is performed automatically by
      * {@link #pplFinalize()}.
      */
@@ -170,8 +171,8 @@ public class PPL {
      * Sets the precision parameter used for irrational calculations.
      *
      * If {@code p} is less than or equal to {@link Integer#MAX_VALUE}, sets the
-     * precision parameter used for irrational calculations to \(p\). Then, in the
-     * irrational calculations returning an unbounded rational, (e.g., when
+     * precision parameter used for irrational calculations to {@code p}. Then, in
+     * the irrational calculations returning an unbounded rational, (e.g., when
      * computing a square root), the lesser between numerator and denominator will
      * be limited to \(2^p\).
      */
@@ -236,14 +237,14 @@ public class PPL {
     /**
      * Returns a string containing the native PPL version.
      *
-     * Let M and m denote the numbers returned by {@link getVersionMajor} and
-     * {@link getVersionMinor}, respectively. The format of {@link getVersion} is M
-     * "." m if both {@link getVersionRevision} (r) and {@link getVersionBeta}
-     * (b)are zero, M "." m "pre" b if {@link getVersionRevision} is zero and
-     * {@link getVersionBeta} is not zero, M "." m "." r if
-     * {@link getVersionRevision} is not zero and {@link getVersionBeta} is zero, M
-     * "." m "." r "pre" b if neither {@link getVersionRevision} nor
-     * {@link getVersionBeta} are zero.
+     * Let M and m denote the numbers returned by {@link #getVersionMajor} and
+     * {@link #getVersionMinor}, respectively. The format of {@link #getVersion} is
+     * M "." m if both {@link #getVersionRevision} (r) and {@link #getVersionBeta}
+     * (b)are zero, M "." m "pre" b if {@link #getVersionRevision} is zero and
+     * {@link #getVersionBeta} is not zero, M "." m "." r if
+     * {@link #getVersionRevision} is not zero and {@link #getVersionBeta} is zero,
+     * M "." m "." r "pre" b if neither {@link #getVersionRevision} nor
+     * {@link #getVersionBeta} are zero.
      */
     public static String getVersion() {
         var p = new PointerByReference();
@@ -268,7 +269,9 @@ public class PPL {
         return p.getValue().getString(0);
     }
 
-    /** Returns the maximum space dimension this library can handle. */
+    /**
+     * Returns the maximum space dimension this library can handle.
+     */
     public static long getMaxSpaceDimension() {
         var mref = new SizeTByReference();
         int result = ppl_max_space_dimension(mref);
@@ -277,7 +280,9 @@ public class PPL {
         return mref.getValue().longValue();
     }
 
-    /** Returns a value that does not designate a valid dimension. */
+    /**
+     * Returns a value that does not designate a valid dimension.
+     */
     public static long getNotADimension() {
         var mref = new SizeTByReference();
         int result = ppl_not_a_dimension(mref);
@@ -287,20 +292,20 @@ public class PPL {
     }
 
     /**
-     * Sends the string representatio of {@code var} to standard output.
+     * Sends the string representation of \(x_i\) to standard output.
      */
-    static void ioPrintVariable(long var) {
-        int result = ppl_io_print_variable(new SizeT(var));
+    static void ioPrintVariable(long i) {
+        int result = ppl_io_print_variable(new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
     }
 
     /**
-     * Returns the string representation of {@code var}.
+     * Returns the string representation of \(x_i\).
      */
-    public static String ioASPrintVariable(long var) {
+    public static String ioASPrintVariable(long i) {
         var strp = new PointerByReference();
-        int result = ppl_io_asprint_variable(strp, new SizeT(var));
+        int result = ppl_io_asprint_variable(strp, new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         var p = strp.getValue();
@@ -310,26 +315,31 @@ public class PPL {
     }
 
     /**
-     * Sets the output function to be used for printing variables to {@code vof}.
+     * Sets the output function to be used for printing variables. This callback is
+     * used every time a {@code toString()} method needs to compute the string
+     * representation of a variable \(x_i\).
      *
-     * This callback is used every time a {@code toString()} method need to compute
-     * the string representation of
+     * @param f a function from a {@code Long} \(i\) to the string representation of
+     *          the variable \(x_i\).
      */
-    public static void ioSetVariableOutputFunction(VariableOutputFunction vof) {
-        int result = ppl_io_set_variable_output_function(vof);
+    public static void ioSetVariableOutputFunction(Function<Long, String> f) {
+        int result = ppl_io_set_variable_output_function(f::apply);
         if (result < 0)
             PPLRuntimeException.checkError(result);
     }
 
     /**
      * Returns the current output function for printing variables.
+     *
+     * @return a function from a {@code Long} \(i\) to the string representation of
+     *         the variable \(x_i\).
      */
-    public static VariableOutputFunction ioGetVariableOutputFunction() {
-        var pp = new VariableOutputFunctionByRef();
+    public static Function<Long, String> ioGetVariableOutputFunction() {
+        var pp = new VariableOutputFunctionByReference();
         int result = ppl_io_get_variable_output_function(pp);
         if (result < 0)
             PPLRuntimeException.checkError(result);
-        return pp.f;
+        return pp.f::callback;
     }
 
     /**
@@ -342,7 +352,7 @@ public class PPL {
      *                                    text.
      * @param preferred_line_length       The preferred length for all the lines but
      *                                    the first one.
-     * @return The indented string.
+     * @return the indented string.
      */
     public static String ioWrapString(String src, int indent_depth, int preferred_first_line_length,
             int preferred_line_length) {

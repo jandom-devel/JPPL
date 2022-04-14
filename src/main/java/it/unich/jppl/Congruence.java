@@ -24,8 +24,8 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Congruence class may be considered
- * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
- * library generates an error.
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the
+ * underlying PPL library generates an error.
  * </p>
  */
 public class Congruence extends AbstractPPLObject<Congruence> implements GeometricDescriptor<Congruence> {
@@ -44,7 +44,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     }
 
     /**
-     * Creates a congruence from a native object.
+     * Creates a congruence from the native object pointed by {@code p}.
      *
      * @param registerCleaner if true, the native object is registered for deletion
      *                        when the congruence is garbage collected.
@@ -56,8 +56,8 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     }
 
     /**
-     * Creates a congruence from a native object. It is equivalent to
-     * {@code Congruence(p, true)}.
+     * Creates a congruence from the native object pointed by {@code p}. It is
+     * equivalent to {@code Congruence(p, true)}.
      */
     private Congruence(Pointer p) {
         this(p, true);
@@ -168,9 +168,9 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     }
 
     /**
-     * Returns whether obj is the same as this congruence. Two congruences are the
-     * same if they have the same space dimension, coefficients, inhomogeneous term
-     * and modulus.
+     * Returns whether {@code obj} is the same as this congruence. Two congruences
+     * are the same if they have the same space dimension, coefficients,
+     * inhomogeneous term and modulus.
      */
     @Override
     public boolean equals(Object obj) {

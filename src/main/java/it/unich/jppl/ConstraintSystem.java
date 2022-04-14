@@ -106,7 +106,7 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
     }
 
     /**
-     * Creates a constraint system from a native object.
+     * Creates a constraint system from the native object pointed by {@code p}.
      *
      * @param registerCleaner if true, the native object is registered for deletion
      *                        when the congruence system is garbage collected.
@@ -118,8 +118,8 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
     }
 
     /**
-     * Creates a constraint system from a native object. It is equivalent to
-     * {@code ConstraintSystem(p, true)}.
+     * Creates a constraint system from the native object pointed by {@code p}. It
+     * is equivalent to {@code ConstraintSystem(p, true)}.
      */
     private ConstraintSystem(Pointer p) {
         this(p, false);
@@ -152,7 +152,7 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
 
     /**
      * Creates and returns a constraint system containing only a copy of the
-     * constraint c.
+     * constraint {@code c}.
      */
     public static ConstraintSystem of(Constraint c) {
         var pcs = new PointerByReference();
@@ -172,7 +172,7 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
     }
 
     @Override
-    public ConstraintSystem assign(ConstraintSystem cs) {
+    ConstraintSystem assign(ConstraintSystem cs) {
         int result = ppl_assign_Constraint_System_from_Constraint_System(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -208,7 +208,7 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
     }
 
     @Override
-    public boolean isOK() {
+    boolean isOK() {
         int result = ppl_Constraint_System_OK(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);

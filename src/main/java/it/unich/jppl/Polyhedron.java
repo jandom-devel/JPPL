@@ -13,12 +13,15 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
-abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> implements Property<T> {
+/**
+ * Common abstract parent for both closed and NNC polyhedra.
+ */
+public abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> implements Property<T> {
 
-    protected static class PolyhedronCleaner implements Runnable {
+    static class PolyhedronCleaner implements Runnable {
         private Pointer pplObj;
 
-        protected PolyhedronCleaner(Pointer pplObj) {
+        PolyhedronCleaner(Pointer pplObj) {
             this.pplObj = pplObj;
         }
 
@@ -28,7 +31,11 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         }
     }
 
-    // This is used to simulate the Scala self-type in Java
+    /**
+     * Returns an object of type {@code T}. This is used to simulate the Scala
+     * self-type in Java. Each concrete class extending Polyhedron should provide an
+     * implementation which just returns {@code this}.
+     */
     abstract protected T self();
 
     @Override
@@ -50,7 +57,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public int getRelationWithConstraint(Constraint c) {
+    public int getRelationWith(Constraint c) {
         int result = ppl_Polyhedron_relation_with_Constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -58,7 +65,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public int getRelationWithGenerator(Generator g) {
+    public int getRelationWith(Generator g) {
         int result = ppl_Polyhedron_relation_with_Generator(pplObj, g.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -258,7 +265,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public boolean isOK() {
+    boolean isOK() {
         int result = ppl_Polyhedron_OK(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -284,7 +291,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addConstraint(Constraint c) {
+    public T add(Constraint c) {
         int result = ppl_Polyhedron_add_constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -292,7 +299,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addCongruence(Congruence c) {
+    public T add(Congruence c) {
         int result = ppl_Polyhedron_add_congruence(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -300,7 +307,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addConstraints(ConstraintSystem cs) {
+    public T add(ConstraintSystem cs) {
         int result = ppl_Polyhedron_add_constraints(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -308,7 +315,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addCongruences(CongruenceSystem cs) {
+    public T add(CongruenceSystem cs) {
         int result = ppl_Polyhedron_add_congruences(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -316,7 +323,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addReycledConstraints(ConstraintSystem cs) {
+    public T addReycled(ConstraintSystem cs) {
         int result = ppl_Polyhedron_add_recycled_constraints(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -324,7 +331,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T addRecycledCongruences(CongruenceSystem cs) {
+    public T addRecycled(CongruenceSystem cs) {
         int result = ppl_Polyhedron_add_recycled_congruences(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -332,7 +339,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T refineWithConstraint(Constraint c) {
+    public T refineWith(Constraint c) {
         int result = ppl_Polyhedron_refine_with_constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -340,7 +347,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T refineWithCongruence(Congruence c) {
+    public T refineWith(Congruence c) {
         int result = ppl_Polyhedron_refine_with_congruence(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -348,7 +355,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T refineWithConstraints(ConstraintSystem c) {
+    public T refineWith(ConstraintSystem c) {
         int result = ppl_Polyhedron_refine_with_constraints(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -356,7 +363,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T refineWithCongruences(CongruenceSystem c) {
+    public T refineWith(CongruenceSystem c) {
         int result = ppl_Polyhedron_refine_with_congruences(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -364,39 +371,39 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T intersectionAssign(T ph) {
-        int result = ppl_Polyhedron_intersection_assign(pplObj, ph.pplObj);
+    public T intersection(T p) {
+        int result = ppl_Polyhedron_intersection_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T upperBoundAssign(T ph) {
-        int result = ppl_Polyhedron_upper_bound_assign(pplObj, ph.pplObj);
+    public T upperBound(T p) {
+        int result = ppl_Polyhedron_upper_bound_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T differenceAssign(T ph) {
-        int result = ppl_Polyhedron_difference_assign(pplObj, ph.pplObj);
+    public T difference(T p) {
+        int result = ppl_Polyhedron_difference_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T simplifyUsingContextAssign(T ph) {
-        int result = ppl_Polyhedron_difference_assign(pplObj, ph.pplObj);
+    public T simplifyUsingContext(T p) {
+        int result = ppl_Polyhedron_difference_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T timeElapseAssign(T ph) {
+    public T timeElapse(T ph) {
         int result = ppl_Polyhedron_time_elapse_assign(pplObj, ph.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -404,7 +411,7 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T topologicalClosureAssign() {
+    public T topologicalClosure() {
         int result = ppl_Polyhedron_topological_closure_assign(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -412,15 +419,15 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T unconstrainSpaceDimension(long var) {
-        int result = ppl_Polyhedron_unconstrain_space_dimension(pplObj, new SizeT(var));
+    public T unconstrain(long i) {
+        int result = ppl_Polyhedron_unconstrain_space_dimension(pplObj, new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T unconstrainSpaceDimensions(long[] ds) {
+    public T unconstrain(long[] ds) {
         var buffer = new SizeTArray(ds);
         int result = ppl_Polyhedron_unconstrain_space_dimensions(pplObj, buffer, new SizeT(ds.length));
         if (result < 0)
@@ -429,40 +436,40 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T affineImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_affine_image(pplObj, new SizeT(var), le.pplObj, d.pplObj);
+    public T affineImage(long i, LinearExpression le, Coefficient d) {
+        int result = ppl_Polyhedron_affine_image(pplObj, new SizeT(i), le.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T affinePreImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_affine_preimage(pplObj, new SizeT(var), le.pplObj, d.pplObj);
+    public T affinePreImage(long i, LinearExpression le, Coefficient d) {
+        int result = ppl_Polyhedron_affine_preimage(pplObj, new SizeT(i), le.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Polyhedron_bounded_affine_image(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
+    public T boundedAffineImage(long i, LinearExpression lb, LinearExpression ub, Coefficient d) {
+        int result = ppl_Polyhedron_bounded_affine_image(pplObj, new SizeT(i), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Polyhedron_bounded_affine_preimage(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
+    public T boundedAffinePreImage(long i, LinearExpression lb, LinearExpression ub, Coefficient d) {
+        int result = ppl_Polyhedron_bounded_affine_preimage(pplObj, new SizeT(i), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
     @Override
-    public T generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_generalized_affine_image(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
+    public T generalizedAffineImage(long i, ConstraintType relsym, LinearExpression le, Coefficient d) {
+        int result = ppl_Polyhedron_generalized_affine_image(pplObj, new SizeT(i), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -470,8 +477,8 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Polyhedron_generalized_affine_preimage(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
+    public T generalizedAffinePreImage(long i, ConstraintType relsym, LinearExpression le, Coefficient d) {
+        int result = ppl_Polyhedron_generalized_affine_preimage(pplObj, new SizeT(i), relsym.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -496,8 +503,8 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T concatenateAssign(T ph) {
-        int result = ppl_Polyhedron_concatenate_assign(pplObj, ph.pplObj);
+    public T concatenate(T p) {
+        int result = ppl_Polyhedron_concatenate_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
@@ -552,14 +559,19 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
     }
 
     @Override
-    public T foldSpaceDimensions(long[] ds, long d) {
+    public T foldSpaceDimensions(long[] ds, long i) {
         int result = ppl_Polyhedron_fold_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length),
-                new SizeT(d));
+                new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
+    /**
+     * Returns a generator system approximating this polyhedron. This is an internal
+     * structure of the PPL, should not be modified and might not survive any change
+     * to the polyhedron.
+     */
     public GeneratorSystem getGenerators() {
         var pgs = new PointerByReference();
         int result = ppl_Polyhedron_get_generators(pplObj, pgs);
@@ -568,6 +580,11 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return new GeneratorSystem(pgs.getValue(), false);
     }
 
+    /**
+     * Returns a minimized generator system approximating this polyhedron. This is
+     * an internal structure of the PPL, should not be modified and might not
+     * survive any change to the polyhedron.
+     */
     public GeneratorSystem getMinimizedGenerators() {
         var pgs = new PointerByReference();
         int result = ppl_Polyhedron_get_minimized_generators(pplObj, pgs);
@@ -576,34 +593,71 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return new GeneratorSystem(pgs.getValue(), false);
     }
 
-    public T addGenerator(Generator g) {
+    /**
+     * Adds the generator {@code g} to this polyhedron.
+     *
+     * @throws PPLRuntimeException if {@code this} and {@code g} are
+     *                             dimension-incompatible, or the generator
+     *                             {@code g} is not optimally supported by the class
+     *                             of the polyhedron.
+     * @return this polyhedron
+     */
+    public T add(Generator g) {
         int result = ppl_Polyhedron_add_generator(pplObj, g.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T addGenerators(GeneratorSystem gs) {
+    /**
+     * Adds the generators in {@code gs} to the polyhedron.
+     *
+     * @throws PPLRuntimeException if {@code this} and {@code gs} are
+     *                             dimension-incompatible, or {@code gs} constrains
+     *                             a generator which is not optimally supported by
+     *                             the class of the polyhedron.
+     * @return this polyhedron.
+     */
+    public T add(GeneratorSystem gs) {
         int result = ppl_Polyhedron_add_generators(pplObj, gs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T addReycledGenerators(GeneratorSystem gs) {
+    /**
+     * Similar to {@link #add(GeneratorSystem)} but after calling this method there
+     * is no guarantee on the content of {@code gs}. For increasing performance, its
+     * internal data structure might have been reused.
+     *
+     * @return this polyhedron.
+     */
+    public T addReycled(GeneratorSystem gs) {
         int result = ppl_Polyhedron_add_recycled_generators(pplObj, gs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T polyHullAssign(T ph) {
+    /**
+     * Assigns to this polyhedron is poly-hull with {@code ph}.
+     *
+     * @return this polyhedron.
+     */
+    public T polyHull(T ph) {
         int result = ppl_Polyhedron_poly_hull_assign(pplObj, ph.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
+    /**
+     * Assigns to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation/devref/ppl-devref-1.2-html/index.html#Convex_Polyhedral_Difference">poly-difference</a>
+     * with {@code ph}.
+     *
+     * @return this polyhedron.
+     */
     public T polyDifferenceAssign(T ph) {
         int result = ppl_Polyhedron_poly_difference_assign(pplObj, ph.pplObj);
         if (result < 0)
@@ -611,7 +665,16 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T BHRZ03WideningAssign(T ph, WideningTokens w) {
+    /**
+     * Variant of {@link #BHRZ03Widening(Polyhedron) BHRZ03Widening} which also
+     * applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
+    public T BHRZ03Widening(T ph, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_BHRZ03_widening_assign_with_tokens(pplObj, ph.pplObj, tp);
         w.tokens = tp.getValue();
@@ -620,14 +683,31 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T BHRZ03WideningAssign(T ph) {
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#BHRZ03_widening">BHRZ03-widening</a>
+     * with {@code ph}. The polyhedron {@code ph} should be contained in (or be
+     * equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
+    public T BHRZ03Widening(T ph) {
         int result = ppl_Polyhedron_BHRZ03_widening_assign(pplObj, ph.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T H79WideningAssign(T ph, WideningTokens w) {
+    /**
+     * Variant of {@link #H79Widening(Polyhedron) H79Widening} which also applies
+     * the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
+    public T H79Widening(T ph, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_H79_widening_assign_with_tokens(pplObj, ph.pplObj, tp);
         w.tokens = tp.getValue();
@@ -636,14 +716,31 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T H79WideningAssign(T ph) {
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#H79_widening">H79-widening</a>
+     * with {@code ph}. The polyhedron {@code ph} should be contained in (or be
+     * equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
+    public T H79Widening(T ph) {
         int result = ppl_Polyhedron_H79_widening_assign(pplObj, ph.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T limitedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
+    /**
+     * Variant og {@link #limitedBHRZ03Extrapolation(Polyhedron, ConstraintSystem)
+     * limitedBHRZ03Extrapolation} which also applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
+    public T limitedBHRZ03Extrapolation(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_limited_BHRZ03_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();
@@ -652,14 +749,33 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T limitedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs) {
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#BHRZ03_widening">BHRZ03-widening</a>
+     * with {@code ph} using limited extrapolation. It means that the result is
+     * intersected with the constraints in {@code cs} that are satisfied by all the
+     * points of {@code this}. The polyhedron {@code ph} should be contained in (or
+     * be equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
+    public T limitedBHRZ03Extrapolation(T ph, ConstraintSystem cs) {
         int result = ppl_Polyhedron_limited_BHRZ03_extrapolation_assign(pplObj, ph.pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
-    public T limitedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
+    /**
+     * Variant of {@link #limitedH79Extrapolation(Polyhedron, ConstraintSystem)
+     * limitedH79Extrapolation} which also applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
+    public T limitedH79Extrapolation(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_limited_H79_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
         w.tokens = tp.getValue();
@@ -668,13 +784,33 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
-    public T limitedH79ExtrapolationAssign(T ph, ConstraintSystem cs) {
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#H79_widening">H79-widening</a>
+     * with {@code ph} using limited extrapolation. It means that the result is
+     * intersected with the constraints in {@code cs} that are satisfied by all the
+     * points of {@code this}. The polyhedron {@code ph} should be contained in (or
+     * be equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
+    public T limitedH79Extrapolation(T ph, ConstraintSystem cs) {
         int result = ppl_Polyhedron_limited_H79_extrapolation_assign(pplObj, ph.pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
     }
 
+    /**
+     * Variant of
+     * {@link #boundedBHRZ03ExtrapolationAssign(Polyhedron, ConstraintSystem)
+     * boundedBHRZ03ExtrapolationAssign} which also applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
     public T boundedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
@@ -684,6 +820,18 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#BHRZ03_widening">BHRZ03-widening</a>
+     * with {@code ph} using bounded extrapolation. It means the result is
+     * intersected with the constraints in {@code cs} that are satisfied by all the
+     * points of {@code this}, further intersected with all the constraints of the
+     * form \(\pm v \leq r\) and \(\pm v &lt; r\), with $r \in \mathbbt{Q}$, that
+     * are satisfied by all the points of {@code this}. The polyhedron {@code ph}
+     * should be contained in (or be equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
     public T boundedBHRZ03ExtrapolationAssign(T ph, ConstraintSystem cs) {
         int result = ppl_Polyhedron_bounded_BHRZ03_extrapolation_assign(pplObj, ph.pplObj, cs.pplObj);
         if (result < 0)
@@ -691,6 +839,16 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
+    /**
+     * Variant of
+     * {@link #boundedH79ExtrapolationAssign(Polyhedron, ConstraintSystem)
+     * boundedH79ExtrapolationAssign} which also applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this polyhedron.
+     */
     public T boundedH79ExtrapolationAssign(T ph, ConstraintSystem cs, WideningTokens w) {
         IntByReference tp = new IntByReference(w.tokens);
         int result = ppl_Polyhedron_bounded_H79_extrapolation_assign_with_tokens(pplObj, ph.pplObj, cs.pplObj, tp);
@@ -700,6 +858,18 @@ abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObject<T> 
         return self();
     }
 
+    /**
+     * Assign to this polyhedron its <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#H79_widening">H79-widening</a>
+     * with {@code ph} using bounded extrapolation. It means the result is
+     * intersected with the constraints in {@code cs} that are satisfied by all the
+     * points of {@code this}, further intersected with all the constraints of the
+     * form \(\pm v \leq r\) and \(\pm v &lt; r\), with $r \in \mathbbt{Q}$, that
+     * are satisfied by all the points of {@code this}. The polyhedron {@code ph}
+     * should be contained in (or be equal to) {@code this}.
+     *
+     * @return this polyhedron.
+     */
     public T boundedH79ExtrapolationAssign(T ph, ConstraintSystem cs) {
         int result = ppl_Polyhedron_bounded_H79_extrapolation_assign(pplObj, ph.pplObj, cs.pplObj);
         if (result < 0)

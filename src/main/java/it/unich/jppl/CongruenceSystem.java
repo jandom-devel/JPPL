@@ -106,7 +106,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     }
 
     /**
-     * Creates a congruence system from a native object.
+     * Creates a congruence system from the native object pointed by {@code p}.
      *
      * @param registerCleaner if true, the native object is registered for deletion
      *                        when the congruence system is garbage collected.
@@ -118,8 +118,8 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     }
 
     /**
-     * Creates a congruence system from a native object. It is equivalent to
-     * {@code CongruenceSystem(p, true}
+     * Creates a congruence system from the native object pointed by {@code p}. It
+     * is equivalent to {@code CongruenceSystem(p, true}
      */
     private CongruenceSystem(Pointer p) {
         this(p, false);
@@ -152,7 +152,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
 
     /**
      * Create and returns a congruence system containing only a copy of the
-     * congruence c.
+     * congruence {@code c}.
      */
     public static CongruenceSystem of(Congruence c) {
         var pcs = new PointerByReference();

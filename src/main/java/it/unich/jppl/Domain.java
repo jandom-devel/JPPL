@@ -16,54 +16,69 @@ public interface Domain<T extends Property<T>> {
 
     /**
      * Creates and returns an empty {@code d}-dimensional abstract object.
+     *
+     * @throws PPLRuntimeException with code {@code LENGTH_ERROR} if {@code d}
+     *                             exceeds the maximum allowed space dimension.
      */
     T createEmpty(long d);
 
     /**
-     * Creates and returns an universe {@code d}-dimensional abstract object, i.e., the
-     * full vector space \(\mathbb{R}^d\).
+     * Creates and returns an universe {@code d}-dimensional abstract object, i.e.,
+     * the full vector space \(\mathbb{R}^d\).
+     *
+     * @throws PPLRuntimeException with code {@code LENGTH_ERROR} if {@code d}
+     *                             exceeds the maximum allowed space dimension.
      */
     T createUniverse(long d);
 
     /**
      * Creates and returns an abstract object from the constraints in {@code cs}.
      * The abstract object inherits the space dimension of {@code cs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             constraints in {@code cs} is not optimally
+     *                             supported.
      */
     T createFrom(ConstraintSystem cs);
 
     /**
-     * Creates and returns an abstract object from the constraints in {@code cs},
-     * possibly recycling their internal structure. After calling this methods,
-     * there is no guarantee on the content of {@code cs}. The abstract object
-     * inherits the space dimension of {@code cs}.
+     * Similar to {@link #createFrom(ConstraintSystem) createFrom} but after calling
+     * this method there is no guarantee on the content of {@code cs}. For
+     * increasing performance, its internal data structure might have been reused.
      */
     T createRecycledFrom(ConstraintSystem cs);
 
     /**
      * Creates and returns an abstract object from the congruences in {@code cs}.
      * The abstract object inherits the space dimension of {@code cs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             congruences in {@code cs} is not optimally
+     *                             supported.
      */
     T createFrom(CongruenceSystem cs);
 
     /**
-     * Creates and returns an abstract object from the congruences in {@code cs}, possibly
-     * recycling their internal structure. After calling this methods, there is no
-     * guarantee on the content of {@code cs}. The abstract object inherits the
-     * space dimension of cs.
+     * Similar to {@link #createFrom(CongruenceSystem) createFrom}, but after
+     * calling this method there is no guarantee on the content of {@code cs}. For
+     * increasing performance, its internal data structure might have been reused.
      */
     T createRecycledFrom(CongruenceSystem cs);
 
     /**
      * Creates and returns an abstract object from the generators in {@code gs}. The
      * abstract object inherits the space dimension of {@code gs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             generators in {@code gs} is not optimally
+     *                             supported.
      */
     T createFrom(GeneratorSystem gs);
 
     /**
-     * Creates and returns an abstract object from the generators in {@code gs},
-     * possibly recycling their internal structure. After calling this methods,
-     * there is no guarantee on the contents of {@code gs}. The abstract object
-     * inherits the space dimension of [@code gs}.
+     * Similar to {@link #createFrom(GeneratorSystem) createFrom}, but after calling
+     * this method there is no guarantee on the content of {@code gs}. For
+     * increasing performance, its internal data structure might have been reused.
      */
     T createRecycledFrom(GeneratorSystem gs);
 

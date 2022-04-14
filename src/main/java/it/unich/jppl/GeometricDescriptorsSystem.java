@@ -35,7 +35,7 @@ public interface GeometricDescriptorsSystem<GD, GDS extends GeometricDescriptors
     GDS clear();
 
     /**
-     * Adds the geometric decriptor d to this system.
+     * Adds the geometric decriptor {@code gd} to this system.
      *
      * @return this system
      */

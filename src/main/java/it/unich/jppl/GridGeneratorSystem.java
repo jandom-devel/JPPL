@@ -145,7 +145,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
 
     /**
      * Creates and returns a new grid generator system containing only a copy of the
-     * grid generator c.
+     * grid generator {@code g}.
      */
     public static GridGeneratorSystem of(GridGenerator g) {
         var pgs = new PointerByReference();
@@ -165,7 +165,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     }
 
     @Override
-    public GridGeneratorSystem assign(GridGeneratorSystem gs) {
+    GridGeneratorSystem assign(GridGeneratorSystem gs) {
         int result = ppl_assign_Grid_Generator_System_from_Grid_Generator_System(pplObj, gs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -190,7 +190,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     }
 
     @Override
-    public boolean isOK() {
+    boolean isOK() {
         int result = ppl_Grid_Generator_System_OK(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);

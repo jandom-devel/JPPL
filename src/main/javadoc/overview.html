@@ -2,56 +2,53 @@
 
 <body>
     <p>
-        JPPL are Java bindings for the <a href="https://www.bugseng.com/parma-polyhedra-library">PPL</a> (Parma
-        Plyhedra Library) written using the <a href="https://github.com/java-native-access/jna">JNA</a> (Java Native
-        Acccess)
-        library.
+        The JPPL is a set of Java bindings for the <a href="https://www.bugseng.com/parma-polyhedra-library">PPL</a>
+        (Parma Plyhedra Library) written using the <a href="https://github.com/java-native-access/jna">JNA</a> (Java
+        Native Acccess) library.
     </p>
     <p>
-        Although the PPL already comes with Java bindings (in the following called
-        <em>standard bindings</em>), we think they have some shortcomings:
+        Although the PPL already comes with Java bindings (in the following called <em>standard bindings</em>), we think
+        they have some shortcomings:
     </p>
     <ul>
-        <li>They are not available in standard online repositories and scarcely available
-            in OS package repositories (for example, in the Linux world, the Java
-            bindings are packaged by Fedora but not by Debian or Ubuntu).
-        <li>There is no common interface explicitly implemented by abstract domains.
-            This make generic programming impossible without recurring to reflexivity.
-        <li>Conventions do not follow the Java standard practices (for example, words
-            in multi-word class names are separated by an underscore).
-        <li>Some parts of the API (such as the one for linear expressions) are quite
-            cumbersome to use.
+        <li>They are not available in standard online repositories and scarcely available in OS package repositories
+            (for example, in the Linux world, the Java bindings are packaged by Fedora but not by Debian or Ubuntu).
+        <li>The abstract domains do not explicitly implement a common interface. This make generic programming
+            impossible without recurring to reflexivity.
+        <li>Most conventions do not follow the Java standard practices (for example, words in multi-word class names are
+            separated by an underscore).
+        <li>Some parts of the API (such as the one for linear expressions) are cumbersome to use.
     </ul>
     <p>
-        JPPL strives to overcome these shortcomings. The fact that the standard
-        bindings are not readily available online in binary form led us to write a
-        complete replacement for them, instead of a wrapper. JPPL uses JNA to
-        interface directly with the C bindings of the PPL. Obviously, this choice
-        also has its shortcomings, mainly:
+        JPPL strives to overcome these shortcomings. The fact that the standard bindings are not readily available
+        online in binary form led us to write a complete replacement for them, instead of a wrapper. JPPL uses <a
+            href="https://github.com/java-native-access/jna">JNA</a> to interface directly with the C bindings of the <a
+            href="https://www.bugseng.com/parma-polyhedra-library">PPL</a>. Obviously, this choice also has its
+        shortcomings, mainly:
     <ul>
-        <li>JPPL is probably slower than the standard bindings.</li>
-        <li>JPPL only works (at least at the moment) with the default configuration
-            of the C bindings of the PPL.</li>
+        <li>
+            JPPL is probably slower than the standard bindings.
+        </li>
+        <li>
+            JPPL only works (at least at the moment) with the default configuration of the C bindings of the <a
+                href="https://www.bugseng.com/parma-polyhedra-library">PPL</a>.
+        </li>
     </ul>
     <p>
-        The central cornerstones of the JPPL are the two interfaces
-        {@link it.unich.jppl.Domain} and {@link it.unich.jppl.Property}. Every
-        nunerical abstract domain should implement both.
-        {@link it.unich.jppl.Property} is the interface for the elements of an
-        abstract domain, which we will call <em>abstract objects</em>. Methods of the
-        Property interface are operations which may be performed on these abstract
-        objects, such as projection over a dimension, convex hull, refinement with a
-        linear constraint, etc... F-Bounded polymorphism is used for correctly typing
-        the parameters and return value of these methods.
-        A {@link it.unich.jppl.Domain} is a factory for abstract objects. Each class implementing
-        {@link it.unich.jppl.Property} has a companion class implementing
-        {@link it.unich.jppl.Domain} (for example, {@link it.unich.jppl.CPolyhedron}
-        implements {@link it.unich.jppl.Property} while
-        {@link it.unich.jppl.CPolyhedronDomain} implements
-        {@link it.unich.jppl.Domain}).
+        The central cornerstones of the JPPL are the two interfaces {@link it.unich.jppl.Domain} and {@link
+        it.unich.jppl.Property}. Every nunerical abstract domain should implement both. {@link it.unich.jppl.Property}
+        is the interface for the elements of an abstract domain, which we will call <em>abstract objects</em>. Methods
+        of the {@link it.unich.jppl.Property} interface are operations which may be performed on these abstract objects,
+        such as projection over a dimension, convex hull, refinement with a linear constraint, etc... F-Bounded
+        polymorphism is used for correctly typing the parameters and return value of these methods. A {@link
+        it.unich.jppl.Domain} is a factory for abstract objects. Each class implementing {@link it.unich.jppl.Property}
+        has a companion class implementing {@link it.unich.jppl.Domain} (for example, {@link it.unich.jppl.CPolyhedron}
+        implements {@link it.unich.jppl.Property} while {@link it.unich.jppl.CPolyhedronDomain} implements {@link
+        it.unich.jppl.Domain}).
     </p>
     <p>
-        Note that the PPL is not thread safe, therefore the same holds for JPPL.
+        Note that the <a href="https://www.bugseng.com/parma-polyhedra-library">PPL</a> is not thread safe, therefore
+        the same holds for the JPPL.
     </p>
 </body>
 

@@ -146,7 +146,7 @@ public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
 
     /**
      * Creates and returns a generator system containing only a copy of the
-     * generator g.
+     * generator {@code g}.
      */
     public static GeneratorSystem of(Generator g) {
         var pgs = new PointerByReference();

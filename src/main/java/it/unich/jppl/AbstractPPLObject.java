@@ -15,19 +15,19 @@ public abstract class AbstractPPLObject<T extends AbstractPPLObject<T>> implemen
     protected Pointer pplObj;
 
     /**
-     * Assigns to this object a copy of the object obj.
+     * Assigns to this object a copy of the object {@code obj}.
      */
     abstract T assign(T obj);
 
     /**
      * Returns true if the native PPL object satisfies all its implementation
-     * invariants; returns false and perhaps makes some noise if it is broken.
+     * invariants. Returns false and perhaps makes some noise if it is broken.
      * Useful for debugging purposes.
      */
     abstract boolean isOK();
 
     /**
-     * Returns in pstr a pointer to the string representation of this object.
+     * Returns in {@code pstr} a pointer to the string representation of this object.
      *
      * <p>
      * The method provided by concrete subclasses should call the correct C function

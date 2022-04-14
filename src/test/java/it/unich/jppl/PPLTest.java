@@ -2,8 +2,6 @@ package it.unich.jppl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.unich.jppl.LibPPL.VariableOutputFunction;
-
 import org.junit.jupiter.api.Test;
 
 class PPLTest {
@@ -39,7 +37,7 @@ class PPLTest {
     void variablePrintTest() {
         long var = 2;
         assertEquals("C", PPL.ioASPrintVariable(var));
-        VariableOutputFunction f = PPL.ioGetVariableOutputFunction();
+        var f = PPL.ioGetVariableOutputFunction();
         PPL.ioSetVariableOutputFunction((x) -> "v" + x);
         assertEquals("v2", PPL.ioASPrintVariable(var));
         PPL.ioSetVariableOutputFunction(f);

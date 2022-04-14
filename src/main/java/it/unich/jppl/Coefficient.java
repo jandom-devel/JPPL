@@ -24,8 +24,8 @@ import com.sun.jna.ptr.PointerByReference;
  * </ul>
  * <p>
  * If using only public methods, the Coefficient class may be considered
- * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
- * library generates an error.
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the
+ * underlying PPL library generates an error.
  * </p>
  */
 public class Coefficient extends AbstractPPLObject<Coefficient> {
@@ -59,7 +59,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Creates a coefficient from the pointer p to a native object.
+     * Creates a coefficient from the native object pointed by {@code p}.
      */
     private Coefficient(Pointer p) {
         pplObj = p;
@@ -78,7 +78,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Creates and returns a coefficient whose value is z.
+     * Creates and returns a coefficient whose value is {@code z}.
      */
     public static Coefficient valueOf(MPZ z) {
         var pc = new PointerByReference();
@@ -89,7 +89,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Creates and returns a coefficient whose value is l.
+     * Creates and returns a coefficient whose value is {@code l}.
      */
     public static Coefficient valueOf(long l) {
         return valueOf(new MPZ(l));
@@ -97,7 +97,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
 
     /**
      * Creates and returns a coefficient whose value is given by the string
-     * representation s in the specified radix.
+     * representation {@code s} in the specified {@code radix}.
      */
     public static Coefficient valueOf(String s, int radix) {
         return valueOf(new MPZ(s, radix));
@@ -105,14 +105,14 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
 
     /**
      * Cretes and returns a coefficient whose value is given by the decimal string
-     * representation s. It is equivalent to {@code Coefficient(s, 10)}.
+     * representation {@code s}. It is equivalent to {@code Coefficient(s, 10)}.
      */
     public static Coefficient valueOf(String s) {
         return valueOf(s, 10);
     }
 
     /**
-     * Creates and returns a coefficient whose value is equal to bi.
+     * Creates and returns a coefficient whose value is equal to {@code bi}.
      */
     public static Coefficient valueOf(BigInteger bi) {
         // We use radix 32 since we suspect it to be faster than radix 10.
@@ -130,7 +130,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Set the value of this coefficient to z.
+     * Set the value of this coefficient to {@code z}.
      */
     Coefficient assign(MPZ z) {
         int result = ppl_assign_Coefficient_from_mpz_t(pplObj, z.getPointer());
@@ -159,7 +159,8 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Converts the coefficient to its string representation in the specified radix.
+     * Converts the coefficient to its string representation in the specified
+     * {@code radix}.
      */
     public String stringValue(int radix) {
         return MPZValue().toString(radix);
@@ -242,7 +243,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     }
 
     /**
-     * Returns whether obj is the same as this coefficient.
+     * Returns whether {@code obj} is the same as this coefficient.
      */
     @Override
     public boolean equals(Object obj) {

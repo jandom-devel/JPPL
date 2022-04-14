@@ -84,10 +84,10 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     /**
-     * Creates and returns a grid generator of direction le and type t. If the grid
-     * generator to be created is a point or a parameter, the divisor d is applied
-     * to le. If it is a line, d is simply disregarded. The space dimension of the
-     * new grid generator is equal to the space dimension of le.
+     * Creates and returns a grid generator of direction {@code le} and type {@code t}. If the grid
+     * generator to be created is a point or a parameter, the divisor {@code d} is applied
+     * to {@code le}. If it is a line, {@code d} is simply disregarded. The space dimension of the
+     * new grid generator is equal to the space dimension of {@code le}.
      */
     public static GridGenerator of(LinearExpression le, GridGeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
@@ -98,7 +98,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     /**
-     * Creates and returns a grid generator of direction le and type t. It is
+     * Creates and returns a grid generator of direction {@code le} and type {@code t}. It is
      * equivalent to {@code GridGenerator(le, t, Coefficient.ONE)}.
      */
     public static GridGenerator of(LinearExpression le, GridGeneratorType t) {
@@ -106,8 +106,8 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     /**
-     * Creates and returns the point which is the origin of the zero-dimensional space
-     * \(\mathbb{R}^0\).
+     * Creates and returns the point which is the origin of the zero-dimensional
+     * space \(\mathbb{R}^0\).
      */
     public static GridGenerator zeroDimPooint() {
         var pg = new PointerByReference();
@@ -174,7 +174,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     @Override
-    public boolean isOK() {
+    boolean isOK() {
         int result = ppl_Grid_Generator_OK(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -187,7 +187,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     }
 
     /**
-     * Returns whether obj is the same as this grid generator. Two grid generators
+     * Returns whether {@code obj} is the same as this grid generator. Two grid generators
      * are the same if they have the same type, space dimensions and coefficients.
      * For points and parameters, the divisor should also be equal.
      */

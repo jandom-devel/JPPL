@@ -53,7 +53,10 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}}
+     * <p>
+     * The complexity argument is ignored.
+     * </p>
      */
     @Override
     public DoubleBox createFrom(DoubleBox box, ComplexityClass complexity) {
@@ -66,7 +69,11 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}
+     * <p>
+     * If {@code complexity} is {@code ANY_COMPLEXITY}, then the built box is the
+     * smallest one containing {@code ph}.
+     * </p>
      */
     @Override
     public DoubleBox createFrom(CPolyhedron ph, ComplexityClass complexity) {
@@ -79,7 +86,11 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}
+     * <p>
+     * If {@code complexity} is {@code ANY_COMPLEXITY}, then the built box is the
+     * smallest one containing {@code ph}.
+     * </p>
      */
     @Override
     public DoubleBox createFrom(NNCPolyhedron ph, ComplexityClass complexity) {

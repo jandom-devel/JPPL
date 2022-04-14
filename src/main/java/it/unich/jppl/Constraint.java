@@ -25,8 +25,8 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Constraint class may be considered
- * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
- * library generates an error.
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the
+ * underlying PPL library generates an error.
  * </p>
  */
 public class Constraint extends AbstractPPLObject<Constraint> implements GeometricDescriptor<Constraint> {
@@ -47,9 +47,9 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         GREATER_THAN;
 
         /**
-         * Returns the ConstraintType corrisponding to its ordinal value.
+         * Returns the constraint type corrisponding to its ordinal value.
          *
-         * @throws IllegalArgumentException if t is not a valid ordinal value.
+         * @throws IllegalArgumentException if {@code t} is not a valid ordinal value.
          */
         static ConstraintType valueOf(int t) {
             switch (t) {
@@ -82,7 +82,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     }
 
     /**
-     * Creates a constraint from a native object.
+     * Creates a constraint from the native object pointed by {@code p}.
      *
      * @param registerCleaner if true, the native object is registered for deletion
      *                        when the constraint is garbage collected.
@@ -94,8 +94,8 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     }
 
     /**
-     * Creates a constraint from a native object. It is equivalent to
-     * {@code Constraint(p, true)}.
+     * Creates a constraint from the native object pointed by {@code p}. It is
+     * equivalent to {@code Constraint(p, true)}.
      */
     private Constraint(Pointer p) {
         this(p, false);
@@ -205,9 +205,9 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     }
 
     /**
-     * Returns whether obj is the same as this constraint. Two constraints are the
-     * same if they have the same space dimension, coefficients, inhomogeneous term
-     * and type.
+     * Returns whether {@code obj} is the same as this constraint. Two constraints
+     * are the same if they have the same space dimension, coefficients,
+     * inhomogeneous term and type.
      */
     @Override
     public boolean equals(Object obj) {

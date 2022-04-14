@@ -14,7 +14,7 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * Boxes with bounds implemented using native doubles.
+ * A box with bounds implemented using native doubles.
  */
 public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<DoubleBox> {
 
@@ -32,13 +32,19 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     /**
-     * Creates a box from a native object.
+     * Creates a closed polyhedron from the native object pointed by {@code p}.
      */
     DoubleBox(Pointer p) {
         pplObj = p;
         PPL.cleaner.register(this, new DoubleBoxCleaner(pplObj));
     }
 
+    /**
+     * Creates and returns an empty {@code d}-dimensional box.
+     *
+     * @throws PPLRuntimeException with code {@code LENGTH_ERROR} if {@code d}
+     *                             exceeds the maximum allowed space dimension.
+     */
     public static DoubleBox empty(long d) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_space_dimension(pbox, new SizeT(d), 1);
@@ -47,6 +53,13 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns an universe {@code d}-dimensional box, i.e., the full
+     * vector space \(\mathbb{R}^d\).
+     *
+     * @throws PPLRuntimeException with code {@code LENGTH_ERROR} if {@code d}
+     *                             exceeds the maximum allowed space dimension.
+     */
     public static DoubleBox universe(long d) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_space_dimension(pbox, new SizeT(d), 0);
@@ -55,6 +68,14 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a boxn from the constraints in {@code cs}. The box
+     * inherits the space dimension of {@code cs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             constraints in {@code cs} is not optimally
+     *                             supported.
+     */
     public static DoubleBox from(ConstraintSystem cs) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_Constraint_System(pbox, cs.pplObj);
@@ -63,7 +84,12 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
-    public static DoubleBox recycledFrom(ConstraintSystem cs){
+    /**
+     * Similar to {@link #from(ConstraintSystem) from} but after calling this method
+     * there is no guarantee on the content of {@code cs}. For increasing
+     * performance, its internal data structure might have been reused.
+     */
+    public static DoubleBox recycledFrom(ConstraintSystem cs) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_recycle_Constraint_System(pbox, cs.pplObj);
         if (result < 0)
@@ -71,6 +97,14 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box from the congruences in {@code cs}. The box
+     * inherits the space dimension of {@code cs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             congruences in {@code cs} is not optimally
+     *                             supported.
+     */
     public static DoubleBox from(CongruenceSystem cs) {
         PointerByReference pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_Congruence_System(pbox, cs.pplObj);
@@ -79,6 +113,11 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Similar to {@link #from(CongruenceSystem) from} but after calling this method
+     * there is no guarantee on the content of {@code cs}. For increasing
+     * performance, its internal data structure might have been reused.
+     */
     public static DoubleBox recycledFrom(CongruenceSystem cs) {
         PointerByReference pbox = new PointerByReference();
         int result = ppl_new_Double_Box_recycle_Congruence_System(pbox, cs.pplObj);
@@ -87,6 +126,14 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box from the generators in {@code gs}. The box inherits
+     * the space dimension of {@code gs}.
+     *
+     * @throws PPLRuntimeException with code {@code INVALID_ARGUMENT} if any of the
+     *                             generators in {@code gs} is not optimally
+     *                             supported.
+     */
     public static DoubleBox from(GeneratorSystem gs) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_Generator_System(pbox, gs.pplObj);
@@ -95,6 +142,11 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Similar to {@link #from(GeneratorSystem) from} but after calling this method there
+     * is no guarantee on the content of {@code gs}. For increasing performance, its
+     * internal data structure might have been reused.
+     */
     public static DoubleBox recycledFrom(GeneratorSystem gs) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_recycle_Generator_System(pbox, gs.pplObj);
@@ -103,6 +155,9 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a copy of {@code box}.
+     */
     public static DoubleBox from(DoubleBox box) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_Double_Box(pbox, box.pplObj);
@@ -111,6 +166,10 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a copy of {@code box}. The parameter {@code complexity}
+     * is ignored.
+     */
     public static DoubleBox from(DoubleBox box, ComplexityClass complexity) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_Double_Box_with_complexity(pbox, box.pplObj, complexity.ordinal());
@@ -119,6 +178,9 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box containing {@code ph}.
+     */
     public static DoubleBox from(CPolyhedron ph) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_C_Polyhedron(pbox, ph.pplObj);
@@ -127,6 +189,11 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box containing {@code ph}. If {@code complexity} is
+     * {@code ANY_COMPLEXITY}, then the built box is the smallest one containing
+     * {@code ph}.
+     */
     public static DoubleBox from(CPolyhedron ph, ComplexityClass complexity) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_NNC_Polyhedron_with_complexity(pbox, ph.pplObj, complexity.ordinal());
@@ -135,6 +202,9 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box containing {@code ph}.
+     */
     public static DoubleBox from(NNCPolyhedron ph) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_NNC_Polyhedron(pbox, ph.pplObj);
@@ -143,6 +213,11 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
         return new DoubleBox(pbox.getValue());
     }
 
+    /**
+     * Creates and returns a box containing {@code ph}. If {@code complexity} is
+     * {@code ANY_COMPLEXITY}, then the built box is the smallest one containing
+     * {@code ph}.
+     */
     public static DoubleBox from(NNCPolyhedron ph, ComplexityClass complexity) {
         var pbox = new PointerByReference();
         int result = ppl_new_Double_Box_from_NNC_Polyhedron_with_complexity(pbox, ph.pplObj, complexity.ordinal());
@@ -157,7 +232,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox assign(DoubleBox box) {
+    DoubleBox assign(DoubleBox box) {
         int result = ppl_assign_Double_Box_from_Double_Box(pplObj, box.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -183,7 +258,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public int getRelationWithConstraint(Constraint c) {
+    public int getRelationWith(Constraint c) {
         int result = ppl_Double_Box_relation_with_Constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -191,7 +266,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public int getRelationWithGenerator(Generator g) {
+    public int getRelationWith(Generator g) {
         int result = ppl_Double_Box_relation_with_Generator(pplObj, g.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -283,8 +358,8 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public boolean constraints(long var) {
-        int result = ppl_Double_Box_constrains(pplObj, new SizeT(var));
+    public boolean constraints(long i) {
+        int result = ppl_Double_Box_constrains(pplObj, new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
@@ -367,31 +442,31 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public boolean contains(DoubleBox box) {
-        int result = ppl_Double_Box_contains_Double_Box(pplObj, box.pplObj);
+    public boolean contains(DoubleBox p) {
+        int result = ppl_Double_Box_contains_Double_Box(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
     @Override
-    public boolean strictlyContains(DoubleBox box) {
-        int result = ppl_Double_Box_strictly_contains_Double_Box(pplObj, box.pplObj);
+    public boolean strictlyContains(DoubleBox p) {
+        int result = ppl_Double_Box_strictly_contains_Double_Box(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
     @Override
-    public boolean isDisjointFrom(DoubleBox box) {
-        int result = ppl_Double_Box_is_disjoint_from_Double_Box(pplObj, box.pplObj);
+    public boolean isDisjointFrom(DoubleBox p) {
+        int result = ppl_Double_Box_is_disjoint_from_Double_Box(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
     @Override
-    public boolean isOK() {
+    boolean isOK() {
         int result = ppl_Double_Box_OK(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -417,7 +492,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addConstraint(Constraint c) {
+    public DoubleBox add(Constraint c) {
         int result = ppl_Double_Box_add_constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -425,7 +500,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addCongruence(Congruence c) {
+    public DoubleBox add(Congruence c) {
         int result = ppl_Double_Box_add_congruence(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -433,7 +508,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addConstraints(ConstraintSystem cs) {
+    public DoubleBox add(ConstraintSystem cs) {
         int result = ppl_Double_Box_add_constraints(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -441,7 +516,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addCongruences(CongruenceSystem cs) {
+    public DoubleBox add(CongruenceSystem cs) {
         int result = ppl_Double_Box_add_congruences(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -449,7 +524,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addReycledConstraints(ConstraintSystem cs) {
+    public DoubleBox addReycled(ConstraintSystem cs) {
         int result = ppl_Double_Box_add_recycled_constraints(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -457,7 +532,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox addRecycledCongruences(CongruenceSystem cs) {
+    public DoubleBox addRecycled(CongruenceSystem cs) {
         int result = ppl_Double_Box_add_recycled_congruences(pplObj, cs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -465,7 +540,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox refineWithConstraint(Constraint c) {
+    public DoubleBox refineWith(Constraint c) {
         int result = ppl_Double_Box_refine_with_constraint(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -473,7 +548,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox refineWithCongruence(Congruence c) {
+    public DoubleBox refineWith(Congruence c) {
         int result = ppl_Double_Box_refine_with_congruence(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -481,7 +556,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox refineWithConstraints(ConstraintSystem c) {
+    public DoubleBox refineWith(ConstraintSystem c) {
         int result = ppl_Double_Box_refine_with_constraints(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -489,7 +564,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox refineWithCongruences(CongruenceSystem c) {
+    public DoubleBox refineWith(CongruenceSystem c) {
         int result = ppl_Double_Box_refine_with_congruences(pplObj, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -497,47 +572,47 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox intersectionAssign(DoubleBox box) {
-        int result = ppl_Double_Box_intersection_assign(pplObj, box.pplObj);
+    public DoubleBox intersection(DoubleBox p) {
+        int result = ppl_Double_Box_intersection_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox upperBoundAssign(DoubleBox box) {
-        int result = ppl_Double_Box_upper_bound_assign(pplObj, box.pplObj);
+    public DoubleBox upperBound(DoubleBox p) {
+        int result = ppl_Double_Box_upper_bound_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox differenceAssign(DoubleBox box) {
-        int result = ppl_Double_Box_difference_assign(pplObj, box.pplObj);
+    public DoubleBox difference(DoubleBox p) {
+        int result = ppl_Double_Box_difference_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox simplifyUsingContextAssign(DoubleBox box) {
-        int result = ppl_Double_Box_difference_assign(pplObj, box.pplObj);
+    public DoubleBox simplifyUsingContext(DoubleBox p) {
+        int result = ppl_Double_Box_difference_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox timeElapseAssign(DoubleBox box) {
-        int result = ppl_Double_Box_time_elapse_assign(pplObj, box.pplObj);
+    public DoubleBox timeElapse(DoubleBox p) {
+        int result = ppl_Double_Box_time_elapse_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox topologicalClosureAssign() {
+    public DoubleBox topologicalClosure() {
         int result = ppl_Double_Box_topological_closure_assign(pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -545,15 +620,15 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox unconstrainSpaceDimension(long var) {
-        int result = ppl_Double_Box_unconstrain_space_dimension(pplObj, new SizeT(var));
+    public DoubleBox unconstrain(long i) {
+        int result = ppl_Double_Box_unconstrain_space_dimension(pplObj, new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox unconstrainSpaceDimensions(long[] ds) {
+    public DoubleBox unconstrain(long[] ds) {
         var buffer = new SizeTArray(ds);
         int result = ppl_Double_Box_unconstrain_space_dimensions(pplObj, buffer, new SizeT(ds.length));
         if (result < 0)
@@ -562,40 +637,40 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox affineImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_affine_image(pplObj, new SizeT(var), le.pplObj, d.pplObj);
+    public DoubleBox affineImage(long i, LinearExpression le, Coefficient d) {
+        int result = ppl_Double_Box_affine_image(pplObj, new SizeT(i), le.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox affinePreImage(long var, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_affine_preimage(pplObj, new SizeT(var), le.pplObj, d.pplObj);
+    public DoubleBox affinePreImage(long i, LinearExpression le, Coefficient d) {
+        int result = ppl_Double_Box_affine_preimage(pplObj, new SizeT(i), le.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox boundedAffineImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Double_Box_bounded_affine_image(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
+    public DoubleBox boundedAffineImage(long i, LinearExpression lb, LinearExpression ub, Coefficient d) {
+        int result = ppl_Double_Box_bounded_affine_image(pplObj, new SizeT(i), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox boundedAffinePreImage(long var, LinearExpression lb, LinearExpression ub, Coefficient d) {
-        int result = ppl_Double_Box_bounded_affine_preimage(pplObj, new SizeT(var), lb.pplObj, ub.pplObj, d.pplObj);
+    public DoubleBox boundedAffinePreImage(long i, LinearExpression lb, LinearExpression ub, Coefficient d) {
+        int result = ppl_Double_Box_bounded_affine_preimage(pplObj, new SizeT(i), lb.pplObj, ub.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox generalizedAffineImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_generalized_affine_image(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
+    public DoubleBox generalizedAffineImage(long i, ConstraintType rel, LinearExpression le, Coefficient d) {
+        int result = ppl_Double_Box_generalized_affine_image(pplObj, new SizeT(i), rel.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -603,8 +678,8 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox generalizedAffinePreImage(long var, ConstraintType relsym, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_generalized_affine_preimage(pplObj, new SizeT(var), relsym.ordinal(), le.pplObj,
+    public DoubleBox generalizedAffinePreImage(long i, ConstraintType rel, LinearExpression le, Coefficient d) {
+        int result = ppl_Double_Box_generalized_affine_preimage(pplObj, new SizeT(i), rel.ordinal(), le.pplObj,
                 d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -612,42 +687,40 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox generalizedAffineImageLhsRhs(LinearExpression lhs, ConstraintType relsym, LinearExpression rhs) {
-        int result = ppl_Double_Box_generalized_affine_image_lhs_rhs(pplObj, lhs.pplObj, relsym.ordinal(), rhs.pplObj);
+    public DoubleBox generalizedAffineImageLhsRhs(LinearExpression lhs, ConstraintType rel, LinearExpression rhs) {
+        int result = ppl_Double_Box_generalized_affine_image_lhs_rhs(pplObj, lhs.pplObj, rel.ordinal(), rhs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType relsym,
-            LinearExpression rhs) {
-        int result = ppl_Double_Box_generalized_affine_preimage_lhs_rhs(pplObj, lhs.pplObj, relsym.ordinal(),
-                rhs.pplObj);
+    public DoubleBox generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType rel, LinearExpression rhs) {
+        int result = ppl_Double_Box_generalized_affine_preimage_lhs_rhs(pplObj, lhs.pplObj, rel.ordinal(), rhs.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox concatenateAssign(DoubleBox box) {
-        int result = ppl_Double_Box_concatenate_assign(pplObj, box.pplObj);
+    public DoubleBox concatenate(DoubleBox p) {
+        int result = ppl_Double_Box_concatenate_assign(pplObj, p.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox addSpaceDimensionsAndEmbed(long d) {
-        int result = ppl_Double_Box_add_space_dimensions_and_embed(pplObj, new SizeT(d));
+    public DoubleBox addSpaceDimensionsAndEmbed(long m) {
+        int result = ppl_Double_Box_add_space_dimensions_and_embed(pplObj, new SizeT(m));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox addSpaceDimensionsAndProject(long d) {
-        int result = ppl_Double_Box_add_space_dimensions_and_project(pplObj, new SizeT(d));
+    public DoubleBox addSpaceDimensionsAndProject(long m) {
+        int result = ppl_Double_Box_add_space_dimensions_and_project(pplObj, new SizeT(m));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
@@ -678,17 +751,17 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox expandSpaceDimension(long d, long m) {
-        int result = ppl_Double_Box_expand_space_dimension(pplObj, new SizeT(d), new SizeT(m));
+    public DoubleBox expandSpaceDimension(long i, long m) {
+        int result = ppl_Double_Box_expand_space_dimension(pplObj, new SizeT(i), new SizeT(m));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox foldSpaceDimensions(long[] ds, long d) {
+    public DoubleBox foldSpaceDimensions(long[] ds, long i) {
         int result = ppl_Double_Box_fold_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length),
-                new SizeT(d));
+                new SizeT(i));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;

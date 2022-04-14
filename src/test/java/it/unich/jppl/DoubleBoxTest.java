@@ -3,6 +3,7 @@ package it.unich.jppl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import it.unich.jppl.Constraint.ConstraintType;
+import it.unich.jppl.Generator.GeneratorType;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,11 +18,38 @@ public class DoubleBoxTest {
 
         var box = DoubleBox.universe(2);
         assertFalse(box.constraints(0));
-        box.addConstraint(c1);
+        box.add(c1);
 
         assertTrue(box.constraints(0));
-        var exception = assertThrows(PPLRuntimeException.class, () -> box.addConstraint(c2));
+        var exception = assertThrows(PPLRuntimeException.class, () -> box.add(c2));
         assertEquals(exception.getCode(), PPLRuntimeException.INVALID_ARGUMENT);
+    }
+
+    @Test
+    void testAddCongruences() {
+        var le = LinearExpression.zero().add(Coefficient.ONE, 0);
+        var c = Congruence.of(le, Coefficient.valueOf(2));
+        var cs = CongruenceSystem.of(c);
+        var exception = assertThrows(PPLRuntimeException.class, () -> DoubleBox.from(cs));
+        assertEquals(exception.getCode(), PPLRuntimeException.INVALID_ARGUMENT);
+    }
+
+    @Test
+    void testAddGenerator() {
+        var p = Generator.zeroDimPoint();
+        var le = LinearExpression.zero().add(Coefficient.ONE, 0);
+        var g1 = Generator.of(le, GeneratorType.RAY);
+        le.add(Coefficient.ONE, 1);
+        var g2 = Generator.of(le, GeneratorType.RAY);
+        var gs = GeneratorSystem.of(p).add(g1).add(g2);
+        var b = DoubleBox.from(gs);
+        assertFalse(b.isBounded());
+    }
+
+    @Test
+    void testBig() {
+        var exception = assertThrows(PPLRuntimeException.class, () -> DoubleBox.universe(-3));
+        assertEquals(exception.getCode(), PPLRuntimeException.LENGTH_ERROR);
     }
 
 }

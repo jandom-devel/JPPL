@@ -27,8 +27,8 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Congruence class may be considered
- * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
- * library generates an error.
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the
+ * underlying PPL library generates an error.
  * </p>
  */
 public class Generator extends AbstractPPLObject<Generator> implements GeometricDescriptor<Generator> {
@@ -93,10 +93,11 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     }
 
     /**
-     * Creates and returns a generator of direction le and type t. If the generator
-     * to be created is a point or a closure point, the divisor d is applied to le.
-     * For other types of generators d is simply disregarded. The space dimension of
-     * the new generator is equal to the space dimension of le.
+     * Creates and returns a generator of direction {@code le} and type {@code t}.
+     * If the generator to be created is a point or a closure point, the divisor
+     * {@code d} is applied to {@code le}. For other types of generators {@code d}
+     * is simply disregarded. The space dimension of the new generator is equal to
+     * the space dimension of {@code le}.
      */
     public static Generator of(LinearExpression le, GeneratorType t, Coefficient d) {
         var pg = new PointerByReference();
@@ -107,8 +108,8 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     }
 
     /**
-     * Creates and returns a generator of direction le and type t. It is equivalent
-     * to {@code Generator(le, t, Coefficient.ONE)}.
+     * Creates and returns a generator of direction {@code le} and type {@code t}.
+     * It is equivalent to {@code Generator(le, t, Coefficient.ONE)}.
      */
     public static Generator of(LinearExpression le, GeneratorType t) {
         return of(le, t, Coefficient.ONE);
@@ -208,9 +209,9 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     }
 
     /**
-     * Returns whether obj is the same as this Generator. Two generators are the
-     * same if they have the same space type, dimension, coefficients. For points
-     * and closure point, the divisor should also be equal.
+     * Returns whether {@code obj} is the same as this generator. Two generators are
+     * the same if they have the same space type, dimension, coefficients. For
+     * points and closure point, the divisor should also be equal.
      */
     @Override
     public boolean equals(Object obj) {

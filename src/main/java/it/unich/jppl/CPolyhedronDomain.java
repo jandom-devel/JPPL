@@ -53,7 +53,10 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}
+     * <p>
+     * The complexity argument is ignored.
+     * </p>
      */
     @Override
     public CPolyhedron createFrom(CPolyhedron ph, ComplexityClass complexity) {
@@ -66,7 +69,10 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}
+     * <p>
+     * The complexity argument is ignored.
+     * </p>
      */
     @Override
     public CPolyhedron createFrom(NNCPolyhedron ph, ComplexityClass complexity) {
@@ -79,7 +85,10 @@ public class CPolyhedronDomain implements Domain<CPolyhedron> {
     }
 
     /**
-     * @param complexity is ignored
+     * {@inheritDoc}
+     * <p>
+     * The complexity argument is ignored.
+     * </p>
      */
     @Override
     public CPolyhedron createFrom(DoubleBox box, ComplexityClass complexity) {
