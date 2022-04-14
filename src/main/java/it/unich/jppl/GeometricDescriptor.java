@@ -1,7 +1,7 @@
 package it.unich.jppl;
 
 /**
- * A geometric descriptor.
+ * A (syntactic) geometric descriptor.
  *
  * <p>
  * This is the common interface for all (syntactic) geometric descriptors. Each

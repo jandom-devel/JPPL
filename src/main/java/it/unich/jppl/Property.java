@@ -5,7 +5,7 @@ import it.unich.jppl.Constraint.ConstraintType;
 import java.util.Optional;
 
 /**
- * The interface for properties, i.e., elements of an abstract domain.
+ * An abstract objectm, i.e., an element of an abstract domain.
  *
  * <p>
  * Properties are semantic geometric descriptors, i.e., subsets of a
@@ -14,6 +14,8 @@ import java.util.Optional;
  * "https://www.bugseng.com/external/ppl/documentation/user/ppl-user-c-interface-1.2-html/">PPL
  * official documentation</a> for further information.
  * </p>
+ *
+ * @see Domain
  */
 public interface Property<T extends Property<T>> {
 

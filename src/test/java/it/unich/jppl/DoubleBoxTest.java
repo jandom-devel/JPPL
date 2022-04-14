@@ -21,7 +21,7 @@ public class DoubleBoxTest {
 
         assertTrue(box.constraints(0));
         var exception = assertThrows(PPLError.class, () -> box.addConstraint(c2));
-        assertEquals(exception.getPPLError(), PPLError.PPL_ERROR_INVALID_ARGUMENT);
+        assertEquals(exception.getCode(), PPLError.INVALID_ARGUMENT);
     }
 
 }

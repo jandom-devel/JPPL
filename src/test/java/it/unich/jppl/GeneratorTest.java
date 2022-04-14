@@ -51,7 +51,7 @@ public class GeneratorTest {
     void testGetIllegalCoefficient() {
         var g = Generator.zeroDimPoint();
         var exception = assertThrows(PPLError.class, () -> g.getCoefficient(0));
-        assertEquals(PPLError.PPL_ERROR_INVALID_ARGUMENT, exception.getPPLError());
+        assertEquals(PPLError.INVALID_ARGUMENT, exception.getCode());
     }
 
 }

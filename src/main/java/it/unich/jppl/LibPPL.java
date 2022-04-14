@@ -1,5 +1,6 @@
 package it.unich.jppl;
 
+import com.sun.jna.Callback;
 import com.sun.jna.IntegerType;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
@@ -12,8 +13,7 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
 /**
- * This class contains all native methods which are used by the other classes of
- * the package to interface with the C library.
+ * This class contains all native methods of the PPL library.
  */
 public final class LibPPL {
 
@@ -53,7 +53,7 @@ public final class LibPPL {
 
     // Error handling
 
-    static native int ppl_set_error_handler(ErrorHandler h);
+    static native int ppl_set_error_handler(Callback h);
 
     // Timeout handling
 
@@ -111,6 +111,18 @@ public final class LibPPL {
             Pointer p = getPointer();
             return new SizeT(Native.SIZE_T_SIZE == 8 ? p.getLong(0) : p.getInt(0));
         }
+    }
+
+    /**
+     * A callback for obtaining the string representation of a variable.
+     */
+    public static interface VariableOutputFunction extends Callback {
+        /**
+         * Once the callback is registered, this method is called by PPL output
+         * functions whenever they need a string representation for a variable
+         * \(x_i\).
+         */
+        public String callback(long i);
     }
 
     @FieldOrder({ "f" })

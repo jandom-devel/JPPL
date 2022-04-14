@@ -3,7 +3,7 @@ package it.unich.jppl;
 import java.util.Iterator;
 
 /**
- * A system of geometric descriptors of type {@code GD}.
+ * A system of (syntactic) geometric descriptors.
  *
  * <p>
  * This the common interface for systems of geometric descriptors of type

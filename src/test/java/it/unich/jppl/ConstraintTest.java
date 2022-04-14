@@ -52,7 +52,7 @@ public class ConstraintTest {
     void testGetIllegalCoefficient() {
         var c = Constraint.zeroDimPositivity();
         var exception = assertThrows(PPLError.class, () -> c.getCoefficient(0));
-        assertEquals(PPLError.PPL_ERROR_INVALID_ARGUMENT, exception.getPPLError());
+        assertEquals(PPLError.INVALID_ARGUMENT, exception.getCode());
     }
 
 }

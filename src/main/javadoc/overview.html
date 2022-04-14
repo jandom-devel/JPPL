@@ -1,6 +1,6 @@
-<HTML>
+<html>
 
-<BODY>
+<body>
     <p>
         JPPL are Java bindings for the <a href="https://www.bugseng.com/parma-polyhedra-library">PPL</a> (Parma
         Plyhedra Library) written using the <a href="https://github.com/java-native-access/jna">JNA</a> (Java Native
@@ -9,23 +9,23 @@
     </p>
     <p>
         Although the PPL already comes with Java bindings (in the following called
-        <em>standard binding</em>), we think they have many shortcomings:
+        <em>standard bindings</em>), we think they have some shortcomings:
     </p>
     <ul>
-        <li>They are not available in online Java repositories and scarcely available
+        <li>They are not available in standard online repositories and scarcely available
             in OS package repositories (for example, in the Linux world, the Java
             bindings are packaged by Fedora but not by Debian or Ubuntu).
-        <li>There is no common interface explicitly implemented by numerical domains.
-            This make generic programming imposible without recurring to reflexivity.
+        <li>There is no common interface explicitly implemented by abstract domains.
+            This make generic programming impossible without recurring to reflexivity.
         <li>Conventions do not follow the Java standard practices (for example, words
             in multi-word class names are separated by an underscore).
-        <li>Some parts of the API (such as the one for linear expressions) ar quite
+        <li>Some parts of the API (such as the one for linear expressions) are quite
             cumbersome to use.
     </ul>
     <p>
         JPPL strives to overcome these shortcomings. The fact that the standard
         bindings are not readily available online in binary form led us to write a
-        complete replacement for them, instead of a simple wrapper. JPPL uses JNA to
+        complete replacement for them, instead of a wrapper. JPPL uses JNA to
         interface directly with the C bindings of the PPL. Obviously, this choice
         also has its shortcomings, mainly:
     <ul>
@@ -33,23 +33,26 @@
         <li>JPPL only works (at least at the moment) with the default configuration
             of the C bindings of the PPL.</li>
     </ul>
-
     <p>
-        The central corenerstones of JPPL are the two interfaces
-        {@link it.unich.jppl.Domain Domain} and {@link it.unich.jppl.Property Property}.
-        Every class which implements a numerical domain should implement the Property
-        interface. Methods of the Property interface are operations which may be
-        performed on geometric objects, such as projection over a dimension, convex
-        hull, refinement with a linear expressions, etc... F-Bounded polymorphism is
-        used for correctly typing the parameters and return value of these methods.
+        The central cornerstones of the JPPL are the two interfaces
+        {@link it.unich.jppl.Domain} and {@link it.unich.jppl.Property}. Every
+        nunerical abstract domain should implement both.
+        {@link it.unich.jppl.Property} is the interface for the elements of an
+        abstract domain, which we will call <em>abstract objects</em>. Methods of the
+        Property interface are operations which may be performed on these abstract
+        objects, such as projection over a dimension, convex hull, refinement with a
+        linear constraint, etc... F-Bounded polymorphism is used for correctly typing
+        the parameters and return value of these methods.
+        A {@link it.unich.jppl.Domain} is a factory for abstract objects. Each class implementing
+        {@link it.unich.jppl.Property} has a companion class implementing
+        {@link it.unich.jppl.Domain} (for example, {@link it.unich.jppl.CPolyhedron}
+        implements {@link it.unich.jppl.Property} while
+        {@link it.unich.jppl.CPolyhedronDomain} implements
+        {@link it.unich.jppl.Domain}).
     </p>
     <p>
-        A Domain is a factory for geometric objects. Each class implementing Property
-        has a companion class implementing Domain (for example, Polyhedron implements
-        Property while PolyhedronDomain implements Domain). Domain has a single method
-        called {@code createProperty} in several overloaded variants which
-        returns a property of the corresponding class.
+        Note that the PPL is not thread safe, therefore the same holds for JPPL.
     </p>
-</BODY>
+</body>
 
-</HTML>
+</html>
