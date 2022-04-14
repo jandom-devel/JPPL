@@ -24,7 +24,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </ul>
  * <p>
  * If using only public methods, the Coefficient class may be considered
- * immutable. Almost all methods throw {@link PPLError} when the underlying PPL
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
  * library generates an error.
  * </p>
  */
@@ -73,7 +73,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient(pc);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Coefficient(pc.getValue());
     }
 
@@ -84,7 +84,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient_from_mpz_t(pc, z.getPointer());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Coefficient(pc.getValue());
     }
 
@@ -125,7 +125,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
         var pc = new PointerByReference();
         int result = ppl_new_Coefficient_from_Coefficient(pc, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Coefficient(pc.getValue());
     }
 
@@ -135,7 +135,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     Coefficient assign(MPZ z) {
         int result = ppl_assign_Coefficient_from_mpz_t(pplObj, z.getPointer());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -143,7 +143,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     Coefficient assign(Coefficient c) {
         int result = ppl_assign_Coefficient_from_Coefficient(pplObj, this.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -154,7 +154,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
         var z = new MPZ();
         int result = ppl_Coefficient_to_mpz_t(pplObj, z.getPointer());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return z;
     }
 
@@ -212,7 +212,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     boolean isOK() {
         int result = ppl_Coefficient_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -222,7 +222,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     public int minAllowed() {
         int result = ppl_Coefficient_min(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -232,7 +232,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     public int maxAllowed() {
         int result = ppl_Coefficient_max(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -262,7 +262,7 @@ public class Coefficient extends AbstractPPLObject<Coefficient> {
     public static boolean isBounded() {
         int result = ppl_Coefficient_is_bounded();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 

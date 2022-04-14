@@ -24,7 +24,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Congruence class may be considered
- * immutable. Almost all methods throw {@link PPLError} when the underlying PPL
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
  * library generates an error.
  * </p>
  */
@@ -70,7 +70,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Congruence(pc, le.pplObj, m.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Congruence(pc.getValue());
     }
 
@@ -81,7 +81,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Congruence_zero_dim_false(pc);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Congruence(pc.getValue());
     }
 
@@ -93,7 +93,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Congruence_zero_dim_integrality(pc);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Congruence(pc.getValue());
     }
 
@@ -102,7 +102,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Congruence_from_Congruence(pc, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Congruence(pc.getValue());
     }
 
@@ -110,7 +110,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     Congruence assign(Congruence c) {
         int result = ppl_assign_Congruence_from_Congruence(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -119,7 +119,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var m = new SizeTByReference();
         int result = ppl_Congruence_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -128,7 +128,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var n = Coefficient.zero();
         int result = ppl_Congruence_coefficient(pplObj, new SizeT(i), n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -139,7 +139,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var n = Coefficient.zero();
         int result = ppl_Congruence_inhomogeneous_term(pplObj, n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -150,7 +150,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
         var n = Coefficient.zero();
         int result = ppl_Congruence_modulus(pplObj, n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -158,7 +158,7 @@ public class Congruence extends AbstractPPLObject<Congruence> implements Geometr
     boolean isOK() {
         int result = ppl_Congruence_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 

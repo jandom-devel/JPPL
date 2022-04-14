@@ -20,7 +20,7 @@
  * </p>
  *
  * <p>
- * Almost all methods of all classes throw {@link PPLError} when the underlying
+ * Almost all methods of all classes throw {@link PPLRuntimeException} when the underlying
  * PPL library generates an error.
  * </p>
  */

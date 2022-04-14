@@ -25,7 +25,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Constraint class may be considered
- * immutable. Almost all methods throw {@link PPLError} when the underlying PPL
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
  * library generates an error.
  * </p>
  */
@@ -108,7 +108,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Constraint(pc, le.pplObj, rel.ordinal());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Constraint(pc.getValue());
     }
 
@@ -119,7 +119,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Constraint_zero_dim_false(pc);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Constraint(pc.getValue());
     }
 
@@ -131,7 +131,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Constraint_zero_dim_positivity(pc);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Constraint(pc.getValue());
     }
 
@@ -140,7 +140,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var pc = new PointerByReference();
         int result = ppl_new_Constraint_from_Constraint(pc, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Constraint(pc.getValue());
     }
 
@@ -148,7 +148,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     Constraint assign(Constraint c) {
         int result = ppl_assign_Constraint_from_Constraint(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -157,7 +157,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var m = new SizeTByReference();
         int result = ppl_Constraint_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -166,7 +166,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var n = Coefficient.zero();
         int result = ppl_Constraint_coefficient(pplObj, new SizeT(i), n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -177,7 +177,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
         var n = Coefficient.zero();
         int result = ppl_Constraint_inhomogeneous_term(pplObj, n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -187,7 +187,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     public ConstraintType getType() {
         int result = ppl_Constraint_type(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return ConstraintType.valueOf(result);
     }
 
@@ -195,7 +195,7 @@ public class Constraint extends AbstractPPLObject<Constraint> implements Geometr
     boolean isOK() {
         int result = ppl_Constraint_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 

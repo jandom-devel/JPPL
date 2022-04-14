@@ -36,7 +36,7 @@ import com.sun.jna.ptr.PointerByReference;
  * dimension zero.
  * </p>
  * <p>
- * Almost all methods throw {@link PPLError} when the underlying PPL library
+ * Almost all methods throw {@link PPLRuntimeException} when the underlying PPL library
  * generates an error.
  * </p>
  */
@@ -68,7 +68,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression(ple);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -80,7 +80,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_with_dimension(ple, new SizeT(d));
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -91,7 +91,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Constraint(ple, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -102,7 +102,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Generator(ple, g.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -113,7 +113,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Congruence(ple, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -121,7 +121,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public static LinearExpression from(GridGenerator g) {
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_GridGenerator(ple, g.pplObj);
-        if (result < 0) throw new PPLError(result);
+        if (result < 0) PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
     */
@@ -131,7 +131,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var ple = new PointerByReference();
         int result = ppl_new_Linear_Expression_from_Linear_Expression(ple, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new LinearExpression(ple.getValue());
     }
 
@@ -139,7 +139,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public LinearExpression assign(LinearExpression le) {
         int result = ppl_assign_Linear_Expression_from_Linear_Expression(pplObj, le.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -148,7 +148,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var m = new SizeTByReference();
         int result = ppl_Linear_Expression_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -157,7 +157,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var c = Coefficient.zero();
         int result = ppl_Linear_Expression_coefficient(pplObj, new SizeT(i), c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return c;
     }
 
@@ -168,7 +168,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
         var c = Coefficient.zero();
         int result = ppl_Linear_Expression_inhomogeneous_term(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return c;
     }
 
@@ -176,7 +176,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     boolean isOK() {
         int result = ppl_Linear_Expression_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -186,7 +186,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public boolean isZero() {
         int result = ppl_Linear_Expression_is_zero(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -196,7 +196,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public boolean isConstant() {
         int result = ppl_Linear_Expression_all_homogeneous_terms_are_zero(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -208,7 +208,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public LinearExpression add(Coefficient c, long i) {
         int result = ppl_Linear_Expression_add_to_coefficient(pplObj, new SizeT(i), c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -220,7 +220,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public LinearExpression add(Coefficient c) {
         int result = ppl_Linear_Expression_add_to_inhomogeneous(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -232,7 +232,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public LinearExpression add(LinearExpression le) {
         int result = ppl_add_Linear_Expression_to_Linear_Expression(pplObj, le.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -244,7 +244,7 @@ public class LinearExpression extends AbstractPPLObject<LinearExpression> implem
     public LinearExpression multiply(Coefficient c) {
         int result = ppl_multiply_Linear_Expression_by_Coefficient(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 

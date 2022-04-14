@@ -76,8 +76,8 @@ public class PPL {
     }
 
     /**
-     * An error handler which saves the code and description of natve PPL error. Uses
-     * the Singleton design pattern.
+     * An error handler which saves the code and description of natve PPL error.
+     * Uses the Singleton design pattern.
      */
     static class JPPLErrorHandler implements Callback {
         private static JPPLErrorHandler instance = null;
@@ -124,7 +124,7 @@ public class PPL {
         ppl_set_error_handler(JPPLErrorHandler.getInstance());
         int result = ppl_initialize();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -136,7 +136,7 @@ public class PPL {
         // called multiple times,  but it never happended to me
         int result = ppl_finalize();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -149,7 +149,7 @@ public class PPL {
     public static void setRoundingForPPL() {
         int result = ppl_set_rounding_for_PPL();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -163,7 +163,7 @@ public class PPL {
     public static void restorePrePPLRounding() {
         int result = ppl_restore_pre_PPL_rounding();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -178,7 +178,7 @@ public class PPL {
     public static void setIrrationalPrecision(int p) {
         int result = ppl_set_irrational_precision(p);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -191,7 +191,7 @@ public class PPL {
         var pref = new IntByReference();
         int result = ppl_irrational_precision(pref);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return pref.getValue();
     }
 
@@ -201,7 +201,7 @@ public class PPL {
     public static int getVersionMajor() {
         int result = ppl_version_major();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -211,7 +211,7 @@ public class PPL {
     public static int getVersionMinor() {
         int result = ppl_version_minor();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -221,7 +221,7 @@ public class PPL {
     public static int getVersionRevision() {
         int result = ppl_version_revision();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -229,7 +229,7 @@ public class PPL {
     public static int getVersionBeta() {
         int result = ppl_version_beta();
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result;
     }
 
@@ -249,7 +249,7 @@ public class PPL {
         var p = new PointerByReference();
         int result = ppl_version(p);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return p.getValue().getString(0);
     }
 
@@ -264,7 +264,7 @@ public class PPL {
         var p = new PointerByReference();
         int result = ppl_banner(p);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return p.getValue().getString(0);
     }
 
@@ -273,7 +273,7 @@ public class PPL {
         var mref = new SizeTByReference();
         int result = ppl_max_space_dimension(mref);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return mref.getValue().longValue();
     }
 
@@ -282,7 +282,7 @@ public class PPL {
         var mref = new SizeTByReference();
         int result = ppl_not_a_dimension(mref);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return mref.getValue().longValue();
     }
 
@@ -292,7 +292,7 @@ public class PPL {
     static void ioPrintVariable(long var) {
         int result = ppl_io_print_variable(new SizeT(var));
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -302,7 +302,7 @@ public class PPL {
         var strp = new PointerByReference();
         int result = ppl_io_asprint_variable(strp, new SizeT(var));
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         var p = strp.getValue();
         var s = p.getString(0);
         Native.free(Pointer.nativeValue(p));
@@ -318,7 +318,7 @@ public class PPL {
     public static void ioSetVariableOutputFunction(VariableOutputFunction vof) {
         int result = ppl_io_set_variable_output_function(vof);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
     }
 
     /**
@@ -328,7 +328,7 @@ public class PPL {
         var pp = new VariableOutputFunctionByRef();
         int result = ppl_io_get_variable_output_function(pp);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return pp.f;
     }
 

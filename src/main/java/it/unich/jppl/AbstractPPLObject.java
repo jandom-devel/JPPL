@@ -52,7 +52,7 @@ public abstract class AbstractPPLObject<T extends AbstractPPLObject<T>> implemen
         var pstr = new PointerByReference();
         int result = toStringByReference(pstr);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         var p = pstr.getValue();
         var s = p.getString(0);
         Native.free(Pointer.nativeValue(p));

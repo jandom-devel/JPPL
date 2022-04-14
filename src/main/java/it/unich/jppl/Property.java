@@ -299,7 +299,7 @@ public interface Property<T extends Property<T>> {
     /**
      * Adds the constraint c to this abstract object.
      *
-     * @throws PPLError if this and c are dimension-incompatible, or the constraint
+     * @throws PPLRuntimeException if this and c are dimension-incompatible, or the constraint
      *                  c is not optimally supported by the class of the abstract
      *                  object.
      * @return this abstract object
@@ -309,7 +309,7 @@ public interface Property<T extends Property<T>> {
     /**
      * Adds the congruence c to this abstract object.
      *
-     * @throws PPLError if this and c are dimension-incompatible, or the congruence
+     * @throws PPLRuntimeException if this and c are dimension-incompatible, or the congruence
      *                  c is not optimally supported by the class abstract object.
      * @return this abstract object
      */
@@ -318,7 +318,7 @@ public interface Property<T extends Property<T>> {
     /**
      * Adds the constraints in cs to the abstract object.
      *
-     * @throws PPLError if this and cs are dimension-incompatible, or cs constrains
+     * @throws PPLRuntimeException if this and cs are dimension-incompatible, or cs constrains
      *                  a constraint which is not optimally supported by the class
      *                  of the abstract object.
      * @return this abstract object
@@ -328,7 +328,7 @@ public interface Property<T extends Property<T>> {
     /**
      * Adds the congruences in cs to the abstract object.
      *
-     * @throws PPLError if this and cs are dimension-incompatible, or cs constrains
+     * @throws PPLRuntimeException if this and cs are dimension-incompatible, or cs constrains
      *                  a congruence which is not optimally supported by the class
      *                  of the abstract object.
      * @return this abstract object

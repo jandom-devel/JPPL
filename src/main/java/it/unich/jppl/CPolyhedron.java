@@ -24,7 +24,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_space_dimension(pph, new SizeT(d), 1);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -32,7 +32,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_space_dimension(pph, new SizeT(d), 0);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -40,7 +40,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Constraint_System(pph, cs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -48,7 +48,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_recycle_Constraint_System(pph, cs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -56,7 +56,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         PointerByReference pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Congruence_System(pph, cs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -64,7 +64,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         PointerByReference pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_recycle_Congruence_System(pph, cs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -72,7 +72,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Generator_System(pph, gs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -80,7 +80,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_recycle_Generator_System(pph, gs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -88,7 +88,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_C_Polyhedron(pph, ph.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -96,7 +96,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_C_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -104,7 +104,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_NNC_Polyhedron(pph, ph.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -112,7 +112,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_NNC_Polyhedron_with_complexity(pph, ph.pplObj, complexity.ordinal());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -120,7 +120,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Double_Box(pph, box.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -128,7 +128,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
         var pph = new PointerByReference();
         int result = ppl_new_C_Polyhedron_from_Double_Box_with_complexity(pph, box.pplObj, complexity.ordinal());
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CPolyhedron(pph.getValue());
     }
 
@@ -136,7 +136,7 @@ public class CPolyhedron extends Polyhedron<CPolyhedron>  {
     public CPolyhedron assign(CPolyhedron ph) {
         int result = ppl_assign_C_Polyhedron_from_C_Polyhedron(pplObj, ph.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 

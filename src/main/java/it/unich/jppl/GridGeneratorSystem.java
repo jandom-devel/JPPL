@@ -65,20 +65,20 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
             var pgsit = new PointerByReference();
             int result = ppl_new_Grid_Generator_System_const_iterator(pgsit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             cit = pgsit.getValue();
             PPL.cleaner.register(this, new GridGeneratorSystemIteratorCleaner(cit));
             result = ppl_Grid_Generator_System_begin(pplObj, cit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             result = ppl_new_Grid_Generator_System_const_iterator(pgsit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             cend = pgsit.getValue();
             PPL.cleaner.register(this, new GridGeneratorSystemIteratorCleaner(cend));
             result = ppl_Grid_Generator_System_end(pplObj, cend);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
         }
 
         /**
@@ -88,7 +88,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         public boolean hasNext() {
             int result = ppl_Grid_Generator_System_const_iterator_equal_test(cit, cend);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             return result == 0;
         }
 
@@ -104,10 +104,10 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
             var pc = new PointerByReference();
             int result = ppl_Grid_Generator_System_const_iterator_dereference(cit, pc);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             result = ppl_Grid_Generator_System_const_iterator_increment(cit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             return new GridGenerator(pc.getValue(), false);
         }
     }
@@ -139,7 +139,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System(pgs);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGeneratorSystem(pgs.getValue());
     }
 
@@ -151,7 +151,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System_from_Grid_Generator(pgs, g.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGeneratorSystem(pgs.getValue());
     }
 
@@ -160,7 +160,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         var pgs = new PointerByReference();
         int result = ppl_new_Grid_Generator_System_from_Grid_Generator_System(pgs, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGeneratorSystem(pgs.getValue());
     }
 
@@ -168,7 +168,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     public GridGeneratorSystem assign(GridGeneratorSystem gs) {
         int result = ppl_assign_Grid_Generator_System_from_Grid_Generator_System(pplObj, gs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -177,7 +177,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
         var m = new SizeTByReference();
         int result = ppl_Grid_Generator_System_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -185,7 +185,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     public boolean isEmpty() {
         int result = ppl_Grid_Generator_System_empty(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -193,7 +193,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     public boolean isOK() {
         int result = ppl_Grid_Generator_System_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -201,7 +201,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     public GridGeneratorSystem clear() {
         int result = ppl_Grid_Generator_System_clear(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -209,7 +209,7 @@ public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
     public GridGeneratorSystem add(GridGenerator g) {
         int result = ppl_Grid_Generator_System_insert_Grid_Generator(pplObj, g.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 

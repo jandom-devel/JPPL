@@ -27,7 +27,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  * <p>
  * If using only public methods, the Congruence class may be considered
- * immutable. Almost all methods throw {@link PPLError} when the underlying PPL
+ * immutable. Almost all methods throw {@link PPLRuntimeException} when the underlying PPL
  * library generates an error.
  * </p>
  */
@@ -102,7 +102,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var pg = new PointerByReference();
         int result = ppl_new_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Generator(pg.getValue());
     }
 
@@ -122,7 +122,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var pg = new PointerByReference();
         int result = ppl_new_Generator_zero_dim_point(pg);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Generator(pg.getValue());
     }
 
@@ -134,7 +134,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var pg = new PointerByReference();
         int result = ppl_new_Generator_zero_dim_closure_point(pg);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Generator(pg.getValue());
     }
 
@@ -143,7 +143,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var pg = new PointerByReference();
         int result = ppl_new_Generator_from_Generator(pg, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new Generator(pg.getValue());
     }
 
@@ -151,7 +151,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     public Generator assign(Generator g) {
         int result = ppl_assign_Generator_from_Generator(pplObj, g.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -160,7 +160,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var m = new SizeTByReference();
         int result = ppl_Generator_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -169,7 +169,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var n = Coefficient.zero();
         int result = ppl_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -179,7 +179,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     public GeneratorType getType() {
         int result = ppl_Generator_type(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return GeneratorType.valueOf(result);
     }
 
@@ -190,7 +190,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
         var d = Coefficient.zero();
         int result = ppl_Generator_divisor(pplObj, d.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return d;
     }
 
@@ -198,7 +198,7 @@ public class Generator extends AbstractPPLObject<Generator> implements Geometric
     public boolean isOK() {
         int result = ppl_Generator_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 

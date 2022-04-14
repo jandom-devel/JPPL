@@ -20,8 +20,8 @@ public class DoubleBoxTest {
         box.addConstraint(c1);
 
         assertTrue(box.constraints(0));
-        var exception = assertThrows(PPLError.class, () -> box.addConstraint(c2));
-        assertEquals(exception.getCode(), PPLError.INVALID_ARGUMENT);
+        var exception = assertThrows(PPLRuntimeException.class, () -> box.addConstraint(c2));
+        assertEquals(exception.getCode(), PPLRuntimeException.INVALID_ARGUMENT);
     }
 
 }

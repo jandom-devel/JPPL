@@ -58,20 +58,20 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
             var pcsit = new PointerByReference();
             int result = ppl_new_Congruence_System_const_iterator(pcsit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             cit = pcsit.getValue();
             PPL.cleaner.register(this, new CongruenceSystemIteratorCleaner(cit));
             result = ppl_Congruence_System_begin(pplObj, cit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             result = ppl_new_Congruence_System_const_iterator(pcsit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             cend = pcsit.getValue();
             PPL.cleaner.register(this, new CongruenceSystemIteratorCleaner(cend));
             result = ppl_Congruence_System_end(pplObj, cend);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
         }
 
         /**
@@ -81,7 +81,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         public boolean hasNext() {
             int result = ppl_Congruence_System_const_iterator_equal_test(cit, cend);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             return result == 0;
         }
 
@@ -97,10 +97,10 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
             var pc = new PointerByReference();
             int result = ppl_Congruence_System_const_iterator_dereference(cit, pc);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             result = ppl_Congruence_System_const_iterator_increment(cit);
             if (result < 0)
-                throw new PPLError(result);
+                PPLRuntimeException.checkError(result);
             return new Congruence(pc.getValue(), false);
         }
     }
@@ -132,7 +132,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System(pcs);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CongruenceSystem(pcs.getValue());
     }
 
@@ -146,7 +146,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System_zero_dim_empty(pcs);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CongruenceSystem(pcs.getValue());
     }
 
@@ -158,7 +158,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System_from_Congruence(pcs, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CongruenceSystem(pcs.getValue());
     }
 
@@ -167,7 +167,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System_from_Congruence_System(pcs, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new CongruenceSystem(pcs.getValue());
     }
 
@@ -175,7 +175,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     CongruenceSystem assign(CongruenceSystem cs) {
         int result = ppl_assign_Congruence_System_from_Congruence_System(pplObj, cs.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -184,7 +184,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
         var m = new SizeTByReference();
         int result = ppl_Congruence_System_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -192,7 +192,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     public boolean isEmpty() {
         int result = ppl_Congruence_System_empty(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -200,7 +200,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     boolean isOK() {
         int result = ppl_Congruence_System_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
@@ -208,7 +208,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     public CongruenceSystem clear() {
         int result = ppl_Congruence_System_clear(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -216,7 +216,7 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
     public CongruenceSystem add(Congruence c) {
         int result = ppl_Congruence_System_insert_Congruence(pplObj, c.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 

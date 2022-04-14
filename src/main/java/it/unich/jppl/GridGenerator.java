@@ -93,7 +93,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator(pg, le.pplObj, t.ordinal(), d.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGenerator(pg.getValue());
     }
 
@@ -113,7 +113,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator_zero_dim_point(pg);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGenerator(pg.getValue());
     }
 
@@ -122,7 +122,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var pg = new PointerByReference();
         int result = ppl_new_Grid_Generator_from_Grid_Generator(pg, pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return new GridGenerator(pg.getValue());
     }
 
@@ -130,7 +130,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     GridGenerator assign(GridGenerator g) {
         int result = ppl_assign_Grid_Generator_from_Grid_Generator(pplObj, g.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return this;
     }
 
@@ -139,7 +139,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var m = new SizeTByReference();
         int result = ppl_Grid_Generator_space_dimension(pplObj, m);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return m.getValue().longValue();
     }
 
@@ -148,7 +148,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var n = Coefficient.zero();
         int result = ppl_Grid_Generator_coefficient(pplObj, new SizeT(var), n.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return n;
     }
 
@@ -158,7 +158,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     public GridGeneratorType getType() {
         int result = ppl_Grid_Generator_type(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return GridGeneratorType.valueOf(result);
     }
 
@@ -169,7 +169,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
         var d = Coefficient.zero();
         int result = ppl_Grid_Generator_divisor(pplObj, d.pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return d;
     }
 
@@ -177,7 +177,7 @@ public class GridGenerator extends AbstractPPLObject<GridGenerator> implements G
     public boolean isOK() {
         int result = ppl_Grid_Generator_OK(pplObj);
         if (result < 0)
-            throw new PPLError(result);
+            PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
