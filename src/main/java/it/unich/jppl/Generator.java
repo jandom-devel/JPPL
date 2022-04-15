@@ -1,9 +1,9 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.LibPPL.*;
+import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.LibPPL.SizeT;
-import it.unich.jppl.LibPPL.SizeTByReference;
+import it.unich.jppl.nativelib.SizeT;
+import it.unich.jppl.nativelib.SizeTByReference;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;

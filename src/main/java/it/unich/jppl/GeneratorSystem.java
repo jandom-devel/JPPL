@@ -1,8 +1,8 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.LibPPL.*;
+import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.LibPPL.SizeTByReference;
+import it.unich.jppl.nativelib.SizeTByReference;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

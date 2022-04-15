@@ -1,14 +1,8 @@
-package it.unich.jppl;
+package it.unich.jppl.nativelib;
 
-import com.sun.jna.Callback;
-import com.sun.jna.IntegerType;
-import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.Structure.FieldOrder;
-import com.sun.jna.ptr.ByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 
@@ -81,120 +75,6 @@ public class LibPPL {
     public static native int ppl_reset_deterministic_timeout();
 
     // Dimensions
-
-    /**
-     * Represents the native {@code size_t} data type, which may be 32 or 64 bits.
-     */
-    public static class SizeT extends IntegerType {
-        /**
-         * Creates a {@code size_t} with value 0
-         */
-        public SizeT() {
-            this(0);
-        }
-
-        /**
-         * Creates a {@code size_t} with the specified {@code value}. The value is
-         * truncated when {@code size_t} is a 32 bit integer.
-         */
-        public SizeT(long value) {
-            super(Native.SIZE_T_SIZE, value, true);
-        }
-    }
-
-    /**
-     * Represents a native array of {@code size_t} elements.
-     */
-    public static class SizeTArray extends Memory {
-        /**
-         * Creates a native array from the Java array {@code ls}.
-         */
-        SizeTArray(long[] ls) {
-            super(ls.length * Native.SIZE_T_SIZE);
-            for (int i = 0; i < ls.length; i++)
-                if (Native.SIZE_T_SIZE == 8)
-                    setLong(8 * i, ls[i]);
-                else
-                    setInt(4 * i, (int) ls[i]);
-        }
-    }
-
-    /**
-     * A reference to the native {@code size_t} data type.
-     */
-    protected static class SizeTByReference extends ByReference {
-        /**
-         * Creates a reference to a newly allocated {@code size_t} object.
-         */
-        public SizeTByReference() {
-            this(new SizeT());
-        }
-
-        /**
-         * Creates a reference to a newly allocated {@code size_t} object, which is
-         * initialized with {@code value}.
-         */
-        public SizeTByReference(SizeT value) {
-            super(Native.SIZE_T_SIZE);
-            setValue(value);
-        }
-
-        /**
-         * Change the value of the {@code size_t} object pointed by this reference.
-         */
-        public void setValue(SizeT value) {
-            Pointer p = getPointer();
-            if (Native.SIZE_T_SIZE == 8) {
-                p.setLong(0, value.longValue());
-            } else {
-                p.setInt(0, value.intValue());
-            }
-        }
-
-        /**
-         * Get the value of {@code size_t} object pointed by this reference.
-         */
-        SizeT getValue() {
-            Pointer p = getPointer();
-            return new SizeT(Native.SIZE_T_SIZE == 8 ? p.getLong(0) : p.getInt(0));
-        }
-    }
-
-    /**
-     * A callback for obtaining the string representation of a variable.
-     */
-    public static interface VariableOutputFunction extends Callback {
-        /**
-         * The callback method. Once the callback is registered with
-         * {@link ppl_io_set_variable_output_function}, this method is called by PPL
-         * output functions whenever they need a string representation for a variable
-         * \(x_i\).
-         */
-        public String callback(long i);
-    }
-
-    /**
-     * A structure containing a {@link VariableOutputFunction
-     * VariableOutputFunction} callback. This is used to pass the callback by
-     * reference to native code.
-     */
-    @FieldOrder({ "f" })
-    public static class VariableOutputFunctionByReference extends Structure {
-        /** The callback which is the only element of this structure. */
-        public VariableOutputFunction f;
-    }
-
-    /**
-     * A callback for a PPL error handler.
-     */
-    public interface PPLErrorHandler extends Callback {
-        /**
-         * The callback method. Once the callback is registered with
-         * {@link ppl_set_error_handler}, this method is called by PPL functions
-         * whenever an error occurs.
-         */
-        void callback(int code, String description);
-    }
 
     public static native int ppl_max_space_dimension(SizeTByReference m);
 
@@ -1079,17 +959,18 @@ public class LibPPL {
 
     public static native int ppl_Double_Box_fold_space_dimensions(Pointer ph, Pointer ds, SizeT n, SizeT d);
 
-    public static native int ppl_Double_Box_CC76_widening_assign_with_tokens (Pointer x, Pointer y, IntByReference tp);
+    public static native int ppl_Double_Box_CC76_widening_assign_with_tokens(Pointer x, Pointer y, IntByReference tp);
 
     public static native int ppl_Double_Box_CC76_widening_assign(Pointer x, Pointer y);
 
-    public static native int ppl_Double_Box_widening_assign_with_tokens (Pointer x, Pointer y, IntByReference tp);
+    public static native int ppl_Double_Box_widening_assign_with_tokens(Pointer x, Pointer y, IntByReference tp);
 
     public static native int ppl_Double_Box_widening_assign(Pointer x, Pointer y);
 
-    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign_with_tokens  (Pointer x, Pointer y, Pointer cs, IntByReference tp);
+    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign_with_tokens(Pointer x, Pointer y,
+            Pointer cs, IntByReference tp);
 
-    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign (Pointer x, Pointer y, Pointer cs);
+    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign(Pointer x, Pointer y, Pointer cs);
 
     public static native int ppl_Double_Box_CC76_narrowing_assign(Pointer x, Pointer y);
 

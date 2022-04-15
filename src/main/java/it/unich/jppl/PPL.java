@@ -1,11 +1,14 @@
 package it.unich.jppl;
 
-import static it.unich.jppl.LibPPL.*;
+import static it.unich.jppl.nativelib.LibPPL.*;
 
-import it.unich.jppl.LibPPL.SizeT;
+import it.unich.jppl.nativelib.PPLErrorHandler;
+import it.unich.jppl.nativelib.SizeT;
+import it.unich.jppl.nativelib.SizeTByReference;
+import it.unich.jppl.nativelib.VariableOutputFunctionByReference;
 
 import java.lang.ref.Cleaner;
-import java.util.function.Function;
+import java.util.function.LongFunction;
 
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
@@ -322,7 +325,7 @@ public class PPL {
      * @param f a function from a {@code Long} \(i\) to the string representation of
      *          the variable \(x_i\).
      */
-    public static void ioSetVariableOutputFunction(Function<Long, String> f) {
+    public static void ioSetVariableOutputFunction(LongFunction<String> f) {
         int result = ppl_io_set_variable_output_function(f::apply);
         if (result < 0)
             PPLRuntimeException.checkError(result);
@@ -334,12 +337,12 @@ public class PPL {
      * @return a function from a {@code Long} \(i\) to the string representation of
      *         the variable \(x_i\).
      */
-    public static Function<Long, String> ioGetVariableOutputFunction() {
+    public static LongFunction<String> ioGetVariableOutputFunction() {
         var pp = new VariableOutputFunctionByReference();
         int result = ppl_io_get_variable_output_function(pp);
         if (result < 0)
             PPLRuntimeException.checkError(result);
-        return pp.f::callback;
+        return pp.vof::callback;
     }
 
     /**

@@ -1,5 +1,5 @@
 /**
- * This package contains all the classes of the JPPL.
+ * This package contains all the high-level classes of the JPPL.
  *
  * <p>
  * The central cornerstones of the JPPL are the two interfaces {@link Domain}
