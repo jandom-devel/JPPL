@@ -267,19 +267,19 @@ public interface Property<T extends Property<T>> {
     Optional<ExtremalOutput> minimize(LinearExpression le);
 
     /**
-     * Checkss whether this abstract object contains {@code p}.
+     * Checkss whether this abstract object contains {@code y}.
      */
-    boolean contains(T p);
+    boolean contains(T y);
 
     /**
-     * Checks whether this abstract object strictly contains {@code p}.
+     * Checks whether this abstract object strictly contains {@code y}.
      */
-    boolean strictlyContains(T p);
+    boolean strictlyContains(T y);
 
     /**
-     * Checks whether this abstract object is disjoint from {@code p}.
+     * Checks whether this abstract object is disjoint from {@code y}.
      */
-    boolean isDisjointFrom(T p);
+    boolean isDisjointFrom(T y);
 
     /**
      * Returns the size in bytes of the memory managed by this abstract object. It
@@ -397,45 +397,45 @@ public interface Property<T extends Property<T>> {
 
     /**
      * Assigns to {@code this} the best over-approximation of its intersection with
-     * {@code p}.
+     * {@code y}.
      *
      * @return this abstract object.
      */
-    T intersection(T p);
+    T intersection(T y);
 
     /**
      * Assigns to {@code this} the best over-approximation of its union with
-     * {@code p}.
+     * {@code y}.
      *
      * @return this abstract object.
      */
-    T upperBound(T p);
+    T upperBound(T y);
 
     /**
      * Assigns to {@code this} the best over-approximation of its difference with
-     * {@code p}.
+     * {@code y}.
      *
      * @return this abstract object.
      */
-    T difference(T p);
+    T difference(T y);
 
     /**
      * Assigns to {@code this} an over-approximation of its <a href=
      * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Meet_Preserving_Simplification">
-     * meet preserving simplification</a> with context {@code p}.
+     * meet preserving simplification</a> with context {@code y}.
      *
      * @return this abstract object.
      */
-    T simplifyUsingContext(T p);
+    T simplifyUsingContext(T y);
 
     /**
      * Assigns to {@code this} the result of computing the <a href=
      * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Time_Elapse_Operator">
-     * time elapse</a> between {@code this} this and {@code p}.
+     * time elapse</a> between {@code this} this and {@code y}.
      *
      * @return this abstract object.
      */
-    T timeElapse(T p);
+    T timeElapse(T y);
 
     /**
      * Assigns to this abstract object its topological closure.
@@ -596,11 +596,11 @@ public interface Property<T extends Property<T>> {
     T generalizedAffinePreImageLhsRhs(LinearExpression lhs, ConstraintType rel, LinearExpression rhs);
 
     /**
-     * Assigns to this abstract object its cartesian product with {@code p}.
+     * Assigns to this abstract object its cartesian product with {@code y}.
      *
      * @return this abstract object.
      */
-    T concatenate(T p);
+    T concatenate(T y);
 
     /**
      * Adds {@code m} new dimensions to {@code this}, and embeds the old abstract
@@ -677,6 +677,27 @@ public interface Property<T extends Property<T>> {
      * @return this abstract object.
      */
     T foldSpaceDimensions(long[] ds, long i);
+
+    /**
+     * Assigns to this abstract object its <em>standard</em> widening with
+     * {@code y}. The box {@code y} must be contained in (or be equal to)
+     * {@code this}. Which widening is considered standard is up to the JPPL
+     * developers.
+     *
+     * @return this abstract object.
+     */
+    T widening(T y);
+
+    /**
+     * Variant of {@link #widening(Property) widening} which also applies the
+     * <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this abstract object.
+     */
+    T widening(T y, WideningTokens w);
 
     /**
      * Returns whether {@code obj} is the same abstract object as {@code this}.

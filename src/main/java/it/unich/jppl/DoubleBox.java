@@ -143,9 +143,9 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     /**
-     * Similar to {@link #from(GeneratorSystem) from} but after calling this method there
-     * is no guarantee on the content of {@code gs}. For increasing performance, its
-     * internal data structure might have been reused.
+     * Similar to {@link #from(GeneratorSystem) from} but after calling this method
+     * there is no guarantee on the content of {@code gs}. For increasing
+     * performance, its internal data structure might have been reused.
      */
     public static DoubleBox recycledFrom(GeneratorSystem gs) {
         var pbox = new PointerByReference();
@@ -442,24 +442,24 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public boolean contains(DoubleBox p) {
-        int result = ppl_Double_Box_contains_Double_Box(pplObj, p.pplObj);
+    public boolean contains(DoubleBox y) {
+        int result = ppl_Double_Box_contains_Double_Box(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
     @Override
-    public boolean strictlyContains(DoubleBox p) {
-        int result = ppl_Double_Box_strictly_contains_Double_Box(pplObj, p.pplObj);
+    public boolean strictlyContains(DoubleBox y) {
+        int result = ppl_Double_Box_strictly_contains_Double_Box(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
     }
 
     @Override
-    public boolean isDisjointFrom(DoubleBox p) {
-        int result = ppl_Double_Box_is_disjoint_from_Double_Box(pplObj, p.pplObj);
+    public boolean isDisjointFrom(DoubleBox y) {
+        int result = ppl_Double_Box_is_disjoint_from_Double_Box(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return result > 0;
@@ -572,40 +572,40 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox intersection(DoubleBox p) {
-        int result = ppl_Double_Box_intersection_assign(pplObj, p.pplObj);
+    public DoubleBox intersection(DoubleBox y) {
+        int result = ppl_Double_Box_intersection_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox upperBound(DoubleBox p) {
-        int result = ppl_Double_Box_upper_bound_assign(pplObj, p.pplObj);
+    public DoubleBox upperBound(DoubleBox y) {
+        int result = ppl_Double_Box_upper_bound_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox difference(DoubleBox p) {
-        int result = ppl_Double_Box_difference_assign(pplObj, p.pplObj);
+    public DoubleBox difference(DoubleBox y) {
+        int result = ppl_Double_Box_difference_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox simplifyUsingContext(DoubleBox p) {
-        int result = ppl_Double_Box_difference_assign(pplObj, p.pplObj);
+    public DoubleBox simplifyUsingContext(DoubleBox y) {
+        int result = ppl_Double_Box_difference_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
     }
 
     @Override
-    public DoubleBox timeElapse(DoubleBox p) {
-        int result = ppl_Double_Box_time_elapse_assign(pplObj, p.pplObj);
+    public DoubleBox timeElapse(DoubleBox y) {
+        int result = ppl_Double_Box_time_elapse_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
@@ -670,8 +670,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
 
     @Override
     public DoubleBox generalizedAffineImage(long i, ConstraintType rel, LinearExpression le, Coefficient d) {
-        int result = ppl_Double_Box_generalized_affine_image(pplObj, new SizeT(i), rel.ordinal(), le.pplObj,
-                d.pplObj);
+        int result = ppl_Double_Box_generalized_affine_image(pplObj, new SizeT(i), rel.ordinal(), le.pplObj, d.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
@@ -703,8 +702,8 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     }
 
     @Override
-    public DoubleBox concatenate(DoubleBox p) {
-        int result = ppl_Double_Box_concatenate_assign(pplObj, p.pplObj);
+    public DoubleBox concatenate(DoubleBox y) {
+        int result = ppl_Double_Box_concatenate_assign(pplObj, y.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;
@@ -762,6 +761,108 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
     public DoubleBox foldSpaceDimensions(long[] ds, long i) {
         int result = ppl_Double_Box_fold_space_dimensions(pplObj, new SizeTArray(ds), new SizeT(ds.length),
                 new SizeT(i));
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * Assigns to this box its CC76-widening with {@code y}. The box {@code y} must be
+     * contained in (or be equal to) {@code this}.
+     *
+     * @return this box.
+     */
+    public DoubleBox CC76Widening(DoubleBox y) {
+        int result = ppl_Double_Box_CC76_widening_assign(pplObj, y.pplObj);
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * Variant of {@link #CC76Widening(DoubleBox) CC76Widening} which also applies
+     * the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this box.
+     */
+    public DoubleBox CC76Widening(DoubleBox y, WideningTokens w) {
+        IntByReference tp = new IntByReference(w.tokens);
+        int result = ppl_Double_Box_CC76_widening_assign_with_tokens(pplObj, y.pplObj, tp);
+        w.tokens = tp.getValue();
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * <p>
+     * Same as {@link #CC76Widening(DoubleBox) CC76Widening}.
+     * </p>
+     */
+    @Override
+    public DoubleBox widening(DoubleBox y) {
+        int result = ppl_Double_Box_widening_assign(pplObj, y.pplObj);
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    @Override
+    public DoubleBox widening(DoubleBox y, WideningTokens w) {
+        IntByReference tp = new IntByReference(w.tokens);
+        int result = ppl_Double_Box_widening_assign_with_tokens(pplObj, y.pplObj, tp);
+        w.tokens = tp.getValue();
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * Assigns to this box its CC76-narrowing with {@code y}. The box {@code y} must
+     * contain {@code this}.
+     *
+     * @return this box.
+     */
+    public DoubleBox CC76Narrowing(DoubleBox y) {
+        int result = ppl_Double_Box_CC76_narrowing_assign(pplObj, y.pplObj);
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * Assigns to this its CC76-widening with {@code y} using limited extrapolation.
+     * It means that the result is intersected with the constraints in cs that are
+     * satisfied by all the points of {@code this}. The box {@code y} must be
+     * contained in (or be equal to) {@code this}.
+     *
+     * @return this box.
+     */
+    public DoubleBox limitedCC76Extrapolation(DoubleBox y, ConstraintSystem cs) {
+        int result = ppl_Double_Box_limited_CC76_extrapolation_assign(pplObj, y.pplObj, cs.pplObj);
+        if (result < 0)
+            PPLRuntimeException.checkError(result);
+        return this;
+    }
+
+    /**
+     * Variant of {@link #limitedCC76Extrapolation(DoubleBox, ConstraintSystem)
+     * limitedCC76Extrapolation} which also applies the <a href=
+     * "https://www.bugseng.com/products/ppl/documentation//devref/ppl-devref-1.2-html/index.html#Widening_with_Tokens">widening
+     * with tokens</a> delay tecnique.
+     *
+     * @param w number of available tokens.
+     * @return this box.
+     */
+    public DoubleBox limitedCC76Extrapolation(DoubleBox y, ConstraintSystem cs, WideningTokens w) {
+        IntByReference tp = new IntByReference(w.tokens);
+        int result = ppl_Double_Box_limited_CC76_extrapolation_assign_with_tokens(pplObj, y.pplObj, cs.pplObj, tp);
+        w.tokens = tp.getValue();
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;

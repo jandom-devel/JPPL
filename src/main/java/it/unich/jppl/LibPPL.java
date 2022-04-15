@@ -1079,6 +1079,20 @@ public class LibPPL {
 
     public static native int ppl_Double_Box_fold_space_dimensions(Pointer ph, Pointer ds, SizeT n, SizeT d);
 
+    public static native int ppl_Double_Box_CC76_widening_assign_with_tokens (Pointer x, Pointer y, IntByReference tp);
+
+    public static native int ppl_Double_Box_CC76_widening_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_widening_assign_with_tokens (Pointer x, Pointer y, IntByReference tp);
+
+    public static native int ppl_Double_Box_widening_assign(Pointer x, Pointer y);
+
+    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign_with_tokens  (Pointer x, Pointer y, Pointer cs, IntByReference tp);
+
+    public static native int ppl_Double_Box_limited_CC76_extrapolation_assign (Pointer x, Pointer y, Pointer cs);
+
+    public static native int ppl_Double_Box_CC76_narrowing_assign(Pointer x, Pointer y);
+
     public static native int ppl_io_print_Double_Box(Pointer x);
 
     public static native int ppl_io_fprint_Double_Box(Pointer stream, Pointer x);
