@@ -110,7 +110,7 @@ public class PPL {
     }
 
     /** Version of JPPL. */
-    public static final String JPPL_VERSION = "0.2-SNAPSHOT";
+    public static final String JPPL_VERSION = "0.3-SNAPSHOT";
 
     static {
         pplInitialize();
