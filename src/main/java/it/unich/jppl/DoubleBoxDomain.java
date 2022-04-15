@@ -1,7 +1,5 @@
 package it.unich.jppl;
 
-import it.unich.jppl.Property.ComplexityClass;
-
 import java.util.Arrays;
 import java.util.List;
 

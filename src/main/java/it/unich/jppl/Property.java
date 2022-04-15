@@ -58,18 +58,6 @@ public interface Property<T extends Property<T>> {
     }
 
     /**
-     * Enumeration of complexity pseudo-classes.
-     */
-    public static enum ComplexityClass {
-        /** Worst-case polynomial complexity. */
-        POLYNOMIAL_COMPLEXITY,
-        /** Worst-case exponential complexity but typically polynomial behavior. */
-        SIMPLEX_COMPLEXITY,
-        /** Any complexity. */
-        ANY_COMPLEXITY
-    }
-
-    /**
      * Class of constants representing the relation between a contraint and an
      * abstract object.
      */
@@ -107,38 +95,6 @@ public interface Property<T extends Property<T>> {
          * Adding the generator to the abstract object would not change the latter.
          */
         public static final int SUBSUMES = 1;
-    }
-
-    /**
-     * Class holding the number of tokens available for a widening with token.
-     */
-    public static class WideningTokens {
-        /**
-         * Number of abailable tokens.
-         */
-        int tokens;
-
-        /**
-         * Returns the number of available tokens.
-         */
-        public int getTokens() {
-            return tokens;
-        }
-
-        /**
-         * Sets the number of available tokens.
-         */
-        public void setTokens(int tokens) {
-            this.tokens = tokens;
-        }
-
-        /**
-         * Creates a {@code WideningTokens} object specifying the number of available
-         * tokens.
-         */
-        public WideningTokens(int tokens) {
-            this.tokens = tokens;
-        }
     }
 
     /** Returns the space dimension of this abstract object. */

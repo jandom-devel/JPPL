@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import it.unich.jppl.Constraint.ConstraintType;
 import it.unich.jppl.Generator.GeneratorType;
-import it.unich.jppl.Property.WideningTokens;
 
 public class PolyhedronTest {
 
