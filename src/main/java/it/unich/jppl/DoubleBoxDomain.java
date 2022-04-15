@@ -2,10 +2,20 @@ package it.unich.jppl;
 
 import it.unich.jppl.Property.ComplexityClass;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The abstract domain of boxes, with bounds implemented using native doubles.
  */
 public class DoubleBoxDomain implements Domain<DoubleBox> {
+
+    private static List<WideningSpecification<DoubleBox>> widenings = Arrays.asList(
+        new WideningSpecification<>("CC76", DoubleBox::CC76Widening, DoubleBox::CC76Widening));
+
+
+    private static List<NarrowingSpecification<DoubleBox>> narrowings = Arrays.asList(
+        new NarrowingSpecification<>("CC76", DoubleBox::CC76Narrowing));
 
     @Override
     public DoubleBox createEmpty(long d) {
@@ -95,6 +105,16 @@ public class DoubleBoxDomain implements Domain<DoubleBox> {
     @Override
     public DoubleBox createFrom(NNCPolyhedron ph, ComplexityClass complexity) {
         return DoubleBox.from(ph, complexity);
+    }
+
+    @Override
+    public List<WideningSpecification<DoubleBox>> getWidenings() {
+        return widenings;
+    }
+
+    @Override
+    public List<NarrowingSpecification<DoubleBox>> getNarrowings() {
+        return narrowings;
     }
 
 }

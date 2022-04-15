@@ -13,7 +13,7 @@ import java.util.Iterator;
  * over the same vector space.
  * </p>
  */
-public interface GeometricDescriptorsSystem<GD, GDS extends GeometricDescriptorsSystem<GD, GDS>>
+public interface GeometricDescriptorsSystem<GD extends GeometricDescriptor<GD>, GDS extends GeometricDescriptorsSystem<GD, GDS>>
         extends PPLObject<GDS>, Iterable<GD> {
 
     /**

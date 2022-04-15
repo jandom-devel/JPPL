@@ -2,6 +2,8 @@ package it.unich.jppl;
 
 import it.unich.jppl.Property.ComplexityClass;
 
+import java.util.List;
+
 /**
  * An abstract domain, i.e., a factory for abstract objects.
  *
@@ -130,4 +132,13 @@ public interface Domain<T extends Property<T>> {
      */
     T createFrom(DoubleBox p, ComplexityClass complexity);
 
+    /**
+     * Returns all the available widenings for this domain.
+     */
+    List<WideningSpecification<T>> getWidenings();
+
+    /**
+     * Returns all the available narrowings for this domain.
+     */
+    List<NarrowingSpecification<T>> getNarrowings();
 }

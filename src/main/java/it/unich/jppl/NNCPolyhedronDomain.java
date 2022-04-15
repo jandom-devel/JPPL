@@ -2,10 +2,19 @@ package it.unich.jppl;
 
 import it.unich.jppl.Property.ComplexityClass;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * The abstract doman of not-necessarily closed polyhedra.
  */
 public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
+
+    private static List<WideningSpecification<NNCPolyhedron>> widenings = Arrays.asList(
+            new WideningSpecification<>("H79", Polyhedron::H79Widening, Polyhedron::H79Widening),
+            new WideningSpecification<>("BHRZ03", Polyhedron::BHRZ03Widening, Polyhedron::BHRZ03Widening));
+
+    private static List<NarrowingSpecification<NNCPolyhedron>> narrowings = List.of();
 
     @Override
     public NNCPolyhedron createEmpty(long d) {
@@ -93,6 +102,16 @@ public class NNCPolyhedronDomain implements Domain<NNCPolyhedron> {
     @Override
     public NNCPolyhedron createFrom(DoubleBox box, ComplexityClass complexity) {
         return NNCPolyhedron.from(box, complexity);
+    }
+
+    @Override
+    public List<WideningSpecification<NNCPolyhedron>> getWidenings() {
+        return widenings;
+    }
+
+    @Override
+    public List<NarrowingSpecification<NNCPolyhedron>> getNarrowings() {
+        return narrowings;
     }
 
 }

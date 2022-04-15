@@ -52,4 +52,17 @@ public class DoubleBoxTest {
         assertEquals(exception.getCode(), PPLRuntimeException.LENGTH_ERROR);
     }
 
+    @Test
+    void testWidenings() {
+        var dom = new DoubleBoxDomain();
+        var ws = dom.getWidenings().get(0);
+        assertEquals("CC76", ws.getName());
+        var p1 = dom.createUniverse(1);
+        p1.refineWith(Constraint.of(LinearExpression.of(-3, 1), ConstraintType.LESS_OR_EQUAL));
+        var p2 = dom.createUniverse(1);
+        p2.refineWith(Constraint.of(LinearExpression.of(-10, 1), ConstraintType.LESS_OR_EQUAL));
+        ws.getWidening().apply(p2, p1);
+        assertTrue(p2.isUniverse());
+    }
+
 }
