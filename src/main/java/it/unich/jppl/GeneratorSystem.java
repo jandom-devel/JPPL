@@ -22,7 +22,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  */
 public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
-        implements GeometricDescriptorsSystem<Generator, GeneratorSystem> {
+        implements GeometricDescriptorSystem<Generator, GeneratorSystem> {
 
     private static class GeneratorSystemCleaner implements Runnable {
         private Pointer pplObj;

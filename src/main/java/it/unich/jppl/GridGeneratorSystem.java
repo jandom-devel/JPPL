@@ -21,7 +21,7 @@ import com.sun.jna.ptr.PointerByReference;
  * </p>
  */
 public class GridGeneratorSystem extends AbstractPPLObject<GridGeneratorSystem>
-        implements GeometricDescriptorsSystem<GridGenerator, GridGeneratorSystem> {
+        implements GeometricDescriptorSystem<GridGenerator, GridGeneratorSystem> {
 
     private static class GridGeneratorSystemCleaner implements Runnable {
         private Pointer pplObj;

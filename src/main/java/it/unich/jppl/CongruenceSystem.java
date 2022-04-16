@@ -14,7 +14,7 @@ import com.sun.jna.ptr.PointerByReference;
  * A system of linear congruences.
  */
 public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
-        implements GeometricDescriptorsSystem<Congruence, CongruenceSystem> {
+        implements GeometricDescriptorSystem<Congruence, CongruenceSystem> {
 
     private static class CongruenceSystemCleaner implements Runnable {
         private Pointer pplObj;

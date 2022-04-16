@@ -14,7 +14,7 @@ import com.sun.jna.ptr.PointerByReference;
  * A system of constraints.
  */
 public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
-        implements GeometricDescriptorsSystem<Constraint, ConstraintSystem> {
+        implements GeometricDescriptorSystem<Constraint, ConstraintSystem> {
 
     private static class ConstraintSystemCleaner implements Runnable {
         private Pointer pplObj;
