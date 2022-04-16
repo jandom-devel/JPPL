@@ -148,12 +148,25 @@ public class GeneratorSystem extends AbstractPPLObject<GeneratorSystem>
      * Creates and returns a generator system containing only a copy of the
      * generator {@code g}.
      */
-    public static GeneratorSystem of(Generator g) {
+    public static GeneratorSystem singleton(Generator g) {
         var pgs = new PointerByReference();
         int result = ppl_new_Generator_System_from_Generator(pgs, g.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return new GeneratorSystem(pgs.getValue());
+    }
+
+    /**
+     * Creates and returns a generator system containing all the listed generators.
+     */
+    public static GeneratorSystem of(Generator... gg) {
+        if (gg.length == 0)
+            return GeneratorSystem.empty();
+        var gs = GeneratorSystem.singleton(gg[0]);
+        for (int i = 1; i < gg.length; i++) {
+            gs.add(gg[i]);
+        }
+        return gs;
     }
 
     @Override

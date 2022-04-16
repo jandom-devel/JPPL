@@ -32,8 +32,7 @@ public class GeneratorSystemTest {
 
     @Test
     void testInsert() {
-        var gs = GeneratorSystem.empty();
-        gs.add(g1);
+        var gs = GeneratorSystem.singleton(g1);
         assertTrue(gs.isOK());
         assertFalse(gs.isEmpty());
         assertEquals(1, gs.getSpaceDimension());
@@ -52,9 +51,7 @@ public class GeneratorSystemTest {
 
     @Test
     void testIterator() {
-        var gs = GeneratorSystem.empty();
-        gs.add(g1);
-        gs.add(g2);
+        var gs = GeneratorSystem.of(g1, g2);
         var le = LinearExpression.zero(2);
         le.add(Coefficient.valueOf(1), 0);
         var c1bis = Generator.of(le, GeneratorType.RAY);

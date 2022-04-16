@@ -48,8 +48,7 @@ public class ConstraintSystemTest {
 
     @Test
     void testInsert() {
-        var cs = ConstraintSystem.empty();
-        cs.add(c1);
+        var cs = ConstraintSystem.singleton(c1);
         assertTrue(cs.isOK());
         assertFalse(cs.isEmpty());
         assertTrue(cs.hasStrictInequalities());
@@ -69,9 +68,7 @@ public class ConstraintSystemTest {
 
     @Test
     void testIterator() {
-        var cs = ConstraintSystem.empty();
-        cs.add(c1);
-        cs.add(c2);
+        var cs = ConstraintSystem.of(c1, c2);
         var le = LinearExpression.zero(2);
         le.add(Coefficient.valueOf(3));
         le.add(Coefficient.valueOf(1), 0);

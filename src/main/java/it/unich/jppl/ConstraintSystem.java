@@ -154,12 +154,25 @@ public class ConstraintSystem extends AbstractPPLObject<ConstraintSystem>
      * Creates and returns a constraint system containing only a copy of the
      * constraint {@code c}.
      */
-    public static ConstraintSystem of(Constraint c) {
+    public static ConstraintSystem singleton(Constraint c) {
         var pcs = new PointerByReference();
         int result = ppl_new_Constraint_System_from_Constraint(pcs, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return new ConstraintSystem(pcs.getValue());
+    }
+
+    /**
+     * Creates and returns a constraint system containing all the listed constraints.
+     */
+    public static ConstraintSystem of(Constraint... cc) {
+        if (cc.length == 0)
+            return ConstraintSystem.empty();
+        var cs = ConstraintSystem.singleton(cc[0]);
+        for (int i = 1; i < cc.length; i++) {
+            cs.add(cc[i]);
+        }
+        return cs;
     }
 
     @Override

@@ -154,12 +154,25 @@ public class CongruenceSystem extends AbstractPPLObject<CongruenceSystem>
      * Create and returns a congruence system containing only a copy of the
      * congruence {@code c}.
      */
-    public static CongruenceSystem of(Congruence c) {
+    public static CongruenceSystem singleton(Congruence c) {
         var pcs = new PointerByReference();
         int result = ppl_new_Congruence_System_from_Congruence(pcs, c.pplObj);
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return new CongruenceSystem(pcs.getValue());
+    }
+
+    /**
+     * Creates and returns a congruence system containing all the listed congruences.
+     */
+    public static CongruenceSystem of(Congruence... cc) {
+        if (cc.length == 0)
+            return CongruenceSystem.empty();
+        var cs = CongruenceSystem.singleton(cc[0]);
+        for (int i = 1; i < cc.length; i++) {
+            cs.add(cc[i]);
+        }
+        return cs;
     }
 
     @Override
