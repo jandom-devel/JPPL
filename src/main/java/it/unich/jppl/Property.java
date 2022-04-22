@@ -18,7 +18,7 @@ import java.util.Optional;
  *
  * @see Domain
  */
-public interface Property<T extends Property<T>> {
+public interface Property<T extends Property<T>> extends PPLObject<T> {
 
     /**
      * Result of a minimization or maximization operation on abstract objects.
