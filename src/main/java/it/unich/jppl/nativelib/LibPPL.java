@@ -1,5 +1,7 @@
 package it.unich.jppl.nativelib;
 
+import it.unich.jppl.PPL;
+
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
@@ -30,6 +32,7 @@ public class LibPPL {
 
     static {
         Native.register(LIBNAME);
+        PPL.pplInitialize();
     }
 
     // Library Initialization and Finalization

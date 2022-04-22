@@ -112,14 +112,10 @@ public class PPL {
     /** Version of JPPL. */
     public static final String JPPL_VERSION = "0.3-SNAPSHOT";
 
-    static {
-        pplInitialize();
-    }
-
     /**
      * Initializes the Parma Polyhedra Library. This mathods must be called before
-     * operating with the PPL. The static initializer of the JPPL class
-     * automatically calls this method.
+     * operating with the PPL. This is automatically called after initialization of
+     * the native PPL library.
      */
     public static void pplInitialize() {
         // according to documentation it seems ppl_initialize should generate an error if
