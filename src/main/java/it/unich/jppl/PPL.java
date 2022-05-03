@@ -5,6 +5,7 @@ import static it.unich.jppl.nativelib.LibPPL.*;
 import it.unich.jppl.nativelib.PPLErrorHandler;
 import it.unich.jppl.nativelib.SizeT;
 import it.unich.jppl.nativelib.SizeTByReference;
+import it.unich.jppl.nativelib.VariableOutputFunction;
 import it.unich.jppl.nativelib.VariableOutputFunctionByReference;
 
 import java.lang.ref.Cleaner;
@@ -32,6 +33,12 @@ public class PPL {
      * garbage collection.
      */
     static final Cleaner cleaner = Cleaner.create();
+
+    /**
+     * The current callback set by ioSetVariableOutputFunction. We need to keep it
+     * in a static variable to avoid garbage collection.
+     */
+    static VariableOutputFunction vof = null;
 
     /**
      * Behavior of bounded integer types.
@@ -322,7 +329,8 @@ public class PPL {
      *          the variable \(x_i\).
      */
     public static void ioSetVariableOutputFunction(LongFunction<String> f) {
-        int result = ppl_io_set_variable_output_function(f::apply);
+        PPL.vof = f::apply;
+        int result = ppl_io_set_variable_output_function(vof);
         if (result < 0)
             PPLRuntimeException.checkError(result);
     }
@@ -334,11 +342,15 @@ public class PPL {
      *         the variable \(x_i\).
      */
     public static LongFunction<String> ioGetVariableOutputFunction() {
-        var pp = new VariableOutputFunctionByReference();
-        int result = ppl_io_get_variable_output_function(pp);
-        if (result < 0)
-            PPLRuntimeException.checkError(result);
-        return pp.vof::callback;
+        if (vof != null)
+            return vof::callback;
+        else {
+            var pp = new VariableOutputFunctionByReference();
+            int result = ppl_io_get_variable_output_function(pp);
+            if (result < 0)
+                PPLRuntimeException.checkError(result);
+            return pp.vof::callback;
+        }
     }
 
     /**
