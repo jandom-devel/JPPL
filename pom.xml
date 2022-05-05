@@ -37,11 +37,6 @@
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
         <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
-        <doclint>all,-missing</doclint>
-        <header>
-            &lt;script src="https://polyfill.io/v3/polyfill.min.js?features=es6"&gt;&lt;/script&gt;
-            &lt;script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;&lt;/script&gt;
-        </header>
     </properties>
 
     <!-- Build settings -->
@@ -83,6 +78,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <doclint>all,-missing</doclint>
+                    <header>
+                        &lt;script src="https://polyfill.io/v3/polyfill.min.js?features=es6"&gt;&lt;/script&gt;
+                        &lt;script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"&gt;&lt;/script&gt;
+                    </header>
                     <additionalJOptions>
                         <additionalJOption>--allow-script-in-comments</additionalJOption>
                         <additionalJOption>--no-module-directories</additionalJOption>
