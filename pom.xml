@@ -60,8 +60,28 @@
                 <version>3.11.0</version>
             </plugin>
             <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                  <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                      <goal>jar-no-fork</goal>
+                    </goals>
+                  </execution>
+                </executions>
+              </plugin>
+            <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <additionalJOptions>
                         <additionalJOption>--allow-script-in-comments</additionalJOption>
@@ -125,15 +145,6 @@
         <developerConnection>scm:git:ssh://git@github.com/amato-gianluca/JPPL.git</developerConnection>
         <url>https://github.com/amato-gianluca/JPPL</url>
     </scm>
-    <distributionManagement>
-        <downloadUrl>https://raw.githubusercontent.com/amato-gianluca/JPPL/master/pom.xml</downloadUrl>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <name>Sonatype OSSRH for snapshots</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>sonatype-snapshots</id>
@@ -146,4 +157,13 @@
             </releases>
         </repository>
     </repositories>
+    <distributionManagement>
+        <downloadUrl>https://raw.githubusercontent.com/amato-gianluca/JPPL/master/pom.xml</downloadUrl>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>Sonatype OSSRH for snapshots</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
 </project>
