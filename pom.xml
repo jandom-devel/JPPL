@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Basics -->
     <groupId>it.unich.jppl</groupId>
     <artifactId>jppl</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
@@ -161,7 +161,8 @@
         <connection>scm:git:https://github.com/amato-gianluca/JPPL.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/amato-gianluca/JPPL.git</developerConnection>
         <url>https://github.com/amato-gianluca/JPPL</url>
-    </scm>
+      <tag>jppl-0.3</tag>
+  </scm>
     <repositories>
         <repository>
             <id>sonatype-snapshots</id>
