@@ -16,7 +16,7 @@
         <dependency>
             <groupId>it.unich.jgmp</groupId>
             <artifactId>jgmp</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
