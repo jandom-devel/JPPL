@@ -85,7 +85,7 @@
                     </header>
                     <additionalJOptions>
                         <additionalJOption>--allow-script-in-comments</additionalJOption>
-                        <additionalJOption>${javadoc.additionalOptions}</additionalJOption>
+                        <additionalJOption>-html5</additionalJOption>
                     </additionalJOptions>
                 </configuration>
             </plugin>
@@ -183,26 +183,5 @@
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <profiles>
-        <profile>
-			<id>java9-javadoc-html5-no-modules</id>
-			<activation>
-				<jdk>[9,14)</jdk>
-			</activation>
-			<properties>
-				<javadoc.additionalOptions>-html5 --no-module-directories</javadoc.additionalOptions>
-			</properties>
-		</profile>
-        <profile>
-			<id>java14-javadoc-html5</id>
-			<activation>
-				<jdk>[14,)</jdk>
-			</activation>
-			<properties>
-				<javadoc.additionalOptions>-html5</javadoc.additionalOptions>
-			</properties>
-		</profile>
-    </profiles>
 
 </project>
