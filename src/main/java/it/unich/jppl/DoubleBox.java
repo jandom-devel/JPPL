@@ -743,7 +743,7 @@ public class DoubleBox extends AbstractPPLObject<DoubleBox> implements Property<
 
     @Override
     public DoubleBox mapSpaceDimensions(long[] maps) {
-        int result = ppl_Double_Box_remove_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
+        int result = ppl_Double_Box_map_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return this;

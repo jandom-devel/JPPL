@@ -544,7 +544,7 @@ public abstract class Polyhedron<T extends Polyhedron<T>> extends AbstractPPLObj
 
     @Override
     public T mapSpaceDimensions(long[] maps) {
-        int result = ppl_Polyhedron_remove_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
+        int result = ppl_Polyhedron_map_space_dimensions(pplObj, new SizeTArray(maps), new SizeT(maps.length));
         if (result < 0)
             PPLRuntimeException.checkError(result);
         return self();
